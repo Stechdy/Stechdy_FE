@@ -1,0 +1,163 @@
+.mood-container {
+  min-height: 100vh;
+  background: #F9FAFB;
+  padding-bottom: 80px;
+}
+
+.mood-content {
+  padding: 20px;
+}
+
+.mood-question {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.mood-question h2 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1F1F1F;
+  margin: 0 0 8px 0;
+}
+
+.mood-question p {
+  font-size: 16px;
+  color: #6B7280;
+  margin: 0;
+}
+
+.mood-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.mood-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: white;
+  border: 2px solid #E5E7EB;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mood-btn:active {
+  transform: scale(0.98);
+}
+
+.mood-btn.selected {
+  border-color: var(--mood-color);
+  background: linear-gradient(135deg, rgba(240, 197, 213, 0.1) 0%, rgba(138, 192, 213, 0.1) 100%);
+}
+
+.mood-emoji {
+  font-size: 32px;
+}
+
+.mood-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1F1F1F;
+}
+
+.emotion-tags-section,
+.mood-note-section {
+  margin-bottom: 24px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.emotion-tags-section h3,
+.mood-note-section h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1F1F1F;
+  margin: 0 0 16px 0;
+}
+
+.emotion-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.emotion-tag {
+  padding: 10px 16px;
+  background: white;
+  border: 2px solid #E5E7EB;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6B7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.emotion-tag:active {
+  transform: scale(0.95);
+}
+
+.emotion-tag.selected {
+  background: linear-gradient(135deg, #F0C5D5 0%, #8AC0D5 100%);
+  border-color: transparent;
+  color: white;
+}
+
+.mood-note-input {
+  width: 100%;
+  padding: 16px;
+  background: white;
+  border: 2px solid #E5E7EB;
+  border-radius: 16px;
+  font-size: 15px;
+  font-family: inherit;
+  color: #1F1F1F;
+  resize: vertical;
+  transition: all 0.2s;
+}
+
+.mood-note-input:focus {
+  outline: none;
+  border-color: #8AC0D5;
+}
+
+.mood-note-input::placeholder {
+  color: #9CA3AF;
+}
+
+.submit-mood-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #F0C5D5 0%, #8AC0D5 100%);
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(138, 192, 213, 0.3);
+}
+
+.submit-mood-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(138, 192, 213, 0.4);
+}
+
+.submit-mood-btn:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

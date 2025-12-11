@@ -13,13 +13,13 @@ import ResetPassword from './pages/Auth/ResetPassword';
 import AdminLogin from './pages/Admin/AdminLogin';
 import AdminForgotPassword from './pages/Admin/AdminForgotPassword';
 
-// Placeholder components
-const Dashboard = () => <div style={{ padding: '40px', textAlign: 'center' }}>
-  <h1>User Dashboard</h1>
-  <p>Welcome to S'techdy!</p>
-  <button onClick={() => { localStorage.clear(); window.location.href = '/login'; }}>Logout</button>
-</div>;
+// Main App Pages
+import Dashboard from './pages/Dashboard/Dashboard';
+import Calendar from './pages/Calendar/Calendar';
+import Mood from './pages/Mood/Mood';
+import Account from './pages/Account/Account';
 
+// Placeholder Admin component
 const AdminDashboard = () => <div style={{ padding: '40px', textAlign: 'center' }}>
   <h1>Admin Dashboard</h1>
   <p>Welcome Admin!</p>
@@ -64,10 +64,25 @@ function App() {
           </PublicRoute>
         } />
 
-        {/* Protected User Routes */}
+        {/* Private Routes - User Dashboard */}
         <Route path="/dashboard" element={
           <PrivateRoute>
             <Dashboard />
+          </PrivateRoute>
+        } />
+        <Route path="/calendar" element={
+          <PrivateRoute>
+            <Calendar />
+          </PrivateRoute>
+        } />
+        <Route path="/mood" element={
+          <PrivateRoute>
+            <Mood />
+          </PrivateRoute>
+        } />
+        <Route path="/account" element={
+          <PrivateRoute>
+            <Account />
           </PrivateRoute>
         } />
 

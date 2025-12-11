@@ -1,0 +1,131 @@
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom));
+  border-top: 1px solid #E5E7EB;
+  box-shadow: 0 -2px 20px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  max-width: 100%;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #9CA3AF;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 68px;
+  position: relative;
+}
+
+.nav-item:active {
+  transform: scale(0.95);
+}
+
+.nav-item.active {
+  color: #8AC0D5;
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 3px;
+  background: linear-gradient(90deg, #F0C5D5 0%, #8AC0D5 100%);
+  border-radius: 2px 2px 0 0;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 32px;
+    opacity: 1;
+  }
+}
+
+.nav-item.active svg {
+  color: #8AC0D5;
+  transform: scale(1.1);
+}
+
+.nav-item svg {
+  color: #9CA3AF;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item-ai {
+  position: relative;
+  margin-top: -20px;
+}
+
+.ai-fab {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #F0C5D5 0%, #8AC0D5 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(138, 192, 213, 0.5);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 4px solid white;
+}
+
+.nav-item-ai:hover .ai-fab {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(138, 192, 213, 0.6);
+}
+
+.nav-item-ai:active .ai-fab {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(138, 192, 213, 0.4);
+}
+
+.nav-item-ai span {
+  color: #8AC0D5;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  .bottom-nav {
+    max-width: 480px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    border-radius: 24px 24px 0 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-item:hover {
+    background: #F9FAFB;
+    color: #8AC0D5;
+  }
+
+  .nav-item:hover svg {
+    color: #8AC0D5;
+  }
+}

@@ -1,0 +1,126 @@
+.calendar-container {
+  min-height: 100vh;
+  background: #F9FAFB;
+  padding-bottom: 80px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: white;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.back-btn,
+.header-action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: none;
+  background: #F9FAFB;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.back-btn:active,
+.header-action-btn:active {
+  transform: scale(0.95);
+  background: #F3F4F6;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1F1F1F;
+  margin: 0;
+}
+
+.calendar-content {
+  padding: 20px;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.calendar-header button {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.calendar-header button:active {
+  transform: scale(0.95);
+  background: #F9FAFB;
+}
+
+.calendar-month {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1F1F1F;
+  margin: 0;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.calendar-day-name {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6B7280;
+  padding: 8px 0;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1F1F1F;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.calendar-day:not(.empty):hover {
+  background: #F9FAFB;
+}
+
+.calendar-day:not(.empty):active {
+  transform: scale(0.95);
+}
+
+.calendar-day.today {
+  background: linear-gradient(135deg, #F0C5D5 0%, #8AC0D5 100%);
+  color: white;
+  font-weight: 600;
+}
+
+.calendar-day.empty {
+  cursor: default;
+}
