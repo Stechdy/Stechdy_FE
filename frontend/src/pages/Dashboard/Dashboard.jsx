@@ -53,42 +53,120 @@ const Dashboard = () => {
         return;
       }
 
-      // Fetch user data in background
-      const userResponse = await fetch('http://localhost:5000/api/users/profile', {
+      // Fetch user data first
+      const userResponse = await fetch('http://localhost:3001/api/users/profile', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
 
+      let currentUser = null;
       if (userResponse.ok) {
-        const user = await userResponse.json();
-        setUserData(user);
-        localStorage.setItem('user', JSON.stringify(user));
+        currentUser = await userResponse.json();
+        setUserData(currentUser);
+        setStreak(currentUser.streakCount || 0);
+        localStorage.setItem('user', JSON.stringify(currentUser));
       }
 
-      // Mock data for now - replace with actual API calls
+      // Get today's date range
+      const today = new Date();
+      const todayStart = new Date(today.setHours(0, 0, 0, 0));
+      const todayEnd = new Date(today.setHours(23, 59, 59, 999));
+
+      // Fetch today's study sessions for time tracking
+      const sessionsResponse = await fetch(
+        `http://localhost:3001/api/study-sessions/today?start=${todayStart.toISOString()}&end=${todayEnd.toISOString()}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      let todaySessions = [];
+      let completedMinutes = 0;
+      let goalMinutes = 360; // Default 6 hours
+
+      if (sessionsResponse.ok) {
+        todaySessions = await sessionsResponse.json();
+        
+        // Calculate completed study time from TODAY's sessions
+        completedMinutes = todaySessions
+          .filter(s => s.status === 'completed')
+          .reduce((total, session) => {
+            const duration = session.actualDuration || session.plannedDuration || 90;
+            return total + duration;
+          }, 0);
+
+        // Calculate goal from all scheduled sessions today
+        goalMinutes = todaySessions.reduce((total, session) => {
+          return total + (session.plannedDuration || 90);
+        }, 0) || 360;
+      }
+
+      // Fetch upcoming sessions by subject (current semester)
+      const upcomingResponse = await fetch(
+        'http://localhost:3001/api/study-sessions/upcoming-by-subject',
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      let upcomingSessions = [];
+      
+      if (upcomingResponse.ok) {
+        const upcomingData = await upcomingResponse.json();
+        
+        // Map to display format with full date and time
+        upcomingSessions = upcomingData
+          .slice(0, 3) // Show max 3 subjects
+          .map(session => {
+            const sessionDate = new Date(session.date);
+            const dayOfWeek = sessionDate.toLocaleDateString('en-US', { weekday: 'short' });
+            const monthDay = sessionDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const year = sessionDate.getFullYear();
+            
+            return {
+              id: session._id,
+              subject: session.subjectInfo?.subjectName || 'Study Session',
+              time: `${dayOfWeek}, ${monthDay} ${year} • ${session.startTime} - ${session.endTime}`,
+              color: session.subjectInfo?.color || '#8AC0D5',
+              topic: session.topic
+            };
+          });
+      }
+
+      // Generate AI suggestion based on progress
+      let suggestion = 'Consider taking a 15-minute break';
+      const progressPercent = (completedMinutes / goalMinutes) * 100;
+      
+      if (progressPercent >= 80) {
+        suggestion = "Great progress today! You're almost done with your study goals 🎉";
+      } else if (progressPercent >= 50) {
+        suggestion = "You're halfway through! Keep up the good work 💪";
+      } else if (upcomingSessions.length > 2) {
+        suggestion = "You have multiple sessions today. Stay focused and take breaks! 🧘";
+      } else if (completedMinutes >= 120) {
+        suggestion = "You've been studying for 2+ hours. Time for a break! ☕";
+      }
+
       const dashboardData = {
-        studyProgress: { current: 270, goal: 360 },
-        streak: 12,
-        upcomingSessions: [
+        studyProgress: { current: completedMinutes, goal: goalMinutes },
+        streak: currentUser?.streakCount || 0,
+        upcomingSessions: upcomingSessions.length > 0 ? upcomingSessions : [
           {
-            id: 1,
-            subject: 'Mathematics',
-            time: '2:00 PM - 3:30 PM',
+            id: 'placeholder1',
+            subject: 'No upcoming sessions',
+            time: 'Enjoy your free time!',
             color: '#8AC0D5'
-          },
-          {
-            id: 2,
-            subject: 'Physics Review',
-            time: '4:00 PM - 5:00 PM',
-            color: '#F0C5D5'
           }
         ],
-        aiSuggestion: 'Consider taking a 15-minute break'
+        aiSuggestion: suggestion
       };
 
       setStudyProgress(dashboardData.studyProgress);
-      setStreak(dashboardData.streak);
       setUpcomingSessions(dashboardData.upcomingSessions);
       setAiSuggestion(dashboardData.aiSuggestion);
       
@@ -96,6 +174,27 @@ const Dashboard = () => {
       localStorage.setItem('dashboardData', JSON.stringify(dashboardData));
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
+      // Fallback to mock data on error
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      
+      const fallbackData = {
+        studyProgress: { current: 0, goal: 360 },
+        streak: 12,
+        upcomingSessions: [
+          {
+            id: 'fallback1',
+            subject: 'Backend Server Not Running',
+            time: 'Please start the server to see your sessions',
+            color: '#FF6B6B'
+          }
+        ],
+        aiSuggestion: 'Unable to connect to server. Please check your backend connection.'
+      };
+      setStudyProgress(fallbackData.studyProgress);
+      setUpcomingSessions(fallbackData.upcomingSessions);
+      setAiSuggestion(fallbackData.aiSuggestion);
     }
   };
 
