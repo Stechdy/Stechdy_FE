@@ -1,7 +1,8 @@
 .calendar-container {
   min-height: 100vh;
-  background: #F9FAFB;
+  background: var(--bg-secondary);
   padding-bottom: 80px;
+  transition: background-color var(--transition-normal);
 }
 
 .page-header {
@@ -9,8 +10,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  background: white;
-  border-bottom: 1px solid #F3F4F6;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-secondary);
+  transition: background-color var(--transition-normal),
+    border-color var(--transition-normal);
 }
 
 .back-btn,
@@ -19,24 +22,29 @@
   height: 40px;
   border-radius: 10px;
   border: none;
-  background: #F9FAFB;
+  background: var(--bg-input);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
+}
+
+.back-btn svg,
+.header-action-btn svg {
+  color: var(--text-secondary);
 }
 
 .back-btn:active,
 .header-action-btn:active {
   transform: scale(0.95);
-  background: #F3F4F6;
+  background: var(--bg-hover);
 }
 
 .page-title {
   font-size: 20px;
   font-weight: 600;
-  color: #1F1F1F;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -56,23 +64,27 @@
   height: 36px;
   border-radius: 8px;
   border: none;
-  background: white;
+  background: var(--bg-card);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
+}
+
+.calendar-header button svg {
+  color: var(--text-secondary);
 }
 
 .calendar-header button:active {
   transform: scale(0.95);
-  background: #F9FAFB;
+  background: var(--bg-hover);
 }
 
 .calendar-month {
   font-size: 18px;
   font-weight: 600;
-  color: #1F1F1F;
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -80,17 +92,18 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
-  background: white;
+  background: var(--bg-card);
   padding: 20px;
   border-radius: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-card);
+  transition: background-color var(--transition-normal);
 }
 
 .calendar-day-name {
   text-align: center;
   font-size: 12px;
   font-weight: 600;
-  color: #6B7280;
+  color: var(--text-secondary);
   padding: 8px 0;
 }
 
@@ -102,13 +115,13 @@
   border-radius: 12px;
   font-size: 14px;
   font-weight: 500;
-  color: #1F1F1F;
+  color: var(--text-primary);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .calendar-day:not(.empty):hover {
-  background: #F9FAFB;
+  background: var(--bg-hover);
 }
 
 .calendar-day:not(.empty):active {
@@ -116,7 +129,7 @@
 }
 
 .calendar-day.today {
-  background: linear-gradient(135deg, #F0C5D5 0%, #8AC0D5 100%);
+  background: var(--primary-gradient);
   color: white;
   font-weight: 600;
 }

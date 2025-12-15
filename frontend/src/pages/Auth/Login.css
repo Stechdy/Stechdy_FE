@@ -10,7 +10,7 @@
   display: block;
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
@@ -22,15 +22,15 @@
 }
 
 .alert-error {
-  background-color: #fef2f2;
-  color: #dc2626;
-  border: 1px solid #fecaca;
+  background-color: var(--alert-error-bg);
+  color: var(--alert-error-text);
+  border: 1px solid var(--alert-error-border);
 }
 
 .alert-success {
-  background-color: #f0fdf4;
-  color: #16a34a;
-  border: 1px solid #bbf7d0;
+  background-color: var(--alert-success-bg);
+  color: var(--alert-success-text);
+  border: 1px solid var(--alert-success-border);
 }
 
 .forgot-password-link {
@@ -40,15 +40,15 @@
 }
 
 .forgot-password-link a {
-  color: #93C5FD;
+  color: var(--text-link);
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
-  transition: color 0.2s;
+  transition: color var(--transition-normal);
 }
 
 .forgot-password-link a:hover {
-  color: #D8B4FE;
+  color: var(--text-link-hover);
   text-decoration: underline;
 }
 
@@ -57,15 +57,15 @@
   align-items: center;
   text-align: center;
   margin: 24px 0;
-  color: #9ca3af;
+  color: var(--text-tertiary);
   font-size: 14px;
 }
 
 .divider::before,
 .divider::after {
-  content: '';
+  content: "";
   flex: 1;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .divider span {
@@ -76,18 +76,18 @@
   text-align: center;
   margin-top: 24px;
   font-size: 14px;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
 .signup-link a {
-  color: #93C5FD;
+  color: var(--text-link);
   text-decoration: none;
   font-weight: 600;
-  transition: color 0.2s;
+  transition: color var(--transition-normal);
 }
 
 .signup-link a:hover {
-  color: #D8B4FE;
+  color: var(--text-link-hover);
   text-decoration: underline;
 }
 

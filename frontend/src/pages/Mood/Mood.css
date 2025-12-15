@@ -1,7 +1,8 @@
 .mood-container {
   min-height: 100vh;
-  background: #F9FAFB;
+  background: var(--bg-secondary);
   padding-bottom: 80px;
+  transition: background-color var(--transition-normal);
 }
 
 .mood-content {
@@ -16,13 +17,13 @@
 .mood-question h2 {
   font-size: 24px;
   font-weight: 600;
-  color: #1F1F1F;
+  color: var(--text-primary);
   margin: 0 0 8px 0;
 }
 
 .mood-question p {
   font-size: 16px;
-  color: #6B7280;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -38,11 +39,11 @@
   align-items: center;
   gap: 16px;
   padding: 16px 20px;
-  background: white;
-  border: 2px solid #E5E7EB;
+  background: var(--bg-card);
+  border: 2px solid var(--border-primary);
   border-radius: 16px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .mood-btn:active {
@@ -51,7 +52,11 @@
 
 .mood-btn.selected {
   border-color: var(--mood-color);
-  background: linear-gradient(135deg, rgba(240, 197, 213, 0.1) 0%, rgba(138, 192, 213, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(240, 197, 213, 0.1) 0%,
+    rgba(138, 192, 213, 0.1) 100%
+  );
 }
 
 .mood-emoji {
@@ -61,7 +66,7 @@
 .mood-label {
   font-size: 16px;
   font-weight: 500;
-  color: #1F1F1F;
+  color: var(--text-primary);
 }
 
 .emotion-tags-section,
@@ -74,7 +79,7 @@
 .mood-note-section h3 {
   font-size: 18px;
   font-weight: 600;
-  color: #1F1F1F;
+  color: var(--text-primary);
   margin: 0 0 16px 0;
 }
 
@@ -86,14 +91,14 @@
 
 .emotion-tag {
   padding: 10px 16px;
-  background: white;
-  border: 2px solid #E5E7EB;
+  background: var(--bg-card);
+  border: 2px solid var(--border-primary);
   border-radius: 20px;
   font-size: 14px;
   font-weight: 500;
-  color: #6B7280;
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .emotion-tag:active {
@@ -101,7 +106,7 @@
 }
 
 .emotion-tag.selected {
-  background: linear-gradient(135deg, #F0C5D5 0%, #8AC0D5 100%);
+  background: var(--primary-gradient);
   border-color: transparent;
   color: white;
 }
@@ -109,29 +114,29 @@
 .mood-note-input {
   width: 100%;
   padding: 16px;
-  background: white;
-  border: 2px solid #E5E7EB;
+  background: var(--bg-card);
+  border: 2px solid var(--border-primary);
   border-radius: 16px;
   font-size: 15px;
   font-family: inherit;
-  color: #1F1F1F;
+  color: var(--text-primary);
   resize: vertical;
-  transition: all 0.2s;
+  transition: all var(--transition-normal);
 }
 
 .mood-note-input:focus {
   outline: none;
-  border-color: #8AC0D5;
+  border-color: var(--primary-blue);
 }
 
 .mood-note-input::placeholder {
-  color: #9CA3AF;
+  color: var(--text-tertiary);
 }
 
 .submit-mood-btn {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #F0C5D5 0%, #8AC0D5 100%);
+  background: linear-gradient(135deg, #f0c5d5 0%, #8ac0d5 100%);
   border: none;
   border-radius: 16px;
   color: white;
