@@ -1,79 +1,115 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/common/BottomNav';
+import moodService from '../../services/moodService';
 import './Mood.css';
 
 const Mood = () => {
   const navigate = useNavigate();
   const [selectedMood, setSelectedMood] = useState(null);
   const [note, setNote] = useState('');
+  const [energyLevel, setEnergyLevel] = useState(5);
+  const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [todayMood, setTodayMood] = useState(null);
+  const [iconAnimate, setIconAnimate] = useState(false);
 
+  // Mood options theo mockup
   const moods = [
-    { value: 5, emoji: '😄', label: 'Excellent', color: '#10B981' },
-    { value: 4, emoji: '😊', label: 'Good', color: '#8AC0D5' },
-    { value: 3, emoji: '😐', label: 'Okay', color: '#F59E0B' },
-    { value: 2, emoji: '😔', label: 'Not Great', color: '#F97316' },
-    { value: 1, emoji: '😢', label: 'Bad', color: '#EF4444' },
+    { value: 1, emoji: '😢', label: 'Upset' },
+    { value: 2, emoji: '😔', label: 'Sad' },
+    { value: 3, emoji: '😐', label: 'Normal' },
+    { value: 4, emoji: '😊', label: 'Happy' },
+    { value: 5, emoji: '😄', label: 'Rất vui' },
   ];
 
-  const emotionTags = [
-    'Happy', 'Focused', 'Motivated', 'Stressed', 'Tired', 
-    'Anxious', 'Calm', 'Excited', 'Frustrated', 'Confident'
-  ];
+  // Energy icons based on level
+  const getEnergyIcon = (level) => {
+    if (level <= 2) return '🔋'; // Very low
+    if (level <= 4) return '🪫'; // Low
+    if (level <= 6) return '🔌'; // Medium
+    if (level <= 8) return '⚡'; // High
+    return '✨'; // Very high
+  };
 
-  const [selectedTags, setSelectedTags] = useState([]);
+  useEffect(() => {
+    loadTodayMood();
+  }, []);
 
-  const toggleTag = (tag) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter(t => t !== tag));
-    } else {
-      setSelectedTags([...selectedTags, tag]);
+  const loadTodayMood = async () => {
+    try {
+      const response = await moodService.getTodayMood();
+      if (response.success && response.data) {
+        setTodayMood(response.data);
+        setSelectedMood(response.data.mood);
+        setNote(response.data.note || '');
+        setEnergyLevel(response.data.energyLevel || 5);
+      }
+    } catch (error) {
+      console.error('Error loading today mood:', error);
     }
   };
 
   const handleSubmit = async () => {
     if (!selectedMood) {
-      alert('Please select a mood');
+      alert('Vui lòng chọn tâm trạng của bạn');
       return;
     }
 
-    // TODO: Submit to API
-    console.log({
-      mood: selectedMood,
-      emotionTags: selectedTags,
-      note: note
-    });
+    setLoading(true);
+    try {
+      const response = await moodService.createMoodEntry({
+        mood: selectedMood,
+        note: note.trim(),
+        energyLevel: energyLevel
+      });
 
-    navigate('/dashboard');
+      if (response.success) {
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+          navigate('/dashboard');
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('Error saving mood:', error);
+      alert('Có lỗi xảy ra khi lưu cảm xúc');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="mood-container">
-      <header className="page-header">
+    <div className="mood-page">
+      {/* Success notification */}
+      {showSuccess && (
+        <div className="success-toast">
+          Đã lưu cảm xúc hôm nay 💙
+        </div>
+      )}
+
+      <header className="mood-header">
         <button className="back-btn" onClick={() => navigate('/dashboard')}>
+          ←
+        </button>
+        <h1 className="mood-title">Mood Tracking</h1>
+        <button className="history-btn" onClick={() => navigate('/mood/history')}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M15 18L9 12L15 6" stroke="#1F1F1F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M13 3C8.03 3 4 7.03 4 12H1L4.89 15.89L4.96 16.03L9 12H6C6 8.13 9.13 5 13 5C16.87 5 20 8.13 20 12C20 15.87 16.87 19 13 19C11.07 19 9.32 18.21 8.06 16.94L6.64 18.36C8.27 19.99 10.51 21 13 21C17.97 21 22 16.97 22 12C22 7.03 17.97 3 13 3ZM12 8V13L16.25 15.52L17.02 14.24L13.5 12.15V8H12Z" fill="#5ECFB1"/>
           </svg>
         </button>
-        <h1 className="page-title">Mood Tracking</h1>
-        <div style={{ width: '40px' }}></div>
       </header>
 
       <div className="mood-content">
-        <div className="mood-question">
-          <h2>How are you feeling today?</h2>
-          <p>Select your current mood</p>
-        </div>
+        <p className="mood-question">Hôm nay bạn cảm thấy thế nào?</p>
 
+        {/* Mood Selector */}
         <div className="mood-selector">
           {moods.map(mood => (
             <button
               key={mood.value}
-              className={`mood-btn ${selectedMood === mood.value ? 'selected' : ''}`}
+              className={`mood-option ${selectedMood === mood.value ? 'selected' : ''}`}
               onClick={() => setSelectedMood(mood.value)}
-              style={{
-                '--mood-color': mood.color
-              }}
             >
               <span className="mood-emoji">{mood.emoji}</span>
               <span className="mood-label">{mood.label}</span>
@@ -81,39 +117,57 @@ const Mood = () => {
           ))}
         </div>
 
-        {selectedMood && (
-          <>
-            <div className="emotion-tags-section">
-              <h3>What emotions are you experiencing?</h3>
-              <div className="emotion-tags">
-                {emotionTags.map(tag => (
-                  <button
-                    key={tag}
-                    className={`emotion-tag ${selectedTags.includes(tag) ? 'selected' : ''}`}
-                    onClick={() => toggleTag(tag)}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-            </div>
+        {/* Note Section */}
+        <div className="note-section">
+          <label className="section-label">Ghi chú cảm xúc</label>
+          <textarea
+            className="note-input"
+            placeholder="Ghi chú cảm xúc hôm nay..."
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            rows="3"
+            maxLength={500}
+          />
+          <div className="char-count">{note.length}/500</div>
+        </div>
 
-            <div className="mood-note-section">
-              <h3>Add a note (optional)</h3>
-              <textarea
-                className="mood-note-input"
-                placeholder="How was your day? What made you feel this way?"
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                rows="4"
+        {/* Energy Level Slider */}
+        <div className="energy-section">
+          <div className="section-header">
+            <label className="section-label">Mức năng lượng</label>
+            <span className="energy-value">{energyLevel}/10</span>
+          </div>
+          <div className="energy-slider-container">
+            <div className="slider-wrapper">
+              <span className="slider-label">Thấp</span>
+              <input
+                type="range"
+                min="1"
+                max="10"
+                value={energyLevel}
+                onChange={(e) => {
+                  setEnergyLevel(parseInt(e.target.value));
+                  setIconAnimate(true);
+                  setTimeout(() => setIconAnimate(false), 500);
+                }}
+                className="energy-slider"
               />
+              <span className="slider-label">Cao</span>
             </div>
+            <div className={`energy-icon ${iconAnimate ? 'animate' : ''}`}>
+              {getEnergyIcon(energyLevel)}
+            </div>
+          </div>
+        </div>
 
-            <button className="submit-mood-btn" onClick={handleSubmit}>
-              Save Mood
-            </button>
-          </>
-        )}
+        {/* Submit Button */}
+        <button 
+          className="submit-btn" 
+          onClick={handleSubmit}
+          disabled={!selectedMood || loading}
+        >
+          {loading ? 'Đang lưu...' : 'Lưu cảm xúc hôm nay 💖'}
+        </button>
       </div>
 
       <BottomNav />

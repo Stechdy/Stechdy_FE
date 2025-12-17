@@ -2,9 +2,16 @@
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
 const apiService = {
-  get: async (endpoint) => {
+  get: async (endpoint, options = {}) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${endpoint}`);
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        method: 'GET',
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+      });
       return await response.json();
     } catch (error) {
       console.error('API GET Error:', error);
@@ -12,12 +19,14 @@ const apiService = {
     }
   },
 
-  post: async (endpoint, data) => {
+  post: async (endpoint, data, options = {}) => {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
+        ...options,
         headers: {
           'Content-Type': 'application/json',
+          ...options.headers,
         },
         body: JSON.stringify(data),
       });
@@ -28,12 +37,14 @@ const apiService = {
     }
   },
 
-  put: async (endpoint, data) => {
+  put: async (endpoint, data, options = {}) => {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'PUT',
+        ...options,
         headers: {
           'Content-Type': 'application/json',
+          ...options.headers,
         },
         body: JSON.stringify(data),
       });
@@ -44,10 +55,15 @@ const apiService = {
     }
   },
 
-  delete: async (endpoint) => {
+  delete: async (endpoint, options = {}) => {
     try {
       const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'DELETE',
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
       });
       return await response.json();
     } catch (error) {

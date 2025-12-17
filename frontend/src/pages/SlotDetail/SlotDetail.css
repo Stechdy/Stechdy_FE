@@ -1,9 +1,10 @@
 /* Slot Detail Page */
 .slot-detail-page {
   min-height: 100vh;
-  background-color: #F5F7FA;
+  background-color: var(--bg-primary);
   padding-bottom: 40px;
   animation: pageSlideIn 0.4s ease;
+  transition: background-color var(--transition-normal);
 }
 
 @keyframes pageSlideIn {
@@ -23,7 +24,7 @@
   justify-content: center;
   min-height: 100vh;
   font-size: 18px;
-  color: #6B7280;
+  color: var(--text-secondary);
 }
 
 /* Header */
@@ -32,8 +33,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: white;
-  border-bottom: 1px solid #F3F4F6;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-secondary);
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
 }
 
 .slot-detail-header h1 {
@@ -63,10 +65,11 @@
 
 /* Info Card */
 .info-card {
-  background: white;
+  background: var(--bg-card);
   border-radius: 20px;
   padding: 24px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-card);
+  transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .info-header {
@@ -75,7 +78,8 @@
   gap: 16px;
   margin-bottom: 24px;
   padding-bottom: 20px;
-  border-bottom: 2px solid #F3F4F6;
+  border-bottom: 2px solid var(--border-secondary);
+  transition: border-color var(--transition-normal);
 }
 
 .info-icon {
@@ -93,14 +97,16 @@
 .info-title h2 {
   font-size: 22px;
   font-weight: 700;
-  color: #1F1F1F;
+  color: var(--text-primary);
   margin: 0 0 4px 0;
+  transition: color var(--transition-normal);
 }
 
 .info-title p {
   font-size: 14px;
-  color: #6B7280;
+  color: var(--text-secondary);
   margin: 0;
+  transition: color var(--transition-normal);
 }
 
 /* Info Content */
@@ -115,7 +121,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 0;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid var(--border-secondary);
+  transition: border-color var(--transition-normal);
 }
 
 .info-row:last-of-type {
@@ -125,13 +132,15 @@
 .info-label {
   font-size: 14px;
   font-weight: 600;
-  color: #6B7280;
+  color: var(--text-secondary);
+  transition: color var(--transition-normal);
 }
 
 .info-value {
   font-size: 15px;
   font-weight: 600;
-  color: #1F1F1F;
+  color: var(--text-primary);
+  transition: color var(--transition-normal);
 }
 
 .info-value.status-completed {
@@ -185,34 +194,36 @@
 .form-group label {
   font-size: 14px;
   font-weight: 600;
-  color: #1F1F1F;
+  color: var(--text-primary);
+  transition: color var(--transition-normal);
 }
 
 .form-group select,
 .form-group input {
   padding: 12px 16px;
-  border: 2px solid #E5E7EB;
+  border: 2px solid var(--border-primary);
   border-radius: 12px;
   font-size: 15px;
-  color: #1F1F1F;
-  background: white;
+  color: var(--text-primary);
+  background: var(--bg-input);
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .form-group select {
   appearance: none;
-  background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
-  background-image: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%), url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%238AC0D5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat, no-repeat;
-  background-position: left top, right 16px center;
+  background-color: var(--bg-input);
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%238AC0D5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
   padding-right: 48px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
+  transition: background-color var(--transition-normal);
 }
 
 .form-group select:hover,
 .form-group input:hover {
-  background: white;
+  background: var(--bg-card);
   box-shadow: 0 4px 12px rgba(138, 192, 213, 0.15);
 }
 
@@ -233,8 +244,8 @@
 .form-group select option {
   padding: 12px 16px;
   font-size: 15px;
-  color: #1F1F1F;
-  background: white;
+  color: var(--text-primary);
+  background: var(--bg-card);
 }
 
 .form-group select option:hover {
@@ -271,33 +282,37 @@
 }
 
 .cancel-btn {
-  background: #F3F4F6;
-  color: #6B7280;
+  background: var(--bg-hover);
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
 }
 
 .cancel-btn:hover {
-  background: #E5E7EB;
+  background: var(--border-primary);
 }
 
 /* Move Slot Section */
 .move-slot-section {
-  background: white;
+  background: var(--bg-card);
   border-radius: 20px;
   padding: 24px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-card);
+  transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .move-slot-section h3 {
   font-size: 20px;
   font-weight: 700;
-  color: #1F1F1F;
+  color: var(--text-primary);
   margin: 0 0 4px 0;
+  transition: color var(--transition-normal);
 }
 
 .section-subtitle {
   font-size: 14px;
-  color: #6B7280;
+  color: var(--text-secondary);
   margin: 0 0 24px 0;
+  transition: color var(--transition-normal);
 }
 
 /* Date Selector */
@@ -311,34 +326,35 @@
   gap: 8px;
   font-size: 15px;
   font-weight: 700;
-  color: #1F1F1F;
+  color: var(--text-primary);
   margin-bottom: 12px;
+  transition: color var(--transition-normal);
 }
 
 .date-selector select {
   width: 100%;
   padding: 16px 20px;
-  border: 2px solid #E5E7EB;
+  border: 2px solid var(--border-primary);
   border-radius: 16px;
   font-size: 15px;
   font-weight: 500;
-  color: #1F1F1F;
-  background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
+  color: var(--text-primary);
+  background-color: var(--bg-input);
+  background-image: url("data:image/svg+xml,%3Csvg width='14' height='9' viewBox='0 0 14 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L7 7.5L13 1.5' stroke='%238AC0D5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 20px center;
   cursor: pointer;
   transition: all 0.3s ease;
   appearance: none;
-  background-image: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%), url("data:image/svg+xml,%3Csvg width='14' height='9' viewBox='0 0 14 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L7 7.5L13 1.5' stroke='%238AC0D5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat, no-repeat;
-  background-position: left top, right 20px center;
   padding-right: 52px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .date-selector select:hover {
   border-color: #8AC0D5;
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(138, 192, 213, 0.2);
-  background: white;
+  background: var(--bg-card);
 }
 
 .date-selector select:focus {
@@ -346,20 +362,20 @@
   border-color: #8AC0D5;
   box-shadow: 0 0 0 4px rgba(138, 192, 213, 0.15), 0 4px 16px rgba(138, 192, 213, 0.2);
   transform: translateY(-2px);
-  background: white;
+  background: var(--bg-card);
 }
 
 .date-selector select option {
   padding: 16px 20px;
   font-size: 15px;
   font-weight: 500;
-  color: #1F1F1F;
-  background: white;
+  color: var(--text-primary);
+  background: var(--bg-card);
 }
 
 .date-selector select option:disabled {
-  color: #9CA3AF;
-  background: #F9FAFB;
+  color: var(--text-tertiary);
+  background: var(--bg-secondary);
 }
 
 /* Selected Date Display */
@@ -383,7 +399,7 @@
 }
 
 .change-date-btn {
-  background: white;
+  background: var(--bg-card);
   border: 2px solid #8AC0D5;
   border-radius: 10px;
   width: 36px;
@@ -413,29 +429,30 @@
   gap: 8px;
   font-size: 15px;
   font-weight: 700;
-  color: #1F1F1F;
+  color: var(--text-primary);
   margin-bottom: 12px;
+  transition: color var(--transition-normal);
 }
 
 .time-input-group input[type="time"] {
   width: 100%;
   padding: 16px 20px;
-  border: 2px solid #E5E7EB;
+  border: 2px solid var(--border-primary);
   border-radius: 16px;
   font-size: 15px;
   font-weight: 500;
-  color: #1F1F1F;
-  background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
+  color: var(--text-primary);
+  background: var(--bg-input);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-sm);
 }
 
 .time-input-group input[type="time"]:hover {
   border-color: #8AC0D5;
   transform: translateY(-2px);
   box-shadow: 0 4px 16px rgba(138, 192, 213, 0.2);
-  background: white;
+  background: var(--bg-card);
 }
 
 .time-input-group input[type="time"]:focus {
@@ -443,7 +460,7 @@
   border-color: #8AC0D5;
   box-shadow: 0 0 0 4px rgba(138, 192, 213, 0.15), 0 4px 16px rgba(138, 192, 213, 0.2);
   transform: translateY(-2px);
-  background: white;
+  background: var(--bg-card);
 }
 
 @keyframes slideInDown {
@@ -469,8 +486,9 @@
   gap: 8px;
   font-size: 15px;
   font-weight: 700;
-  color: #1F1F1F;
+  color: var(--text-primary);
   margin-bottom: 16px;
+  transition: color var(--transition-normal);
 }
 
 .slot-options {
@@ -484,8 +502,8 @@
   align-items: center;
   gap: 16px;
   padding: 16px 20px;
-  background: white;
-  border: 2px solid #E5E7EB;
+  background: var(--bg-card);
+  border: 2px solid var(--border-primary);
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -504,11 +522,16 @@
   box-shadow: 0 4px 16px rgba(138, 192, 213, 0.25);
 }
 
+.slot-option.selected .slot-name {
+  color: #1F1F1F;
+}
+
 .slot-option.disabled {
-  background: #F9FAFB;
-  border-color: #E5E7EB;
+  background: var(--bg-secondary);
+  border-color: var(--border-primary);
   cursor: not-allowed;
   opacity: 0.5;
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
 }
 
 .slot-option .slot-icon {
@@ -523,7 +546,8 @@
   flex: 1;
   font-size: 16px;
   font-weight: 600;
-  color: #1F1F1F;
+  color: var(--text-primary);
+  transition: color var(--transition-normal);
 }
 
 .slot-option .slot-status {
@@ -632,30 +656,32 @@
   align-items: center;
   gap: 16px;
   padding: 16px;
-  border: 2px solid #E5E7EB;
+  border: 2px solid var(--border-primary);
   border-radius: 12px;
-  background: white;
+  background: var(--bg-card);
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .slot-item.available {
   border-color: #10B981;
-  background: #F0FDF4;
+  background: var(--alert-success-bg);
+  transition: background-color var(--transition-normal);
 }
 
 .slot-item.available:hover {
   border-color: #059669;
-  background: #DCFCE7;
+  background: var(--alert-success-border);
   transform: translateX(4px);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
 }
 
 .slot-item.occupied {
-  background: #FEF2F2;
-  border-color: #FCA5A5;
+  background: var(--alert-error-bg);
+  border-color: var(--alert-error-border);
   cursor: not-allowed;
   opacity: 0.6;
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
 }
 
 .slot-item.current {
@@ -672,9 +698,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: white;
+  background: var(--bg-secondary);
   border-radius: 10px;
   flex-shrink: 0;
+  transition: background-color var(--transition-normal);
 }
 
 .slot-item.available .slot-icon {
@@ -727,7 +754,8 @@
 }
 
 .past-text {
-  color: #9CA3AF;
+  color: var(--text-tertiary);
+  transition: color var(--transition-normal);
 }
 
 /* Modal Overlay */
@@ -737,7 +765,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--bg-overlay);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -757,13 +785,14 @@
 
 /* Modal Content */
 .modal-content {
-  background: white;
+  background: var(--bg-card);
   border-radius: 24px;
   width: 90%;
   max-width: 480px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-lg);
   animation: slideUp 0.3s ease;
   overflow: hidden;
+  transition: background-color var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 @keyframes slideUp {
@@ -782,24 +811,26 @@
   justify-content: space-between;
   align-items: center;
   padding: 24px;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid var(--border-secondary);
+  transition: border-color var(--transition-normal);
 }
 
 .modal-header h3 {
   font-size: 22px;
   font-weight: 700;
-  color: #1F1F1F;
+  color: var(--text-primary);
   margin: 0;
+  transition: color var(--transition-normal);
 }
 
 .modal-close {
-  background: #F3F4F6;
+  background: var(--bg-hover);
   border: none;
   width: 36px;
   height: 36px;
   border-radius: 50%;
   font-size: 24px;
-  color: #6B7280;
+  color: var(--text-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -808,8 +839,8 @@
 }
 
 .modal-close:hover {
-  background: #E5E7EB;
-  color: #1F1F1F;
+  background: var(--border-primary);
+  color: var(--text-primary);
   transform: rotate(90deg);
 }
 
@@ -835,7 +866,8 @@
 
 .modal-subject {
   font-size: 16px;
-  color: #6B7280;
+  color: var(--text-secondary);
+  transition: color var(--transition-normal);
   margin: 0 0 24px 0;
 }
 
@@ -909,7 +941,8 @@
   display: flex;
   gap: 12px;
   padding: 20px 24px;
-  background: #F9FAFB;
+  background: var(--bg-secondary);
+  transition: background-color var(--transition-normal);
 }
 
 .modal-btn {
@@ -924,14 +957,15 @@
 }
 
 .modal-cancel {
-  background: white;
-  color: #6B7280;
-  border: 2px solid #E5E7EB;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border: 2px solid var(--border-primary);
+  transition: all 0.3s ease;
 }
 
 .modal-cancel:hover {
-  background: #F3F4F6;
-  border-color: #D1D5DB;
+  background: var(--bg-hover);
+  border-color: var(--border-secondary);
 }
 
 .modal-confirm {
@@ -1018,8 +1052,5 @@
     padding: 16px;
   }
   
-  .info-card,
-  .move-slot-section {
-    padding: 20px;
-  }
+
 }

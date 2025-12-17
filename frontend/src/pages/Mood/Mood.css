@@ -1,163 +1,342 @@
-.mood-container {
+/* Mood Tracking Page - Based on Figma Mockup */
+.mood-page {
   min-height: 100vh;
-  background: #F9FAFB;
+  background: var(--bg-primary);
   padding-bottom: 80px;
+  position: relative;
 }
 
+/* Success Toast */
+.success-toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #4CAF50;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  animation: slideDown 0.3s ease-out;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Header */
+.mood-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.back-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1F1F1F;
+}
+
+.mood-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.history-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.history-btn:hover {
+  transform: scale(1.1);
+}
+
+.history-btn:active {
+  transform: scale(0.95);
+}
+
+/* Content */
 .mood-content {
-  padding: 20px;
+  padding: 16px;
 }
 
 .mood-question {
   text-align: center;
-  margin-bottom: 32px;
-}
-
-.mood-question h2 {
-  font-size: 24px;
-  font-weight: 600;
-  color: #1F1F1F;
-  margin: 0 0 8px 0;
-}
-
-.mood-question p {
   font-size: 16px;
-  color: #6B7280;
-  margin: 0;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 20px 0;
 }
 
+/* Mood Selector */
 .mood-selector {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 32px;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 20px;
+  padding: 0;
 }
 
-.mood-btn {
+.mood-option {
+  flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
-  background: white;
-  border: 2px solid #E5E7EB;
+  gap: 6px;
+  padding: 12px 6px;
+  background: var(--bg-card);
+  border: 2px solid transparent;
   border-radius: 16px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-card);
 }
 
-.mood-btn:active {
+.mood-option:hover {
   transform: scale(0.98);
+  box-shadow: var(--shadow-sm);
 }
 
-.mood-btn.selected {
-  border-color: var(--mood-color);
-  background: linear-gradient(135deg, rgba(240, 197, 213, 0.1) 0%, rgba(138, 192, 213, 0.1) 100%);
+.mood-option.selected {
+  border-color: #FF6B9D;
+  background: var(--bg-card);
+  box-shadow: 0 4px 12px rgba(255, 107, 157, 0.3);
 }
 
 .mood-emoji {
-  font-size: 32px;
+  font-size: 36px;
+  line-height: 1;
 }
 
 .mood-label {
-  font-size: 16px;
-  font-weight: 500;
-  color: #1F1F1F;
-}
-
-.emotion-tags-section,
-.mood-note-section {
-  margin-bottom: 24px;
-  animation: fadeIn 0.3s ease-out;
-}
-
-.emotion-tags-section h3,
-.mood-note-section h3 {
-  font-size: 18px;
+  font-size: 12px;
   font-weight: 600;
-  color: #1F1F1F;
-  margin: 0 0 16px 0;
+  color: #a09d9d;
 }
 
-.emotion-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.mood-option.selected .mood-label {
+  color: #FF6B9D;
+  font-weight: 700;
 }
 
-.emotion-tag {
-  padding: 10px 16px;
-  background: white;
-  border: 2px solid #E5E7EB;
-  border-radius: 20px;
+/* Note Section */
+.note-section {
+  margin-bottom: 20px;
+}
+
+.section-label {
+  display: block;
   font-size: 14px;
-  font-weight: 500;
-  color: #6B7280;
-  cursor: pointer;
-  transition: all 0.2s;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
 }
 
-.emotion-tag:active {
-  transform: scale(0.95);
-}
-
-.emotion-tag.selected {
-  background: linear-gradient(135deg, #F0C5D5 0%, #8AC0D5 100%);
-  border-color: transparent;
-  color: white;
-}
-
-.mood-note-input {
+.note-input {
   width: 100%;
-  padding: 16px;
-  background: white;
-  border: 2px solid #E5E7EB;
+  padding: 12px;
+  border: 1px solid var(--border-primary);
   border-radius: 16px;
-  font-size: 15px;
+  font-size: 14px;
   font-family: inherit;
-  color: #1F1F1F;
-  resize: vertical;
-  transition: all 0.2s;
+  resize: none;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  min-height: 80px;
+  box-shadow: var(--shadow-card);
 }
 
-.mood-note-input:focus {
+.note-input:focus {
   outline: none;
-  border-color: #8AC0D5;
+  border-color: #FF6B9D;
 }
 
-.mood-note-input::placeholder {
-  color: #9CA3AF;
+.note-input::placeholder {
+  color: #B8B8B8;
 }
 
-.submit-mood-btn {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, #F0C5D5 0%, #8AC0D5 100%);
+.char-count {
+  text-align: right;
+  font-size: 12px;
+  color: #B8B8B8;
+  margin-top: 8px;
+}
+
+/* Energy Level Slider */
+.energy-section {
+  margin-bottom: 20px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.energy-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #FF6B9D;
+}
+
+.energy-slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.slider-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.energy-icon {
+  text-align: center;
+  font-size: 32px;
+  margin-top: 8px;
+  transition: transform 0.3s ease;
+}
+
+.energy-icon.animate {
+  animation: bounce 0.5s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.slider-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  min-width: 40px;
+}
+
+.energy-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(to right, #FFE5EE 0%, #FF6B9D 100%);
+  outline: none;
+  cursor: pointer;
+}
+
+.energy-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #FF6B9D;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
+  transition: all 0.2s ease;
+}
+
+.energy-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 3px 12px rgba(255, 107, 157, 0.4);
+}
+
+.energy-slider::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #FF6B9D;
+  cursor: pointer;
   border: none;
-  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(255, 107, 157, 0.3);
+  transition: all 0.2s ease;
+}
+
+.energy-slider::-moz-range-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 0 3px 12px rgba(255, 107, 157, 0.4);
+}
+
+/* Submit Button */
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #FF6B9D 0%, #FFA8C5 100%);
+  border: none;
+  border-radius: 24px;
   color: white;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 12px rgba(138, 192, 213, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(255, 107, 157, 0.3);
 }
 
-.submit-mood-btn:hover {
+.submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(138, 192, 213, 0.4);
+  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
 }
 
-.submit-mood-btn:active {
+.submit-btn:active:not(:disabled) {
   transform: translateY(0);
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .mood-content {
+    padding: 20px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  
+  .mood-selector {
+    gap: 8px;
+  }
+  
+  .mood-option {
+    padding: 14px 8px;
+  }
+  
+  .mood-emoji {
+    font-size: 40px;
+  }
+  
+  .mood-label {
+    font-size: 12px;
   }
 }
