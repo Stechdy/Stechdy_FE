@@ -16,8 +16,10 @@ import AdminForgotPassword from './pages/Admin/AdminForgotPassword';
 // Main App Pages
 import Dashboard from './pages/Dashboard/Dashboard';
 import Calendar from './pages/Calendar/Calendar';
+import SlotDetail from './pages/SlotDetail/SlotDetail';
 import Mood from './pages/Mood/Mood';
 import Account from './pages/Account/Account';
+import StudyTracker from './pages/StudyTracker/StudyTracker';
 
 // Placeholder Admin component
 const AdminDashboard = () => <div style={{ padding: '40px', textAlign: 'center' }}>
@@ -70,9 +72,19 @@ function App() {
             <Dashboard />
           </PrivateRoute>
         } />
+        <Route path="/study-tracker" element={
+          <PrivateRoute>
+            <StudyTracker />
+          </PrivateRoute>
+        } />
         <Route path="/calendar" element={
           <PrivateRoute>
             <Calendar />
+          </PrivateRoute>
+        } />
+        <Route path="/slot-detail/:id" element={
+          <PrivateRoute>
+            <SlotDetail />
           </PrivateRoute>
         } />
         <Route path="/mood" element={

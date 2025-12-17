@@ -1,0 +1,361 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import BottomNav from '../../components/common/BottomNav';
+import { getVietnamTime, getVietnamDate } from '../../utils/helpers';
+import './StudyTracker.css';
+
+const StudyTracker = () => {
+  const navigate = useNavigate();
+  const [weekOffset, setWeekOffset] = useState(0); // 0 = current week, -1 = last week, +1 = next week
+  const [currentWeekNumber, setCurrentWeekNumber] = useState(null);
+  const [weekSchedule, setWeekSchedule] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [todayProgress, setTodayProgress] = useState([]);
+  const [streakData, setStreakData] = useState({ currentStreak: 0, totalHours: 0, calendar: [] });
+
+  useEffect(() => {
+    fetchStudyTrackerData();
+  }, [weekOffset]);
+
+  const fetchStudyTrackerData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
+      // Fetch subjects
+      const subjectsResponse = await fetch('http://localhost:3001/api/subjects', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (subjectsResponse.ok) {
+        const subjectsData = await subjectsResponse.json();
+        setSubjects(subjectsData);
+      }
+
+      // Fetch week schedule
+      const scheduleResponse = await fetch(`http://localhost:3001/api/study-sessions/week?offset=${weekOffset}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (scheduleResponse.ok) {
+        const scheduleData = await scheduleResponse.json();
+        setWeekSchedule(scheduleData.sessions || []);
+        setCurrentWeekNumber(scheduleData.weekNumber);
+      }
+
+      // Fetch today's progress
+      const today = getVietnamDate();
+      const todayStart = new Date(today.setHours(0, 0, 0, 0));
+      const todayEnd = new Date(today.setHours(23, 59, 59, 999));
+      
+      const progressResponse = await fetch(
+        `http://localhost:3001/api/study-sessions/today?start=${todayStart.toISOString()}&end=${todayEnd.toISOString()}`,
+        { headers: { 'Authorization': `Bearer ${token}` } }
+      );
+      
+      if (progressResponse.ok) {
+        const sessions = await progressResponse.json();
+        const progressBySubject = calculateProgressBySubject(sessions);
+        setTodayProgress(progressBySubject);
+      }
+
+      // Fetch streak data
+      const streakResponse = await fetch('http://localhost:3001/api/users/streak', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (streakResponse.ok) {
+        const streak = await streakResponse.json();
+        setStreakData(streak);
+      }
+
+    } catch (error) {
+      console.error('Error fetching study tracker data:', error);
+    }
+  };
+
+  const calculateProgressBySubject = (sessions) => {
+    const subjectMap = {};
+    
+    sessions.forEach(session => {
+      const subjectName = session.subjectId?.subjectName || 'Unknown';
+      if (!subjectMap[subjectName]) {
+        subjectMap[subjectName] = {
+          subject: subjectName,
+          completed: 0,
+          goal: 0,
+          color: session.subjectId?.color || '#8AC0D5'
+        };
+      }
+      
+      subjectMap[subjectName].goal += session.plannedDuration || 90;
+      if (session.status === 'completed') {
+        subjectMap[subjectName].completed += session.actualDuration || session.plannedDuration || 90;
+      }
+    });
+    
+    return Object.values(subjectMap);
+  };
+
+  const getWeekDates = () => {
+    const dates = [];
+    const today = getVietnamDate();
+    const currentDay = today.getDay();
+    
+    // Get current Monday
+    const currentMonday = new Date(today);
+    const daysToMonday = currentDay === 0 ? -6 : 1 - currentDay;
+    currentMonday.setDate(today.getDate() + daysToMonday);
+    
+    // Apply weekOffset to get the Monday of requested week
+    const weekMonday = new Date(currentMonday);
+    weekMonday.setDate(currentMonday.getDate() + (weekOffset * 7));
+    
+    // Generate 7 days from Monday to Sunday
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(weekMonday);
+      date.setDate(weekMonday.getDate() + i);
+      dates.push({
+        day: date.toLocaleDateString('en-US', { weekday: 'short' }),
+        date: `${date.getDate()}/${date.getMonth() + 1}`,
+        fullDate: date // Keep full date object for comparison
+      });
+    }
+    
+    return dates;
+  };
+
+  const getSessionStatus = (day, timeSlot) => {
+    const session = weekSchedule.find(s => 
+      s.dayOfWeek === day && s.timeSlot === timeSlot
+    );
+    
+    if (!session) return 'no-slot';
+    
+    // Check if session is in the future
+    const sessionDate = new Date(session.date);
+    const today = getVietnamDate();
+    today.setHours(0, 0, 0, 0);
+    sessionDate.setHours(0, 0, 0, 0);
+    
+    // Future sessions = scheduled (show dash with color)
+    if (sessionDate > today) {
+      return 'scheduled';
+    }
+    
+    // Past/today sessions
+    if (session.status === 'completed') return 'present';
+    if (session.status === 'cancelled') return 'absent';
+    
+    // Past but not marked = absent (missed)
+    return 'absent';
+  };
+
+  const getSessionColor = (day, timeSlot) => {
+    const session = weekSchedule.find(s => 
+      s.dayOfWeek === day && s.timeSlot === timeSlot
+    );
+    return session?.subjectInfo?.color || '#8AC0D5';
+  };
+
+  const renderStatusIcon = (status, color) => {
+    if (status === 'no-slot') {
+      return <div className="status-icon no-slot">−</div>;
+    }
+    if (status === 'absent') {
+      return <div className="status-icon absent" style={{ backgroundColor: color }}>×</div>;
+    }
+    if (status === 'scheduled') {
+      return <div className="status-icon scheduled" style={{ backgroundColor: color }}>−</div>;
+    }
+    return <div className="status-icon present" style={{ backgroundColor: color }}>✓</div>;
+  };
+
+  const weekDates = getWeekDates();
+  const timeSlots = ['Mor', 'Aft', 'Eve'];
+
+  return (
+    <div className="study-tracker">
+      <header className="tracker-header">
+        <div className="tracker-title-wrapper">
+          <button className="back-button" onClick={() => navigate('/dashboard')}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M15 18L9 12L15 6" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          <h1>Study Tracker</h1>
+        </div>
+        <button className="notification-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.37 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.64 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" fill="#E85D75"/>
+          </svg>
+          <span className="notification-badge"></span>
+        </button>
+      </header>
+
+      {/* Main Content */}
+      <main className="tracker-main">
+        {/* Weekly Schedule */}
+        <section className="weekly-schedule">
+        <div className="schedule-header">
+          <h2>Weekly Schedule</h2>
+          <div className="week-navigation">
+            <button onClick={() => setWeekOffset(weekOffset - 1)}>‹</button>
+            <span>Week {currentWeekNumber || '...'}</span>
+            <button onClick={() => setWeekOffset(weekOffset + 1)}>›</button>
+          </div>
+        </div>
+
+        <div className="schedule-grid">
+          <div className="schedule-row header-row">
+            <div className="time-slot-label"></div>
+            {weekDates.map((day, idx) => {
+              const today = getVietnamDate();
+              today.setHours(0, 0, 0, 0);
+              const dayDate = new Date(day.fullDate);
+              dayDate.setHours(0, 0, 0, 0);
+              const isToday = dayDate.getTime() === today.getTime();
+              
+              return (
+                <div key={idx} className={`day-header ${isToday ? 'today' : ''}`}>
+                  <div className="day-name">{day.day}</div>
+                  <div className="day-date">{day.date}</div>
+                </div>
+              );
+            })}
+          </div>
+
+          {timeSlots.map((slot, slotIdx) => (
+            <div key={slotIdx} className="schedule-row">
+              <div className="time-slot-label">{slot}</div>
+              {weekDates.map((day, dayIdx) => {
+                const status = getSessionStatus(day.day, slot);
+                const color = getSessionColor(day.day, slot);
+                return (
+                  <div key={dayIdx} className="schedule-cell">
+                    {renderStatusIcon(status, color)}
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+
+        <div className="schedule-legend">
+          <div className="legend-item">
+            <div className="legend-icon present">✓</div>
+            <span>Present</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-icon absent">×</div>
+            <span>Absent</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-icon no-slot">−</div>
+            <span>No slot</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Subject Legend */}
+      <section className="subject-legend">
+        <h3>Subject Legend</h3>
+        <div className="subjects-grid">
+          {subjects.map((subject, idx) => (
+            <div key={idx} className="subject-item">
+              <div className="subject-color" style={{ backgroundColor: subject.color }}></div>
+              <span>{subject.subjectName}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Today's Progress */}
+      <section className="today-progress">
+        <h3>Today's Progress</h3>
+        {todayProgress.map((item, idx) => (
+          <div key={idx} className="progress-item">
+            <div className="progress-header">
+              <div className="progress-label">
+                <div className="progress-dot" style={{ backgroundColor: item.color }}></div>
+                <span>{item.subject}</span>
+              </div>
+              <span className="progress-time">
+                {Math.floor(item.completed / 60)}h {item.completed % 60}m / {Math.floor(item.goal / 60)}h
+              </span>
+            </div>
+            <div className="progress-bar-container">
+              <div 
+                className="progress-bar-fill" 
+                style={{ 
+                  width: `${Math.min((item.completed / item.goal) * 100, 100)}%`,
+                  backgroundColor: item.color 
+                }}
+              ></div>
+            </div>
+          </div>
+        ))}
+      </section>
+
+      {/* Study Streak Calendar */}
+      <section className="streak-calendar">
+        <h3>Study Streak Calendar</h3>
+        <div>
+          <div className="calendar-header">
+            {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, idx) => (
+              <div key={idx} className="weekday">{day}</div>
+            ))}
+          </div>
+          <div className="calendar-grid">
+            {Array.from({ length: 35 }, (_, i) => {
+              const currentDate = getVietnamDate();
+              const today = currentDate.getDate();
+              const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+              const startDay = firstDay.getDay();
+              const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+              
+              const mondayShift = startDay === 0 ? 6 : startDay - 1;
+              const dayNumber = i - mondayShift + 1;
+              const isValidDay = dayNumber > 0 && dayNumber <= daysInMonth;
+              const isActive = isValidDay && streakData.calendar?.includes(dayNumber);
+              const isToday = isValidDay && dayNumber === today;
+              
+              return (
+                <div
+                  key={i}
+                  className={`calendar-day ${isToday ? 'today' : ''} ${isActive ? 'active' : ''} ${!isValidDay ? 'empty' : ''}`}
+                >
+                  {isValidDay ? dayNumber : ''}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Streak Stats */}
+        <div className="streak-stats">
+          <div className="streak-icon-container">
+            <span className="streak-icon">🔥</span>
+          </div>
+          <div className="streak-info">
+            <span className="streak-label">Current Streak</span>
+            <span className="streak-value">{streakData.currentStreak || 0} Days</span>
+          </div>
+          <div className="streak-hours">
+            <span className="streak-hours-label">Total Hours</span>
+            <span className="streak-hours-value">{streakData.totalHours || 0}h</span>
+          </div>
+        </div>
+      </section>
+      </main>
+
+      {/* Bottom Navigation */}
+      <BottomNav />
+    </div>
+  );
+};
+
+export default StudyTracker;

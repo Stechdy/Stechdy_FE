@@ -6,7 +6,15 @@ const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => {
+    if (path === '/dashboard') {
+      return location.pathname === '/dashboard' || location.pathname === '/study-tracker';
+    }
+    if (path === '/calendar') {
+      return location.pathname === '/calendar' || location.pathname.startsWith('/slot-detail');
+    }
+    return location.pathname === path;
+  };
 
   return (
     <nav className="bottom-nav">

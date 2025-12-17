@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/common/BottomNav';
+import { getVietnamTime, getVietnamDate } from '../../utils/helpers';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -14,7 +15,7 @@ const Dashboard = () => {
 
   // Get time-based greeting
   const getGreeting = () => {
-    const hour = new Date().getHours();
+    const hour = getVietnamTime().getHours();
     if (hour < 12) return 'Good morning!';
     if (hour < 18) return 'Good afternoon!';
     return 'Good evening!';
@@ -69,7 +70,7 @@ const Dashboard = () => {
       }
 
       // Get today's date range
-      const today = new Date();
+      const today = getVietnamDate();
       const todayStart = new Date(today.setHours(0, 0, 0, 0));
       const todayEnd = new Date(today.setHours(23, 59, 59, 999));
 
@@ -240,7 +241,7 @@ const Dashboard = () => {
         {/* Today's Progress */}
         <section className="progress-section">
           <h2 className="section-title">Today's Progress</h2>
-          <div className="progress-card">
+          <div className="progress-card" onClick={() => navigate('/study-tracker')} style={{ cursor: 'pointer' }}>
             <div className="progress-header">
               <span className="progress-label">Study Time</span>
               <span className="progress-time">
