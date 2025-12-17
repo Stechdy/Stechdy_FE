@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/common/BottomNav';
+import MoodCheckInModal from '../../components/mood/MoodCheckInModal';
+import moodService from '../../services/moodService';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -11,6 +13,7 @@ const Dashboard = () => {
   const [upcomingSessions, setUpcomingSessions] = useState([]);
   const [aiSuggestion, setAiSuggestion] = useState('');
   const [greeting, setGreeting] = useState('Good morning!');
+  const [showMoodModal, setShowMoodModal] = useState(false);
 
   // Get time-based greeting
   const getGreeting = () => {
@@ -24,8 +27,28 @@ const Dashboard = () => {
     setGreeting(getGreeting());
     loadCachedData();
     fetchDashboardData();
+    checkMoodCheckIn();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Check if user needs mood check-in
+  const checkMoodCheckIn = async () => {
+    const lastSkipped = localStorage.getItem('moodCheckInSkipped');
+    const today = new Date().toDateString();
+    
+    // Don't show if already skipped today
+    if (lastSkipped === today) return;
+    
+    try {
+      const response = await moodService.getTodayMood();
+      // Show modal if no mood entry today
+      if (!response.data) {
+        setTimeout(() => setShowMoodModal(true), 2000); // Show after 2 seconds
+      }
+    } catch (error) {
+      console.error('Error checking mood:', error);
+    }
+  };
 
   // Load cached data immediately for instant display
   const loadCachedData = () => {
@@ -289,6 +312,12 @@ const Dashboard = () => {
           </div>
         </section>
       </main>
+
+      {/* Mood Check-in Modal */}
+      <MoodCheckInModal 
+        isOpen={showMoodModal} 
+        onClose={() => setShowMoodModal(false)} 
+      />
 
       {/* Bottom Navigation */}
       <BottomNav />

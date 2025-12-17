@@ -24,6 +24,11 @@ import Calendar from "./pages/Calendar/Calendar";
 import Mood from "./pages/Mood/Mood";
 import Account from "./pages/Account/Account";
 import UserInformation from "./pages/UserInformation/UserInformation";
+import Dashboard from './pages/Dashboard/Dashboard';
+import Calendar from './pages/Calendar/Calendar';
+import Mood from './pages/Mood/Mood';
+import MoodHistory from './pages/Mood/MoodHistory';
+import Account from './pages/Account/Account';
 
 // Placeholder Admin component
 const AdminDashboard = () => (
@@ -122,6 +127,11 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/mood/history" element={
+          <PrivateRoute>
+            <MoodHistory />
+          </PrivateRoute>
+        } />
         <Route
           path="/account"
           element={
