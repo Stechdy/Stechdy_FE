@@ -8,6 +8,9 @@ import {
 import PublicRoute from "./components/common/PublicRoute";
 import PrivateRoute from "./components/common/PrivateRoute";
 
+// Landing Page
+import Landing from "./pages/Landing/Landing";
+
 // Auth Pages
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
@@ -24,9 +27,9 @@ import Calendar from "./pages/Calendar/Calendar";
 import Mood from "./pages/Mood/Mood";
 import Account from "./pages/Account/Account";
 import UserInformation from "./pages/UserInformation/UserInformation";
-import SlotDetail from './pages/SlotDetail/SlotDetail';
-import MoodHistory from './pages/Mood/MoodHistory';
-import StudyTracker from './pages/StudyTracker/StudyTracker';
+import SlotDetail from "./pages/SlotDetail/SlotDetail";
+import MoodHistory from "./pages/Mood/MoodHistory";
+import StudyTracker from "./pages/StudyTracker/StudyTracker";
 
 // Placeholder Admin component
 const AdminDashboard = () => (
@@ -125,37 +128,55 @@ function App() {
             </PrivateRoute>
           }
         />
-        <Route path="/mood/history" element={
-          <PrivateRoute>
-            <Dashboard />
-          </PrivateRoute>
-        } />
-        <Route path="/study-tracker" element={
-          <PrivateRoute>
-            <StudyTracker />
-          </PrivateRoute>
-        } />
-        <Route path="/calendar" element={
-          <PrivateRoute>
-            <Calendar />
-          </PrivateRoute>
-        } />
-        <Route path="/slot-detail/:id" element={
-          <PrivateRoute>
-            <SlotDetail />
-          </PrivateRoute>
-        } />
-        <Route path="/mood" element={
-          <PrivateRoute>
-            <Mood />
-          </PrivateRoute>
-        } />
-        <Route path="/account" element={
-          <PrivateRoute>
-            <Account />
-            <MoodHistory />
-          </PrivateRoute>
-        } />
+        <Route
+          path="/mood/history"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/study-tracker"
+          element={
+            <PrivateRoute>
+              <StudyTracker />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/calendar"
+          element={
+            <PrivateRoute>
+              <Calendar />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/slot-detail/:id"
+          element={
+            <PrivateRoute>
+              <SlotDetail />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/mood"
+          element={
+            <PrivateRoute>
+              <Mood />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/account"
+          element={
+            <PrivateRoute>
+              <Account />
+              <MoodHistory />
+            </PrivateRoute>
+          }
+        />
         <Route
           path="/account"
           element={
@@ -184,8 +205,8 @@ function App() {
         />
 
         {/* Default redirect */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Landing />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
   );
