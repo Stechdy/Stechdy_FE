@@ -795,7 +795,8 @@
 }
 
 @media (max-width: 768px) {
-  .landing-nav-links {
+  .landing-nav-links,
+  .landing-nav-actions {
     display: none;
   }
 
@@ -921,6 +922,13 @@
   background: var(--bg-hover);
 }
 
+.landing-mobile-menu-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 0;
+}
+
 .landing-mobile-menu-actions {
   display: flex;
   flex-direction: column;
@@ -969,6 +977,7 @@
   font-weight: 500;
   transition: all var(--transition-normal);
   width: 100%;
+  justify-content: flex-start;
 }
 
 .landing-mobile-theme-toggle:hover {
