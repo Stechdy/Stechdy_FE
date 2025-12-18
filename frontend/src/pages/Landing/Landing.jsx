@@ -253,7 +253,7 @@ const Landing = () => {
       number: 2,
       title: "Plan Your Schedule",
       description:
-        "Add your subjects, set study times, and let Stechdy help you build the perfect routine.",
+        "Add your subjects, set study times, and let S'Techdy help you build the perfect routine.",
     },
     {
       number: 3,
@@ -265,7 +265,7 @@ const Landing = () => {
 
   const testimonials = [
     {
-      text: '"Stechdy completely transformed how I approach studying. The mood tracking feature helped me understand my best study times."',
+      text: '"S\'Techdy completely transformed how I approach studying. The mood tracking feature helped me understand my best study times."',
       name: "Sarah Chen",
       role: "Medical Student",
       avatar: "SC",
@@ -292,7 +292,7 @@ const Landing = () => {
           <div className="landing-logo-icon">
             <BookIcon />
           </div>
-          <span className="landing-logo-text">Stechdy</span>
+          <span className="landing-logo-text">S'Techdy</span>
         </Link>
 
         <div className="landing-nav-links">
@@ -402,7 +402,7 @@ const Landing = () => {
           </h1>
 
           <p className="landing-hero-subtitle">
-            Stechdy combines intelligent study planning with mood tracking to
+            S'Techdy combines intelligent study planning with mood tracking to
             help you achieve academic success while maintaining your mental
             wellness.
           </p>
@@ -498,7 +498,7 @@ const Landing = () => {
           <span className="landing-section-badge">Testimonials</span>
           <h2 className="landing-section-title">Loved by Students Worldwide</h2>
           <p className="landing-section-subtitle">
-            See what our community has to say about their Stechdy experience.
+            See what our community has to say about their S'Techdy experience.
           </p>
         </div>
 
@@ -534,7 +534,7 @@ const Landing = () => {
             </h2>
             <p className="landing-cta-subtitle">
               Join thousands of students who are already studying smarter with
-              Stechdy.
+              S'Techdy.
             </p>
             <Link to="/register" className="landing-cta-btn">
               Get Started Free
@@ -551,7 +551,7 @@ const Landing = () => {
             <div className="landing-footer-logo-icon">
               <BookIcon />
             </div>
-            <span className="landing-footer-logo-text">Stechdy</span>
+            <span className="landing-footer-logo-text">S'Techdy</span>
           </div>
 
           <div className="landing-footer-links">
@@ -579,7 +579,7 @@ const Landing = () => {
           </div>
 
           <p className="landing-footer-copyright">
-            © 2025 Stechdy. All rights reserved.
+            © 2025 S'Techdy. All rights reserved.
           </p>
         </div>
       </footer>

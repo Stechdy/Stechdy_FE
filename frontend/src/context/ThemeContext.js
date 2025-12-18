@@ -22,9 +22,6 @@ export const ThemeProvider = ({ children }) => {
     }
   });
 
-  // Actual theme being applied (light or dark)
-  const [resolvedTheme, setResolvedTheme] = useState("light");
-
   // Get system preference
   const getSystemTheme = useCallback(() => {
     if (typeof window !== "undefined" && window.matchMedia) {
@@ -34,6 +31,25 @@ export const ThemeProvider = ({ children }) => {
     }
     return "light";
   }, []);
+
+  // Actual theme being applied (light or dark) - initialize with system preference
+  const [resolvedTheme, setResolvedTheme] = useState(() => {
+    try {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved && saved !== "system") {
+        return saved;
+      }
+      // Auto-detect from system preference
+      if (typeof window !== "undefined" && window.matchMedia) {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      }
+      return "light";
+    } catch {
+      return "light";
+    }
+  });
 
   // Resolve the actual theme based on mode
   const resolveTheme = useCallback(
