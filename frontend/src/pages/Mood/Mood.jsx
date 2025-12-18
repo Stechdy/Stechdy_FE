@@ -20,7 +20,7 @@ const Mood = () => {
     { value: 2, emoji: '😔', label: 'Sad' },
     { value: 3, emoji: '😐', label: 'Normal' },
     { value: 4, emoji: '😊', label: 'Happy' },
-    { value: 5, emoji: '😄', label: 'Rất vui' },
+    { value: 5, emoji: '😄', label: 'Very Happy' },
   ];
 
   // Energy icons based on level
@@ -52,7 +52,7 @@ const Mood = () => {
 
   const handleSubmit = async () => {
     if (!selectedMood) {
-      alert('Vui lòng chọn tâm trạng của bạn');
+      alert('Please select your mood');
       return;
     }
 
@@ -73,7 +73,7 @@ const Mood = () => {
       }
     } catch (error) {
       console.error('Error saving mood:', error);
-      alert('Có lỗi xảy ra khi lưu cảm xúc');
+      alert('An error occurred while saving');
     } finally {
       setLoading(false);
     }
@@ -84,7 +84,7 @@ const Mood = () => {
       {/* Success notification */}
       {showSuccess && (
         <div className="success-toast">
-          Đã lưu cảm xúc hôm nay 💙
+          Mood saved successfully 💙
         </div>
       )}
 
@@ -101,7 +101,7 @@ const Mood = () => {
       </header>
 
       <div className="mood-content">
-        <p className="mood-question">Hôm nay bạn cảm thấy thế nào?</p>
+        <p className="mood-question">How are you feeling today?</p>
 
         {/* Mood Selector */}
         <div className="mood-selector">
@@ -119,10 +119,10 @@ const Mood = () => {
 
         {/* Note Section */}
         <div className="note-section">
-          <label className="section-label">Ghi chú cảm xúc</label>
+          <label className="section-label">Notes</label>
           <textarea
             className="note-input"
-            placeholder="Ghi chú cảm xúc hôm nay..."
+            placeholder="Write about your feelings today..."
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows="3"
@@ -134,12 +134,12 @@ const Mood = () => {
         {/* Energy Level Slider */}
         <div className="energy-section">
           <div className="section-header">
-            <label className="section-label">Mức năng lượng</label>
+            <label className="section-label">Energy Level</label>
             <span className="energy-value">{energyLevel}/10</span>
           </div>
           <div className="energy-slider-container">
             <div className="slider-wrapper">
-              <span className="slider-label">Thấp</span>
+              <span className="slider-label">Low</span>
               <input
                 type="range"
                 min="1"
@@ -152,7 +152,7 @@ const Mood = () => {
                 }}
                 className="energy-slider"
               />
-              <span className="slider-label">Cao</span>
+              <span className="slider-label">High</span>
             </div>
             <div className={`energy-icon ${iconAnimate ? 'animate' : ''}`}>
               {getEnergyIcon(energyLevel)}
@@ -166,7 +166,7 @@ const Mood = () => {
           onClick={handleSubmit}
           disabled={!selectedMood || loading}
         >
-          {loading ? 'Đang lưu...' : 'Lưu cảm xúc hôm nay 💖'}
+          {loading ? 'Saving...' : 'Save Today\'s Mood 💖'}
         </button>
       </div>
 

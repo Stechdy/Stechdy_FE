@@ -228,30 +228,81 @@
   position: fixed;
   bottom: 100px;
   right: 20px;
-  width: 56px;
+  width: auto;
   height: 56px;
-  border-radius: 50%;
+  padding: 0 20px;
+  border-radius: 28px;
   background: linear-gradient(135deg, #FF6B9D 0%, #FFA8C5 100%);
   border: none;
   color: white;
-  font-size: 28px;
-  font-weight: 300;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 16px rgba(255, 107, 157, 0.4);
   transition: all 0.3s ease;
   z-index: 50;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.fab-icon {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.fab-label {
+  max-width: 0;
+  opacity: 0;
+  white-space: nowrap;
+  transition: all 0.3s ease;
 }
 
 .add-mood-fab:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
+  padding-right: 24px;
+}
+
+.add-mood-fab:hover .fab-icon {
+  transform: rotate(90deg);
+}
+
+.add-mood-fab:hover .fab-label {
+  max-width: 100px;
+  opacity: 1;
+  margin-left: 4px;
 }
 
 .add-mood-fab:active {
   transform: scale(0.95);
+}
+
+/* Mobile adjustments for FAB */
+@media (max-width: 480px) {
+  .add-mood-fab {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+  }
+  
+  .fab-label {
+    display: none;
+  }
+  
+  .add-mood-fab:hover {
+    padding: 0;
+    width: 56px;
+  }
+  
+  .add-mood-fab:hover .fab-label {
+    display: none;
+  }
 }
 
 /* Responsive */

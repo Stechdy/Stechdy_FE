@@ -41,7 +41,7 @@ const MoodHistory = () => {
         <button className="back-btn" onClick={() => navigate('/dashboard')}>
           ←
         </button>
-        <h1 className="history-title">Lịch sử cảm xúc</h1>
+        <h1 className="history-title">Mood History</h1>
         <div style={{ width: '40px' }}></div>
       </header>
 
@@ -50,7 +50,7 @@ const MoodHistory = () => {
         {loading && (
           <div className="loading-section">
             <div className="loading-spinner"></div>
-            <p>Đang tải dữ liệu...</p>
+            <p>Loading data...</p>
           </div>
         )}
 
@@ -60,7 +60,7 @@ const MoodHistory = () => {
             <div className="stat-card">
               <div className="stat-icon">{getMoodEmoji(stats.avgMood)}</div>
               <div className="stat-info">
-                <span className="stat-label">Tâm trạng trung bình</span>
+                <span className="stat-label">Average Mood</span>
                 <span className="stat-value">{stats.avgMood.toFixed(1)}/5</span>
               </div>
             </div>
@@ -68,7 +68,7 @@ const MoodHistory = () => {
             <div className="stat-card">
               <div className="stat-icon">⚡</div>
               <div className="stat-info">
-                <span className="stat-label">Năng lượng trung bình</span>
+                <span className="stat-label">Average Energy</span>
                 <span className="stat-value">{stats.avgEnergy.toFixed(1)}/10</span>
               </div>
             </div>
@@ -76,7 +76,7 @@ const MoodHistory = () => {
             <div className="stat-card">
               <div className="stat-icon">📊</div>
               <div className="stat-info">
-                <span className="stat-label">Số lần ghi nhận</span>
+                <span className="stat-label">Total Entries</span>
                 <span className="stat-value">{stats.totalEntries}</span>
               </div>
             </div>
@@ -87,24 +87,24 @@ const MoodHistory = () => {
         {!loading && stats && stats.totalEntries === 0 && (
           <div className="empty-state">
             <div className="empty-icon">📊</div>
-            <h3>Chưa có dữ liệu</h3>
-            <p>Hãy bắt đầu ghi nhận cảm xúc của bạn hôm nay!</p>
+            <h3>No Data Yet</h3>
+            <p>Start tracking your mood today!</p>
             <button className="start-btn" onClick={() => navigate('/mood')}>
-              Bắt đầu ngay
+              Start Now
             </button>
           </div>
         )}
 
         {/* Calendar */}
         <div className="calendar-section">
-          <h2 className="section-title">Lịch theo dõi</h2>
+          <h2 className="section-title">Mood Calendar</h2>
           <MoodCalendar />
         </div>
 
         {/* Top Emotions */}
         {!loading && stats && stats.topEmotions.length > 0 && (
           <div className="emotions-section">
-            <h2 className="section-title">Cảm xúc phổ biến</h2>
+            <h2 className="section-title">Common Emotions</h2>
             <div className="emotion-list">
               {stats.topEmotions.map((emotion, index) => (
                 <div key={index} className="emotion-item">
@@ -128,8 +128,10 @@ const MoodHistory = () => {
         <button 
           className="add-mood-fab"
           onClick={() => navigate('/mood')}
+          title="Add new mood entry"
         >
-          +
+          <span className="fab-icon">+</span>
+          <span className="fab-label">Add Mood</span>
         </button>
       </div>
 

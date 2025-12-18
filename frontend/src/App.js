@@ -132,7 +132,7 @@ function App() {
           path="/mood/history"
           element={
             <PrivateRoute>
-              <Dashboard />
+              <MoodHistory />
             </PrivateRoute>
           }
         />
@@ -157,23 +157,6 @@ function App() {
           element={
             <PrivateRoute>
               <SlotDetail />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/mood"
-          element={
-            <PrivateRoute>
-              <Mood />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/account"
-          element={
-            <PrivateRoute>
-              <Account />
-              <MoodHistory />
             </PrivateRoute>
           }
         />

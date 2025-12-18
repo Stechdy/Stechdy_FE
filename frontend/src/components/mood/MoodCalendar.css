@@ -58,7 +58,8 @@
   font-size: 12px;
   font-weight: 600;
   color: var(--text-secondary);
-  padding: 8px 0;
+  padding: 6px 0;
+  min-width: 0;
 }
 
 /* Calendar Grid */
@@ -79,6 +80,8 @@
   position: relative;
   transition: all 0.2s ease;
   background: var(--bg-hover);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .calendar-day.empty {
@@ -273,7 +276,7 @@
   }
   
   .calendar-header {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   
   .calendar-title {
@@ -286,13 +289,54 @@
     font-size: 14px;
   }
   
+  .calendar-weekdays {
+    gap: 2px;
+    margin-bottom: 6px;
+  }
+  
   .calendar-grid {
-    gap: 3px;
+    gap: 2px;
+  }
+  
+  .weekday {
+    font-size: 10px;
+    padding: 4px 0;
+  }
+  
+  .day-number {
+    font-size: 10px;
+  }
+  
+  .day-mood {
+    font-size: 14px;
+    margin-top: 1px;
+  }
+  
+  .calendar-day {
+    border-radius: 6px;
+    min-height: 36px;
+  }
+  
+  .modal-content {
+    padding: 16px;
+  }
+  
+  .modal-header {
+    padding: 16px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+  .mood-calendar {
+    padding: 14px;
+  }
+  
+  .calendar-grid {
+    gap: 4px;
   }
   
   .weekday {
     font-size: 11px;
-    padding: 6px 0;
   }
   
   .day-number {
@@ -301,10 +345,6 @@
   
   .day-mood {
     font-size: 16px;
-  }
-  
-  .calendar-day {
-    border-radius: 8px;
   }
 }
 

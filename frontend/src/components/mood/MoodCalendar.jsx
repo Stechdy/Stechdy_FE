@@ -22,7 +22,7 @@ const MoodCalendar = () => {
     2: 'Sad',
     3: 'Normal',
     4: 'Happy',
-    5: 'Rất vui'
+    5: 'Very Happy'
   };
 
   useEffect(() => {
@@ -117,11 +117,11 @@ const MoodCalendar = () => {
   };
 
   const monthNames = [
-    'Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
-    'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  const weekDays = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   return (
     <div className="mood-calendar">
@@ -188,14 +188,14 @@ const MoodCalendar = () => {
               
               {selectedMood.energyLevel && (
                 <div className="modal-energy">
-                  <span className="modal-field-label">⚡ Năng lượng:</span>
+                  <span className="modal-field-label">⚡ Energy:</span>
                   <span className="modal-field-value">{selectedMood.energyLevel}/10</span>
                 </div>
               )}
               
               {selectedMood.emotionTags && selectedMood.emotionTags.length > 0 && (
                 <div className="modal-emotions">
-                  <span className="modal-field-label">🏷️ Cảm xúc:</span>
+                  <span className="modal-field-label">🏷️ Emotions:</span>
                   <div className="modal-emotion-tags">
                     {selectedMood.emotionTags.map((tag, idx) => (
                       <span key={idx} className="modal-emotion-tag">{tag}</span>
@@ -206,7 +206,7 @@ const MoodCalendar = () => {
               
               {selectedMood.note && (
                 <div className="modal-note">
-                  <span className="modal-field-label">📝 Ghi chú:</span>
+                  <span className="modal-field-label">📝 Notes:</span>
                   <p>{selectedMood.note}</p>
                 </div>
               )}
