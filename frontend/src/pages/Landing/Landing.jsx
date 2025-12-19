@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { useTheme } from "../../context/ThemeContext";
+import LanguageSwitcher from "../../components/common/LanguageSwitcher";
 import "./Landing.css";
 
 // SVG Icons as components for better maintainability
@@ -186,6 +188,7 @@ const MoonIcon = () => (
 const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { resolvedTheme, setThemeMode } = useTheme();
+  const { t } = useTranslation();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -203,83 +206,86 @@ const Landing = () => {
     setMobileMenuOpen(false);
   };
 
+  // Close mobile menu when resizing to desktop view
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768 && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [mobileMenuOpen]);
+
   const features = [
     {
       icon: <CalendarIcon />,
-      title: "Smart Scheduling",
-      description:
-        "Plan your study sessions with an intelligent calendar that adapts to your learning patterns and goals.",
+      title: t("features.smartScheduling.title"),
+      description: t("features.smartScheduling.description"),
     },
     {
       icon: <SmileIcon />,
-      title: "Mood Tracking",
-      description:
-        "Monitor your emotional wellbeing and discover how it affects your study performance over time.",
+      title: t("features.moodTracking.title"),
+      description: t("features.moodTracking.description"),
     },
     {
       icon: <TrendingUpIcon />,
-      title: "Progress Analytics",
-      description:
-        "Track your learning journey with detailed insights and beautiful visualizations of your progress.",
+      title: t("features.progressAnalytics.title"),
+      description: t("features.progressAnalytics.description"),
     },
     {
       icon: <TargetIcon />,
-      title: "Goal Setting",
-      description:
-        "Set achievable study goals and celebrate milestones as you work towards academic success.",
+      title: t("features.goalSetting.title"),
+      description: t("features.goalSetting.description"),
     },
     {
       icon: <ClockIcon />,
-      title: "Time Management",
-      description:
-        "Master your time with study trackers and reminders that keep you focused and on schedule.",
+      title: t("features.timeManagement.title"),
+      description: t("features.timeManagement.description"),
     },
     {
       icon: <BookIcon />,
-      title: "Study Sessions",
-      description:
-        "Organize your subjects and track dedicated study time for each course or topic.",
+      title: t("features.studySessions.title"),
+      description: t("features.studySessions.description"),
     },
   ];
 
   const steps = [
     {
       number: 1,
-      title: "Create Your Account",
-      description:
-        "Sign up in seconds and set up your personalized study profile with your goals.",
+      title: t("howItWorks.step1.title"),
+      description: t("howItWorks.step1.description"),
     },
     {
       number: 2,
-      title: "Plan Your Schedule",
-      description:
-        "Add your subjects, set study times, and let S'Techdy help you build the perfect routine.",
+      title: t("howItWorks.step2.title"),
+      description: t("howItWorks.step2.description"),
     },
     {
       number: 3,
-      title: "Track & Improve",
-      description:
-        "Monitor your progress, check in on your mood, and watch your productivity soar.",
+      title: t("howItWorks.step3.title"),
+      description: t("howItWorks.step3.description"),
     },
   ];
 
   const testimonials = [
     {
-      text: '"S\'Techdy completely transformed how I approach studying. The mood tracking feature helped me understand my best study times."',
-      name: "Sarah Chen",
-      role: "Medical Student",
+      text: t("testimonials.testimonial1.text"),
+      name: t("testimonials.testimonial1.name"),
+      role: t("testimonials.testimonial1.role"),
       avatar: "SC",
     },
     {
-      text: '"Finally, an app that understands that studying is not just about time, but about mental wellness too. Highly recommend!"',
-      name: "James Wilson",
-      role: "Engineering Major",
+      text: t("testimonials.testimonial2.text"),
+      name: t("testimonials.testimonial2.name"),
+      role: t("testimonials.testimonial2.role"),
       avatar: "JW",
     },
     {
-      text: '"The progress analytics are incredible. I can actually see how much Ive improved over the semester. Game changer!"',
-      name: "Emily Rodriguez",
-      role: "Law Student",
+      text: t("testimonials.testimonial3.text"),
+      name: t("testimonials.testimonial3.name"),
+      role: t("testimonials.testimonial3.role"),
       avatar: "ER",
     },
   ];
@@ -300,39 +306,40 @@ const Landing = () => {
             className="landing-nav-link"
             onClick={() => scrollToSection("features")}
           >
-            Features
+            {t("nav.features")}
           </span>
           <span
             className="landing-nav-link"
             onClick={() => scrollToSection("how-it-works")}
           >
-            How It Works
+            {t("nav.howItWorks")}
           </span>
           <span
             className="landing-nav-link"
             onClick={() => scrollToSection("testimonials")}
           >
-            Testimonials
+            {t("nav.testimonials")}
           </span>
         </div>
 
         <div className="landing-nav-actions">
+          <LanguageSwitcher />
           <button
             className="landing-theme-toggle"
             onClick={toggleTheme}
             aria-label={
               resolvedTheme === "dark"
-                ? "Switch to light mode"
-                : "Switch to dark mode"
+                ? t("theme.switchToLight")
+                : t("theme.switchToDark")
             }
           >
             {resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />}
           </button>
           <Link to="/login" className="landing-btn landing-btn-secondary">
-            Sign In
+            {t("nav.signIn")}
           </Link>
           <Link to="/register" className="landing-btn landing-btn-primary">
-            Get Started
+            {t("nav.getStarted")}
           </Link>
         </div>
 
@@ -351,38 +358,45 @@ const Landing = () => {
           className="landing-mobile-menu-link"
           onClick={() => scrollToSection("features")}
         >
-          Features
+          {t("nav.features")}
         </span>
         <span
           className="landing-mobile-menu-link"
           onClick={() => scrollToSection("how-it-works")}
         >
-          How It Works
+          {t("nav.howItWorks")}
         </span>
         <span
           className="landing-mobile-menu-link"
           onClick={() => scrollToSection("testimonials")}
         >
-          Testimonials
+          {t("nav.testimonials")}
         </span>
-        <button className="landing-mobile-theme-toggle" onClick={toggleTheme}>
-          {resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />}
-          <span>{resolvedTheme === "dark" ? "Light Mode" : "Dark Mode"}</span>
-        </button>
+        <div className="landing-mobile-menu-settings">
+          <LanguageSwitcher />
+          <button className="landing-mobile-theme-toggle" onClick={toggleTheme}>
+            {resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />}
+            <span>
+              {resolvedTheme === "dark"
+                ? t("theme.lightMode")
+                : t("theme.darkMode")}
+            </span>
+          </button>
+        </div>
         <div className="landing-mobile-menu-actions">
           <Link
             to="/login"
             className="landing-btn landing-btn-secondary"
             style={{ width: "100%" }}
           >
-            Sign In
+            {t("nav.signIn")}
           </Link>
           <Link
             to="/register"
             className="landing-btn landing-btn-primary"
             style={{ width: "100%" }}
           >
-            Get Started
+            {t("nav.getStarted")}
           </Link>
         </div>
       </div>
@@ -392,49 +406,53 @@ const Landing = () => {
         <div className="landing-hero-content">
           <div className="landing-hero-badge">
             <span className="landing-hero-badge-dot" />
-            <span>Your study companion is here</span>
+            <span>{t("hero.badge")}</span>
           </div>
 
           <h1 className="landing-hero-title">
-            Study Smarter,
+            {t("hero.title")}
             <br />
-            <span className="landing-hero-title-gradient">Feel Better</span>
+            <span className="landing-hero-title-gradient">
+              {t("hero.titleGradient")}
+            </span>
           </h1>
 
-          <p className="landing-hero-subtitle">
-            S'Techdy combines intelligent study planning with mood tracking to
-            help you achieve academic success while maintaining your mental
-            wellness.
-          </p>
+          <p className="landing-hero-subtitle">{t("hero.subtitle")}</p>
 
           <div className="landing-hero-actions">
             <Link
               to="/register"
               className="landing-btn landing-btn-primary landing-btn-large"
             >
-              Start Free Trial
+              {t("hero.startFreeTrial")}
               <ArrowRightIcon />
             </Link>
             <Link
               to="/login"
               className="landing-btn landing-btn-secondary landing-btn-large"
             >
-              Sign In
+              {t("nav.signIn")}
             </Link>
           </div>
 
           <div className="landing-hero-stats">
             <div className="landing-hero-stat">
               <div className="landing-hero-stat-value">10K+</div>
-              <div className="landing-hero-stat-label">Active Students</div>
+              <div className="landing-hero-stat-label">
+                {t("hero.stats.activeStudents")}
+              </div>
             </div>
             <div className="landing-hero-stat">
               <div className="landing-hero-stat-value">95%</div>
-              <div className="landing-hero-stat-label">Improved Focus</div>
+              <div className="landing-hero-stat-label">
+                {t("hero.stats.improvedFocus")}
+              </div>
             </div>
             <div className="landing-hero-stat">
               <div className="landing-hero-stat-value">4.9</div>
-              <div className="landing-hero-stat-label">User Rating</div>
+              <div className="landing-hero-stat-label">
+                {t("hero.stats.userRating")}
+              </div>
             </div>
           </div>
         </div>
@@ -443,14 +461,9 @@ const Landing = () => {
       {/* Features Section */}
       <section id="features" className="landing-features">
         <div className="landing-section-header">
-          <span className="landing-section-badge">Features</span>
-          <h2 className="landing-section-title">
-            Everything You Need to Excel
-          </h2>
-          <p className="landing-section-subtitle">
-            Powerful tools designed to optimize your study routine and support
-            your wellbeing.
-          </p>
+          <span className="landing-section-badge">{t("features.badge")}</span>
+          <h2 className="landing-section-title">{t("features.title")}</h2>
+          <p className="landing-section-subtitle">{t("features.subtitle")}</p>
         </div>
 
         <div className="landing-features-grid">
@@ -469,13 +482,9 @@ const Landing = () => {
       {/* How It Works Section */}
       <section id="how-it-works" className="landing-how-it-works">
         <div className="landing-section-header">
-          <span className="landing-section-badge">How It Works</span>
-          <h2 className="landing-section-title">
-            Get Started in 3 Simple Steps
-          </h2>
-          <p className="landing-section-subtitle">
-            Begin your journey to better studying in just minutes.
-          </p>
+          <span className="landing-section-badge">{t("howItWorks.badge")}</span>
+          <h2 className="landing-section-title">{t("howItWorks.title")}</h2>
+          <p className="landing-section-subtitle">{t("howItWorks.subtitle")}</p>
         </div>
 
         <div className="landing-steps">
@@ -495,10 +504,12 @@ const Landing = () => {
       {/* Testimonials Section */}
       <section id="testimonials" className="landing-testimonials">
         <div className="landing-section-header">
-          <span className="landing-section-badge">Testimonials</span>
-          <h2 className="landing-section-title">Loved by Students Worldwide</h2>
+          <span className="landing-section-badge">
+            {t("testimonials.badge")}
+          </span>
+          <h2 className="landing-section-title">{t("testimonials.title")}</h2>
           <p className="landing-section-subtitle">
-            See what our community has to say about their S'Techdy experience.
+            {t("testimonials.subtitle")}
           </p>
         </div>
 
@@ -529,15 +540,10 @@ const Landing = () => {
       <section className="landing-cta">
         <div className="landing-cta-card">
           <div className="landing-cta-content">
-            <h2 className="landing-cta-title">
-              Ready to Transform Your Studies?
-            </h2>
-            <p className="landing-cta-subtitle">
-              Join thousands of students who are already studying smarter with
-              S'Techdy.
-            </p>
+            <h2 className="landing-cta-title">{t("cta.title")}</h2>
+            <p className="landing-cta-subtitle">{t("cta.subtitle")}</p>
             <Link to="/register" className="landing-cta-btn">
-              Get Started Free
+              {t("cta.button")}
               <ArrowRightIcon />
             </Link>
           </div>
@@ -559,28 +565,26 @@ const Landing = () => {
               className="landing-footer-link"
               onClick={() => scrollToSection("features")}
             >
-              Features
+              {t("nav.features")}
             </span>
             <span
               className="landing-footer-link"
               onClick={() => scrollToSection("how-it-works")}
             >
-              How It Works
+              {t("nav.howItWorks")}
             </span>
             <span
               className="landing-footer-link"
               onClick={() => scrollToSection("testimonials")}
             >
-              Testimonials
+              {t("nav.testimonials")}
             </span>
             <Link to="/login" className="landing-footer-link">
-              Sign In
+              {t("nav.signIn")}
             </Link>
           </div>
 
-          <p className="landing-footer-copyright">
-            © 2025 S'Techdy. All rights reserved.
-          </p>
+          <p className="landing-footer-copyright">{t("footer.copyright")}</p>
         </div>
       </footer>
     </div>

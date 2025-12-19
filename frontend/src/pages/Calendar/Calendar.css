@@ -12,8 +12,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  border-bottom: 1px solid var(--border-secondary);
-  transition: background-color var(--transition-normal), border-color var(--transition-normal);
+  background: transparent;
 }
 
 .calendar-title-wrapper {
@@ -21,6 +20,16 @@
   align-items: center;
   gap: 12px;
   flex: 1;
+}
+
+.calendar-title-wrapper h1 {
+  font-size: 30px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
 }
 
 .back-button {

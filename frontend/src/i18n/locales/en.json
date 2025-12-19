@@ -1,0 +1,105 @@
+{
+  "nav": {
+    "features": "Features",
+    "howItWorks": "How It Works",
+    "testimonials": "Testimonials",
+    "signIn": "Sign In",
+    "getStarted": "Get Started"
+  },
+  "theme": {
+    "lightMode": "Light Mode",
+    "darkMode": "Dark Mode",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
+  },
+  "hero": {
+    "badge": "Your study companion is here",
+    "title": "Study Smarter,",
+    "titleGradient": "Feel Better",
+    "subtitle": "S'Techdy combines intelligent study planning with mood tracking to help you achieve academic success while maintaining your mental wellness.",
+    "startFreeTrial": "Start Free Trial",
+    "stats": {
+      "activeStudents": "Active Students",
+      "improvedFocus": "Improved Focus",
+      "userRating": "User Rating"
+    }
+  },
+  "features": {
+    "badge": "Features",
+    "title": "Everything You Need to Excel",
+    "subtitle": "Powerful tools designed to optimize your study routine and support your wellbeing.",
+    "smartScheduling": {
+      "title": "Smart Scheduling",
+      "description": "Plan your study sessions with an intelligent calendar that adapts to your learning patterns and goals."
+    },
+    "moodTracking": {
+      "title": "Mood Tracking",
+      "description": "Monitor your emotional wellbeing and discover how it affects your study performance over time."
+    },
+    "progressAnalytics": {
+      "title": "Progress Analytics",
+      "description": "Track your learning journey with detailed insights and beautiful visualizations of your progress."
+    },
+    "goalSetting": {
+      "title": "Goal Setting",
+      "description": "Set achievable study goals and celebrate milestones as you work towards academic success."
+    },
+    "timeManagement": {
+      "title": "Time Management",
+      "description": "Master your time with study trackers and reminders that keep you focused and on schedule."
+    },
+    "studySessions": {
+      "title": "Study Sessions",
+      "description": "Organize your subjects and track dedicated study time for each course or topic."
+    }
+  },
+  "howItWorks": {
+    "badge": "How It Works",
+    "title": "Get Started in 3 Simple Steps",
+    "subtitle": "Begin your journey to better studying in just minutes.",
+    "step1": {
+      "title": "Create Your Account",
+      "description": "Sign up in seconds and set up your personalized study profile with your goals."
+    },
+    "step2": {
+      "title": "Plan Your Schedule",
+      "description": "Add your subjects, set study times, and let S'Techdy help you build the perfect routine."
+    },
+    "step3": {
+      "title": "Track & Improve",
+      "description": "Monitor your progress, check in on your mood, and watch your productivity soar."
+    }
+  },
+  "testimonials": {
+    "badge": "Testimonials",
+    "title": "Loved by Students Worldwide",
+    "subtitle": "See what our community has to say about their S'Techdy experience.",
+    "testimonial1": {
+      "text": "\"S'Techdy completely transformed how I approach studying. The mood tracking feature helped me understand my best study times.\"",
+      "name": "Sarah Chen",
+      "role": "Medical Student"
+    },
+    "testimonial2": {
+      "text": "\"Finally, an app that understands that studying is not just about time, but about mental wellness too. Highly recommend!\"",
+      "name": "James Wilson",
+      "role": "Engineering Major"
+    },
+    "testimonial3": {
+      "text": "\"The progress analytics are incredible. I can actually see how much I've improved over the semester. Game changer!\"",
+      "name": "Emily Rodriguez",
+      "role": "Law Student"
+    }
+  },
+  "cta": {
+    "title": "Ready to Transform Your Studies?",
+    "subtitle": "Join thousands of students who are already studying smarter with S'Techdy.",
+    "button": "Get Started Free"
+  },
+  "footer": {
+    "copyright": "© 2025 S'Techdy. All rights reserved."
+  },
+  "language": {
+    "en": "English",
+    "vi": "Vietnamese"
+  }
+}

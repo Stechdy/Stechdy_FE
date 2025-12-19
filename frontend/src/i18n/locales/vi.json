@@ -1,0 +1,105 @@
+{
+  "nav": {
+    "features": "Tính năng",
+    "howItWorks": "Cách hoạt động",
+    "testimonials": "Đánh giá",
+    "signIn": "Đăng nhập",
+    "getStarted": "Bắt đầu"
+  },
+  "theme": {
+    "lightMode": "Chế độ sáng",
+    "darkMode": "Chế độ tối",
+    "switchToLight": "Chuyển sang chế độ sáng",
+    "switchToDark": "Chuyển sang chế độ tối"
+  },
+  "hero": {
+    "badge": "Người bạn đồng hành học tập của bạn",
+    "title": "Học Thông Minh,",
+    "titleGradient": "Cảm Thấy Tốt Hơn",
+    "subtitle": "S'Techdy kết hợp lập kế hoạch học tập thông minh với theo dõi tâm trạng để giúp bạn đạt được thành công trong học tập đồng thời duy trì sức khỏe tinh thần.",
+    "startFreeTrial": "Dùng thử miễn phí",
+    "stats": {
+      "activeStudents": "Sinh viên đang hoạt động",
+      "improvedFocus": "Tập trung cải thiện",
+      "userRating": "Đánh giá người dùng"
+    }
+  },
+  "features": {
+    "badge": "Tính năng",
+    "title": "Mọi thứ bạn cần để xuất sắc",
+    "subtitle": "Công cụ mạnh mẽ được thiết kế để tối ưu hóa lịch học tập và hỗ trợ sức khỏe của bạn.",
+    "smartScheduling": {
+      "title": "Lên lịch thông minh",
+      "description": "Lập kế hoạch các buổi học với lịch thông minh thích ứng với mô hình và mục tiêu học tập của bạn."
+    },
+    "moodTracking": {
+      "title": "Theo dõi tâm trạng",
+      "description": "Theo dõi sức khỏe cảm xúc của bạn và khám phá cách nó ảnh hưởng đến hiệu suất học tập theo thời gian."
+    },
+    "progressAnalytics": {
+      "title": "Phân tích tiến độ",
+      "description": "Theo dõi hành trình học tập của bạn với những thông tin chi tiết và hình ảnh trực quan đẹp mắt về tiến trình của bạn."
+    },
+    "goalSetting": {
+      "title": "Đặt mục tiêu",
+      "description": "Đặt mục tiêu học tập có thể đạt được và ăn mừng các cột mốc khi bạn tiến tới thành công trong học tập."
+    },
+    "timeManagement": {
+      "title": "Quản lý thời gian",
+      "description": "Làm chủ thời gian của bạn với các công cụ theo dõi học tập và nhắc nhở giúp bạn tập trung và đúng lịch."
+    },
+    "studySessions": {
+      "title": "Phiên học tập",
+      "description": "Tổ chức các môn học của bạn và theo dõi thời gian học tập dành riêng cho từng khóa học hoặc chủ đề."
+    }
+  },
+  "howItWorks": {
+    "badge": "Cách hoạt động",
+    "title": "Bắt đầu với 3 bước đơn giản",
+    "subtitle": "Bắt đầu hành trình học tập tốt hơn chỉ trong vài phút.",
+    "step1": {
+      "title": "Tạo tài khoản",
+      "description": "Đăng ký trong vài giây và thiết lập hồ sơ học tập cá nhân với mục tiêu của bạn."
+    },
+    "step2": {
+      "title": "Lên kế hoạch lịch học",
+      "description": "Thêm các môn học, đặt thời gian học và để S'Techdy giúp bạn xây dựng lịch trình hoàn hảo."
+    },
+    "step3": {
+      "title": "Theo dõi & Cải thiện",
+      "description": "Theo dõi tiến trình, kiểm tra tâm trạng và xem năng suất của bạn tăng vọt."
+    }
+  },
+  "testimonials": {
+    "badge": "Đánh giá",
+    "title": "Được sinh viên trên toàn thế giới yêu thích",
+    "subtitle": "Xem cộng đồng của chúng tôi nói gì về trải nghiệm S'Techdy.",
+    "testimonial1": {
+      "text": "\"S'Techdy hoàn toàn thay đổi cách tôi tiếp cận việc học. Tính năng theo dõi tâm trạng giúp tôi hiểu được thời điểm học tốt nhất.\"",
+      "name": "Sarah Chen",
+      "role": "Sinh viên Y khoa"
+    },
+    "testimonial2": {
+      "text": "\"Cuối cùng cũng có một ứng dụng hiểu rằng học tập không chỉ là về thời gian mà còn về sức khỏe tinh thần. Rất khuyên dùng!\"",
+      "name": "James Wilson",
+      "role": "Sinh viên Kỹ thuật"
+    },
+    "testimonial3": {
+      "text": "\"Phân tích tiến độ thật tuyệt vời. Tôi thực sự có thể thấy mình đã cải thiện bao nhiêu trong suốt học kỳ. Thay đổi cuộc chơi!\"",
+      "name": "Emily Rodriguez",
+      "role": "Sinh viên Luật"
+    }
+  },
+  "cta": {
+    "title": "Sẵn sàng thay đổi việc học của bạn?",
+    "subtitle": "Tham gia cùng hàng nghìn sinh viên đang học thông minh hơn với S'Techdy.",
+    "button": "Bắt đầu miễn phí"
+  },
+  "footer": {
+    "copyright": "© 2025 S'Techdy. Bản quyền thuộc về chúng tôi."
+  },
+  "language": {
+    "en": "Tiếng Anh",
+    "vi": "Tiếng Việt"
+  }
+}

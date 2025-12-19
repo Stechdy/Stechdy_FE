@@ -49,7 +49,8 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
-  padding: 8px 0;
+  padding: 16px 20px;
+  background: transparent;
 }
 
 .back-button {
@@ -75,9 +76,12 @@
 }
 
 .page-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-size: 30px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin: 0;
 }
 
@@ -278,7 +282,20 @@
   gap: 12px;
 }
 
+.info-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-card);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-normal);
+}
 
+.info-card:hover {
+  box-shadow: var(--shadow-md);
+}
 
 .info-card-full {
   grid-column: 1 / -1;
