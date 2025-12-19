@@ -33,13 +33,11 @@
   justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border-secondary);
-  transition: background-color var(--transition-normal), border-color var(--transition-normal);
+  background: transparent;
 }
 
 .slot-detail-header h1 {
-  font-size: 24px;
+  font-size: 30px;
   font-weight: 700;
   background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
   -webkit-background-clip: text;
