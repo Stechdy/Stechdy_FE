@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/common/BottomNav';
+import SidebarNav from '../../components/common/SidebarNav';
 import MoodCalendar from '../../components/mood/MoodCalendar';
 import moodService from '../../services/moodService';
 import './MoodHistory.css';
@@ -36,13 +37,11 @@ const MoodHistory = () => {
   };
 
   return (
-    <div className="mood-history-page">
+    <div className="mood-history-container">
+      <SidebarNav />
+      <div className="mood-history-page">
       <header className="history-header">
-        <button className="back-btn" onClick={() => navigate('/dashboard')}>
-          ←
-        </button>
         <h1 className="history-title">Mood History</h1>
-        <div style={{ width: '40px' }}></div>
       </header>
 
       <div className="history-content">
@@ -136,6 +135,7 @@ const MoodHistory = () => {
       </div>
 
       <BottomNav />
+      </div>
     </div>
   );
 };

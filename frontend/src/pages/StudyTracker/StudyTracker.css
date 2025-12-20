@@ -1,4 +1,12 @@
+/* Study Tracker Container */
+.study-tracker-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+}
+
 .study-tracker {
+  flex: 1;
   min-height: 100vh;
   background-color: var(--bg-primary);
   padding-bottom: 120px;
@@ -7,7 +15,7 @@
 
 .tracker-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 16px 20px;
   border-bottom: 1px solid var(--border-secondary);
@@ -15,6 +23,22 @@
   margin: 0;
   border-radius: 0;
   width: 100%;
+  position: relative;
+}
+
+.tracker-page-title {
+  font-size: 30px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.tracker-header .notification-btn {
+  position: absolute;
+  right: 20px;
 }
 
 .tracker-main {
@@ -144,15 +168,14 @@
 .schedule-row {
   display: flex;
   flex-wrap: nowrap;
-  gap: 4px;
+  gap: 8px;
   margin-bottom: 6px;
   min-width: 430px;
 }
 
 .schedule-row .day-header,
 .schedule-row .schedule-cell {
-  flex: 0 0 50px;
-  width: 50px;
+  flex: 1;
 }
 
 .schedule-row .time-slot-label {
@@ -464,77 +487,74 @@
 }
 
 .progress-bar-container {
-  width: 100%;
-  height: 8px;
-  background-color: #f0f0f0;
-  border-radius: 4px;
-  overflow: hidden;
-}
+    width: 100%;
+    height: 8px;
+    background-color: #E5E7EB;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: background-color var(--transition-normal);
+  }
+  
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--primary-gradient);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
 
 /* Streak Stats */
 .streak-stats {
-  display: flex;
-  align-items: center;
-  background: transparent;
-  border-radius: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
   padding: 20px 0 0 0;
   margin-top: 16px;
-  box-shadow: none;
-  gap: 24px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--border-primary);
+  transition: border-color var(--transition-normal);
 }
 
-.streak-icon-container {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #D4A5C7 0%, #8AC0D5 100%);
+.streak-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-input);
+  border-radius: 12px;
+  transition: background-color var(--transition-normal);
+}
+
+.streak-stat-item .streak-icon {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  background: var(--bg-card);
+  border-radius: 10px;
+  transition: background-color var(--transition-normal);
 }
 
-.streak-icon {
-  font-size: 40px;
-}
-
-.streak-info {
+.streak-stat-info {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  flex: 1;
+  gap: 2px;
 }
 
-.streak-label {
-  font-size: 13px;
-  color: #999;
-  font-weight: 500;
-}
-
-.streak-value {
-  font-size: 28px;
+.streak-stat-value {
+  font-size: 20px;
   font-weight: 700;
-  color: #8AC0D5;
+  color: var(--text-primary);
+  transition: color var(--transition-normal);
 }
 
-.streak-hours {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  text-align: right;
-}
-
-.streak-hours-label {
-  font-size: 13px;
-  color: #999;
+.streak-stat-label {
+  font-size: 11px;
+  color: var(--text-tertiary);
   font-weight: 500;
-}
-
-.streak-hours-value {
-  font-size: 24px;
-  font-weight: 700;
-  color: #1f2937;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color var(--transition-normal);
 }
 
 @media (max-width: 480px) {
@@ -563,5 +583,148 @@
 
   .day-date {
     font-size: 10px;
+  }
+}
+
+/* Desktop Responsive */
+@media (min-width: 768px) {
+  .tracker-main {
+    padding: 20px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .study-tracker {
+    padding-bottom: 40px;
+  }
+
+  .bottom-nav {
+    display: none;
+  }
+}
+
+/* Progress Bar Fill - ADDED */
+.progress-bar-fill {
+  height: 100%;
+  background: var(--primary-gradient);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Progress Bar Fill */
+.progress-bar-fill {
+  height: 100%;
+  background: var(--primary-gradient);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Desktop Enhancements - Only apply on larger screens */
+@media (min-width: 768px) {
+  .tracker-main {
+    padding: 20px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .schedule-row {
+    gap: 12px;
+  }
+  
+  .schedule-row .day-header,
+  .schedule-row .schedule-cell {
+    min-width: 70px;
+  }
+
+  .day-name {
+    font-size: 13px;
+  }
+
+  .day-date {
+    font-size: 11px;
+  }
+
+  .status-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+
+  .today-progress h3 {
+    font-size: 20px;
+  }
+
+  .progress-bar-container {
+    height: 10px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .study-tracker {
+    padding-bottom: 40px;
+  }
+
+  .bottom-nav {
+    display: none;
+  }
+
+  .schedule-row {
+    gap: 16px;
+  }
+  
+  .schedule-row .day-header,
+  .schedule-row .schedule-cell {
+    min-width: 90px;
+  }
+
+  .day-name {
+    font-size: 15px;
+  }
+
+  .day-date {
+    font-size: 13px;
+  }
+
+  .status-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+  }
+
+  .today-progress h3 {
+    font-size: 22px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .schedule-row .day-header,
+  .schedule-row .schedule-cell {
+    min-width: 110px;
+  }
+
+  .status-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 26px;
+  }
+}
+
+
+/* Mobile Fix - Override container styles */
+@media (max-width: 1023px) {
+  .study-tracker-container {
+    display: block !important;
+  }
+  
+  .study-tracker {
+    flex: none !important;
+    width: 100% !important;
+    padding-bottom: 80px !important;
+  }
+  
+  .sidebar-nav {
+    display: none !important;
   }
 }

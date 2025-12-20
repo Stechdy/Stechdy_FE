@@ -1,5 +1,12 @@
 /* Mood Tracking Page - Based on Figma Mockup */
+.mood-page-container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
 .mood-page {
+  flex: 1;
   min-height: 100vh;
   background: var(--bg-primary);
   padding-bottom: 80px;
@@ -38,12 +45,15 @@
 .mood-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 16px 20px;
   background: transparent;
+  position: relative;
 }
 
-.back-btn {
+.mood-header .history-btn {
+  position: absolute;
+  right: 20px;
   width: 40px;
   height: 40px;
   border: none;
@@ -53,7 +63,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1F1F1F;
+  color: var(--text-secondary);
+  transition: all var(--transition-normal);
+}
+
+.mood-header .history-btn:hover {
+  transform: scale(1.05);
 }
 
 .mood-title {
@@ -320,7 +335,35 @@
   cursor: not-allowed;
 }
 
-/* Responsive */
+/* Responsive - Desktop */
+@media (min-width: 768px) {
+  .mood-content {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 32px 40px;
+  }
+
+  .mood-question {
+    font-size: 26px;
+  }
+
+  .mood-option:hover {
+    transform: scale(1.05);
+  }
+}
+
+@media (min-width: 1024px) {
+  .mood-page {
+    padding-bottom: 0;
+  }
+
+  /* Hide bottom nav on desktop */
+  .bottom-nav {
+    display: none;
+  }
+}
+
+/* Responsive - Mobile */
 @media (min-width: 768px) {
   .mood-content {
     padding: 20px;

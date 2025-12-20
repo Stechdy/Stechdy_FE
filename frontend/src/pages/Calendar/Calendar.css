@@ -1,5 +1,13 @@
+/* Calendar Page Container */
+.calendar-page-container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-secondary);
+}
+
 /* Calendar Page */
 .calendar-page {
+  flex: 1;
   min-height: 100vh;
   background: var(--bg-secondary);
   padding-bottom: 80px;
@@ -9,20 +17,14 @@
 /* Header */
 .calendar-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 16px 20px;
   background: transparent;
+  position: relative;
 }
 
-.calendar-title-wrapper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-}
-
-.calendar-title-wrapper h1 {
+.calendar-page-title {
   font-size: 30px;
   font-weight: 700;
   background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
@@ -32,12 +34,14 @@
   margin: 0;
 }
 
-.back-button {
+.calendar-header .notification-btn {
+  position: absolute;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
   border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: var(--bg-input);
+  background: var(--bg-card);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -45,13 +49,12 @@
   transition: all var(--transition-normal);
 }
 
-.back-button svg {
-  color: var(--text-secondary);
+.calendar-header .notification-btn:hover {
+  background: var(--bg-hover);
 }
 
-.back-button:active {
+.calendar-header .notification-btn:active {
   transform: scale(0.95);
-  background: var(--bg-hover);
 }
 
 .back-btn svg,
@@ -276,105 +279,97 @@
   transition: color var(--transition-normal);
 }
 
-/* Session Card */
-.session-card {
+/* Calendar Session Item */
+.calendar-session-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
-  padding: 18px;
+  padding: 16px;
   background: var(--bg-secondary);
   border-radius: 16px;
   position: relative;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid var(--border-primary);
+  border: 1px solid transparent;
+  cursor: pointer;
 }
 
-.session-card:hover {
+.calendar-session-item:hover {
   background: var(--bg-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(138, 192, 213, 0.15);
-  border: 1px solid #8AC0D5;
+  border: 1px solid rgba(138, 192, 213, 0.3);
 }
 
-.session-icon {
-  width: 56px;
-  height: 56px;
+.calendar-session-item:active {
+  transform: translateY(0);
+}
+
+.calendar-session-icon {
+  width: 48px;
+  height: 48px;
   background: #8AC0D5;
-  border-radius: 16px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-size: 24px;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(138, 192, 213, 0.3);
+  box-shadow: 0 2px 8px rgba(138, 192, 213, 0.2);
 }
 
-.session-content {
+.calendar-session-details {
   flex: 1;
-}
-
-.session-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 12px;
-}
-
-.session-header-left {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.session-title {
-  font-size: 18px;
-  font-weight: 700;
+.calendar-session-time {
+  font-size: 15px;
+  font-weight: 500;
   color: var(--text-primary);
   margin: 0;
   transition: color var(--transition-normal);
 }
 
-.session-time {
+.calendar-session-subject {
   font-size: 14px;
   color: var(--text-secondary);
+  font-weight: 500;
   margin: 0;
   transition: color var(--transition-normal);
 }
 
-.status-badge {
+.calendar-status-badge {
   font-size: 14px;
   font-weight: 600;
-}
-
-.session-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.session-subject {
-  font-size: 14px;
-  color: var(--text-primary);
-  font-weight: 500;
-  transition: color var(--transition-normal);
-}
-
-.session-status-label {
-  font-size: 13px;
-  color: var(--text-tertiary);
-  font-weight: 500;
-  transition: color var(--transition-normal);
-}
-
-/* Session card hover effect */
-.session-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  border-color: #8AC0D5;
+  flex-shrink: 0;
 }
 
 /* Responsive */
+@media (min-width: 768px) {
+  .calendar-main {
+    padding: 32px 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .calendar-session-item:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .calendar-page {
+    padding-bottom: 0;
+  }
+
+  /* Hide bottom nav on desktop */
+  .bottom-nav {
+    display: none;
+  }
+}
+
 @media (max-width: 480px) {
   .calendar-main {
     padding: 16px;
@@ -397,14 +392,22 @@
     font-size: 14px;
   }
 
-  .session-icon {
+  .calendar-session-icon {
     width: 40px;
     height: 40px;
     font-size: 20px;
   }
 
-  .session-title {
-    font-size: 15px;
+  .calendar-session-time {
+    font-size: 14px;
+  }
+
+  .calendar-session-subject {
+    font-size: 13px;
+  }
+
+  .calendar-status-badge {
+    font-size: 13px;
   }
 
   .center-content {

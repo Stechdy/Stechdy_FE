@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/common/BottomNav';
+import SidebarNav from '../../components/common/SidebarNav';
 import moodService from '../../services/moodService';
 import './Mood.css';
 
@@ -80,7 +81,9 @@ const Mood = () => {
   };
 
   return (
-    <div className="mood-page">
+    <div className="mood-page-container">
+      <SidebarNav />
+      <div className="mood-page">
       {/* Success notification */}
       {showSuccess && (
         <div className="success-toast">
@@ -89,9 +92,6 @@ const Mood = () => {
       )}
 
       <header className="mood-header">
-        <button className="back-btn" onClick={() => navigate('/dashboard')}>
-          ←
-        </button>
         <h1 className="mood-title">Mood Tracking</h1>
         <button className="history-btn" onClick={() => navigate('/mood/history')}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -171,6 +171,7 @@ const Mood = () => {
       </div>
 
       <BottomNav />
+      </div>
     </div>
   );
 };

@@ -3,7 +3,11 @@
 // Get current date/time in Vietnam timezone (UTC+7)
 export const getVietnamTime = () => {
   const now = new Date();
-  return new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Ho_Chi_Minh' }));
+  // Get time in Vietnam timezone
+  const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
+  // Vietnam is UTC+7
+  const vietnamTime = new Date(utcTime + (7 * 3600000));
+  return vietnamTime;
 };
 
 // Get Vietnam date at start of day (00:00:00)

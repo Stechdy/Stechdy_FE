@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import BottomNav from '../../components/common/BottomNav';
+import SidebarNav from '../../components/common/SidebarNav';
 import { getVietnamTime, getVietnamDate } from '../../utils/helpers';
 import './SlotDetail.css';
 
@@ -397,61 +398,59 @@ const SlotDetail = () => {
   }
 
   return (
-    <div className="slot-detail-page">
+    <div className="slot-detail-container">
+      <SidebarNav />
+      <div className="slot-detail-page">
       <header className="slot-detail-header">
-        <button className="back-button" onClick={() => navigate('/calendar')}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M15 18L9 12L15 6" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </button>
-        <h1>Slot Details</h1>
+        <h1 className="slot-detail-title">Slot Details</h1>
         <div className="header-spacer"></div>
       </header>
 
       <main className="slot-detail-main">
         {/* Session Info Card */}
-        <div className="info-card">
-          <div className="info-header">
+        <div className="slot-info-card">
+          <div className="slot-info-header">
             <div 
-              className="info-icon"
+              className="slot-info-icon"
               style={{ background: session.subjectId?.color || '#8AC0D5' }}
             >
               {getTimeSlotIcon(session.timeSlot)}
             </div>
-            <div className="info-title">
+            <div className="slot-info-title">
               <h2>{session.timeSlot} Session</h2>
               <p>{new Date(session.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
             </div>
           </div>
 
           {!isEditing ? (
-            <div className="info-content">
-              <div className="info-row">
-                <span className="info-label">Subject</span>
-                <span className="info-value">📚 {session.subjectId?.subjectName || 'No subject'}</span>
+            <div className="slot-info-content">
+              <div className="slot-info-row">
+                <span className="slot-info-label">Subject</span>
+                <span className="slot-info-value">📚 {session.subjectId?.subjectName || 'No subject'}</span>
               </div>
-              <div className="info-row">
-                <span className="info-label">Time</span>
-                <span className="info-value">🕐 {session.startTime} - {session.endTime}</span>
+              <div className="slot-info-row">
+                <span className="slot-info-label">Time</span>
+                <span className="slot-info-value">🕐 {session.startTime} - {session.endTime}</span>
               </div>
-              <div className="info-row">
-                <span className="info-label">Status</span>
-                <span className={`info-value status-${session.status}`}>
+              <div className="slot-info-row">
+                <span className="slot-info-label">Status</span>
+                <span className={`slot-info-value status-${session.status}`}>
                   {session.status === 'completed' ? '✓ Completed' : 
                    session.status === 'missed' ? '❌ Missed' :
                    '⏱ Scheduled'}
                 </span>
               </div>
               {canMoveSession() && (
-                <button className="edit-btn" onClick={() => setIsEditing(true)}>
-                  Edit Details
+                <button className="slot-edit-btn" onClick={() => setIsEditing(true)}>
+                  <span className="btn-icon">✏️</span>
+                  <span>Edit Details</span>
                 </button>
               )}
             </div>
           ) : (
-            <div className="edit-form">
-              <div className="form-group">
-                <label>Subject</label>
+            <div className="slot-edit-form">
+              <div className="slot-form-group">
+                <label>📚 Subject</label>
                 <select 
                   value={editData.subjectId} 
                   onChange={(e) => setEditData({...editData, subjectId: e.target.value})}
@@ -464,25 +463,31 @@ const SlotDetail = () => {
                   ))}
                 </select>
               </div>
-              <div className="form-group">
-                <label>Start Time</label>
+              <div className="slot-form-group">
+                <label>🕐 Start Time</label>
                 <input 
                   type="time" 
                   value={editData.startTime}
                   onChange={(e) => setEditData({...editData, startTime: e.target.value})}
                 />
               </div>
-              <div className="form-group">
-                <label>End Time</label>
+              <div className="slot-form-group">
+                <label>🕐 End Time</label>
                 <input 
                   type="time" 
                   value={editData.endTime}
                   onChange={(e) => setEditData({...editData, endTime: e.target.value})}
                 />
               </div>
-              <div className="form-actions">
-                <button className="save-btn" onClick={handleSave}>Save Changes</button>
-                <button className="cancel-btn" onClick={() => setIsEditing(false)}>Cancel</button>
+              <div className="slot-form-actions">
+                <button className="slot-save-btn" onClick={handleSave}>
+                  <span className="btn-icon">💾</span>
+                  <span>Save Changes</span>
+                </button>
+                <button className="slot-cancel-btn" onClick={() => setIsEditing(false)}>
+                  <span className="btn-icon">✕</span>
+                  <span>Cancel</span>
+                </button>
               </div>
             </div>
           )}
@@ -672,6 +677,7 @@ const SlotDetail = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };

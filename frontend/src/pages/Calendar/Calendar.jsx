@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/common/BottomNav';
+import SidebarNav from '../../components/common/SidebarNav';
 import { getVietnamTime, getVietnamDate } from '../../utils/helpers';
 import './Calendar.css';
 
@@ -101,16 +102,11 @@ const Calendar = () => {
     'July', 'August', 'September', 'October', 'November', 'December'];
 
   return (
-    <div className="calendar-page">
+    <div className="calendar-page-container">
+      <SidebarNav />
+      <div className="calendar-page">
       <header className="calendar-header">
-        <div className="calendar-title-wrapper">
-          <button className="back-button" onClick={() => navigate('/dashboard')}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          <h1>Calendar</h1>
-        </div>
+        <h1 className="calendar-page-title">Calendar</h1>
         <button className="notification-btn">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.37 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.64 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" fill="#E85D75"/>
@@ -169,37 +165,31 @@ const Calendar = () => {
                 return (
                   <div 
                     key={session._id} 
-                    className="session-card"
+                    className="calendar-session-item"
                     onClick={() => navigate(`/slot-detail/${session._id}`)}
-                    style={{ cursor: 'pointer' }}
                   >
                     <div 
-                      className="session-icon"
+                      className="calendar-session-icon"
                       style={{ 
                         background: session.subjectInfo?.color || '#8AC0D5'
                       }}
                     >
                       {getTimeSlotIcon(session.timeSlot)}
                     </div>
-                    <div className="session-content">
-                      <div className="session-header">
-                        <div className="session-header-left">
-                          <h3 className="session-title">{session.timeSlot}</h3>
-                          <p className="session-time">{session.startTime} - {session.endTime}</p>
-                        </div>
-                        <span 
-                          className="status-badge" 
-                          style={{ color: statusBadge.color }}
-                        >
-                          {statusBadge.text}
-                        </span>
+                    <div className="calendar-session-details">
+                      <div className="calendar-session-time">
+                        {session.startTime} - {session.endTime}
                       </div>
-                      <div className="session-footer">
-                        <span className="session-subject">
-                          📚 {session.subjectInfo?.subjectName || 'No subject'}
-                        </span>
+                      <div className="calendar-session-subject">
+                        📚 {session.subjectInfo?.subjectName || 'No subject'}
                       </div>
                     </div>
+                    <span 
+                      className="calendar-status-badge" 
+                      style={{ color: statusBadge.color }}
+                    >
+                      {statusBadge.text}
+                    </span>
                   </div>
                 );
               })
@@ -209,6 +199,7 @@ const Calendar = () => {
       </main>
 
       <BottomNav />
+      </div>
     </div>
   );
 };

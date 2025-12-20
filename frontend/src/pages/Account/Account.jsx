@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import BottomNav from "../../components/common/BottomNav";
+import SidebarNav from "../../components/common/SidebarNav";
 import "./Account.css";
 
 const Account = () => {
@@ -27,7 +28,9 @@ const Account = () => {
   };
 
   return (
-    <div className="account-container">
+    <div className="account-page">
+      <SidebarNav />
+      <div className="account-wrapper">
       <div className="account-content">
         {/* Profile Header */}
         <div className="profile-header">
@@ -56,104 +59,106 @@ const Account = () => {
           <span className="premium-text">Upgrade to premium</span>
         </div>
 
-        {/* Settings Section */}
-        <div className="settings-section">
-          <h3 className="section-title">Settings</h3>
+        <div className="account-main-grid">
+          {/* Settings Section */}
+          <div className="settings-section">
+            <h3 className="section-title">Settings</h3>
 
-          <button
-            className="settings-item"
-            onClick={() => navigate("/profile")}
-          >
-            <span className="settings-label">User information</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M9 18L15 12L9 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+            <button
+              className="settings-item"
+              onClick={() => navigate("/profile")}
+            >
+              <span className="settings-label">User information</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9 18L15 12L9 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
 
-          <button
-            className="settings-item"
-            onClick={() => setShowThemeModal(true)}
-          >
-            <div className="settings-item-left">
-              <span className="settings-label">Appearance</span>
-              <span className="settings-value">{getThemeLabel()}</span>
-            </div>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M9 18L15 12L9 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+            <button
+              className="settings-item"
+              onClick={() => setShowThemeModal(true)}
+            >
+              <div className="settings-item-left">
+                <span className="settings-label">Appearance</span>
+                <span className="settings-value">{getThemeLabel()}</span>
+              </div>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9 18L15 12L9 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
 
-          <button
-            className="settings-item"
-            onClick={() => navigate("/notifications")}
-          >
-            <span className="settings-label">Sound & Notifications</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M9 18L15 12L9 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
+            <button
+              className="settings-item"
+              onClick={() => navigate("/notifications")}
+            >
+              <span className="settings-label">Sound & Notifications</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9 18L15 12L9 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
 
-        <div className="divider-line"></div>
+          {/* Support Section */}
+          <div className="support-section">
+            <h3 className="section-title">Support</h3>
+            
+            <button className="settings-item" onClick={() => navigate("/help")}>
+              <span className="settings-label">Help & Support</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9 18L15 12L9 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
 
-        {/* Support Section */}
-        <div className="support-section">
-          <button className="settings-item" onClick={() => navigate("/help")}>
-            <span className="settings-label">Help & Support</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M9 18L15 12L9 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+            <button className="settings-item" onClick={() => navigate("/about")}>
+              <span className="settings-label">About us</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9 18L15 12L9 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
 
-          <button className="settings-item" onClick={() => navigate("/about")}>
-            <span className="settings-label">About us</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M9 18L15 12L9 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-
-          <button className="settings-item" onClick={() => navigate("/terms")}>
-            <span className="settings-label">Terms of Use</span>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M9 18L15 12L9 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+            <button className="settings-item" onClick={() => navigate("/terms")}>
+              <span className="settings-label">Terms of Use</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9 18L15 12L9 6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
 
         {/* Logout Button */}
@@ -254,10 +259,11 @@ const Account = () => {
         </div>
       )}
 
-      {/* Bottom Navigation */}
-      <BottomNav />
+        {/* Bottom Navigation */}
+        <BottomNav />
+      </div>
     </div>
   );
-};
+}
 
 export default Account;

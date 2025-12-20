@@ -1,5 +1,13 @@
+/* Mood History Container */
+.mood-history-container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
 /* Mood History Page */
 .mood-history-page {
+  flex: 1;
   min-height: 100vh;
   background: var(--bg-primary);
   padding-bottom: 80px;
@@ -8,7 +16,7 @@
 .history-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: 16px 20px;
   background: var(--bg-card);
   border-bottom: 1px solid var(--border-primary);
@@ -18,14 +26,36 @@
 }
 
 .history-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--text-primary);
+  font-size: 30px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin: 0;
 }
 
 .history-content {
   padding: 16px;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .history-content {
+    padding: 20px 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mood-history-page {
+    padding-bottom: 20px;
+  }
+
+  .bottom-nav {
+    display: none;
+  }
 }
 
 /* Stats Section */
@@ -324,7 +354,9 @@
 
 @media (min-width: 768px) {
   .history-content {
-    padding: 20px;
+    padding: 20px 40px;
+    max-width: 1000px;
+    margin: 0 auto;
   }
   
   .stats-section {
@@ -334,5 +366,32 @@
   
   .stat-card {
     padding: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mood-history-page {
+    padding-bottom: 20px;
+  }
+
+  .bottom-nav {
+    display: none;
+  }
+}
+
+/* Mobile Fix - Override container styles */
+@media (max-width: 1023px) {
+  .mood-history-container {
+    display: block !important;
+  }
+  
+  .mood-history-page {
+    flex: none !important;
+    width: 100% !important;
+    padding-bottom: 80px !important;
+  }
+  
+  .sidebar-nav {
+    display: none !important;
   }
 }

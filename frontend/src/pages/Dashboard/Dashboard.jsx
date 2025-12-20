@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/common/BottomNav';
 import MoodCheckInModal from '../../components/mood/MoodCheckInModal';
+import StudyTimer from '../../components/study/StudyTimer';
 import moodService from '../../services/moodService';
 import { getVietnamTime, getVietnamDate } from '../../utils/helpers';
 import './Dashboard.css';
@@ -15,6 +16,8 @@ const Dashboard = () => {
   const [aiSuggestion, setAiSuggestion] = useState('');
   const [greeting, setGreeting] = useState('Good morning!');
   const [showMoodModal, setShowMoodModal] = useState(false);
+  const [activeSession, setActiveSession] = useState(null);
+  const [missedSessions, setMissedSessions] = useState([]);
 
   // Get time-based greeting
   const getGreeting = () => {
@@ -24,11 +27,79 @@ const Dashboard = () => {
     return 'Good evening!';
   };
 
+  // Fetch active session
+  const fetchActiveSession = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      const response = await fetch('http://localhost:3001/api/study-sessions/active', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setActiveSession(data);
+      }
+    } catch (error) {
+      console.error('Error fetching active session:', error);
+    }
+  }, []);
+
+  // Fetch missed sessions from today
+  const fetchMissedSessions = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      const response = await fetch(
+        `http://localhost:3001/api/study-sessions?startDate=${today.toISOString()}&endDate=${tomorrow.toISOString()}&status=missed`,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setMissedSessions(data);
+      }
+    } catch (error) {
+      console.error('Error fetching missed sessions:', error);
+    }
+  }, []);
+
+  // Handle session end
+  const handleSessionEnd = (data) => {
+    setActiveSession(null);
+    // Refresh dashboard data
+    fetchDashboardData();
+    // Show success message or notification
+    alert(`🎉 Chúc mừng! Bạn đã hoàn thành ${data.stats.actualDuration} phút học!`);
+  };
+
   useEffect(() => {
     setGreeting(getGreeting());
     loadCachedData();
     fetchDashboardData();
+    fetchActiveSession();
+    fetchMissedSessions();
     checkMoodCheckIn();
+
+    // Poll for active session every 30 seconds
+    const interval = setInterval(() => {
+      fetchActiveSession();
+      fetchMissedSessions();
+    }, 30000);
+    return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -226,6 +297,52 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+      {/* Sidebar Navigation - Desktop Only */}
+      <nav className="sidebar-nav">
+        <button className="nav-item" onClick={() => navigate('/dashboard')}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <span>Dashboard</span>
+        </button>
+        <button className="nav-item" onClick={() => navigate('/calendar')}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M16 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M8 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M3 10H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <span>Calendar</span>
+        </button>
+        <button className="nav-item nav-item-ai" onClick={() => navigate('/ai')}>
+          <div className="ai-fab">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+              <circle cx="12" cy="12" r="10" fill="white"/>
+              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="#8AC0D5"/>
+            </svg>
+          </div>
+          <span>AI</span>
+        </button>
+        <button className="nav-item" onClick={() => navigate('/mood')}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+            <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <circle cx="9" cy="9" r="1" fill="currentColor"/>
+            <circle cx="15" cy="9" r="1" fill="currentColor"/>
+          </svg>
+          <span>Mood</span>
+        </button>
+        <button className="nav-item" onClick={() => navigate('/account')}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <span>Account</span>
+        </button>
+      </nav>
+
+      {/* Main Wrapper */}
+      <div className="dashboard-wrapper">
       {/* Header */}
       <header className="dashboard-header">
         <div className="header-left">
@@ -249,63 +366,101 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <main className="dashboard-main">
-        {/* Streak Card */}
-        <div className="streak-card gradient-card">
-          <div className="streak-content">
-            <div className="streak-info">
-              <p className="streak-label">Current Streak</p>
-              <h2 className="streak-days">{streak} Days</h2>
+        <div className="dashboard-grid">
+          {/* Left Column */}
+          <div className="dashboard-left-col">
+            {/* Streak Card */}
+            <div className="streak-card gradient-card">
+              <div className="streak-content">
+                <div className="streak-info">
+                  <p className="streak-label">Current Streak</p>
+                  <h2 className="streak-days">{streak} Days</h2>
+                </div>
+                <div className="streak-icon">🔥</div>
+              </div>
+              <button className="quotes-btn">Quotes</button>
             </div>
-            <div className="streak-icon">🔥</div>
-          </div>
-          <button className="quotes-btn">Quotes</button>
-        </div>
 
-        {/* Today's Progress */}
-        <section className="progress-section">
-          <h2 className="section-title">Today's Progress</h2>
-          <div className="progress-card" onClick={() => navigate('/study-tracker')} style={{ cursor: 'pointer' }}>
-            <div className="progress-header">
-              <span className="progress-label">Study Time</span>
-              <span className="progress-time">
-                {Math.floor(studyProgress.current / 60)}h {studyProgress.current % 60}m / {Math.floor(studyProgress.goal / 60)}h
-              </span>
-            </div>
-            <div className="progress-bar">
-              <div 
-                className="progress-fill" 
-                style={{ width: `${progressPercentage}%` }}
-              ></div>
-            </div>
+            {/* Active Study Timer */}
+            {activeSession && (
+              <StudyTimer 
+                session={activeSession}
+                onEnd={handleSessionEnd}
+                onRefresh={fetchActiveSession}
+              />
+            )}
           </div>
-        </section>
 
-        {/* Upcoming Sessions */}
-        <section className="sessions-section">
-          <h2 className="section-title">Upcoming Sessions</h2>
-          <div className="sessions-list">
-            {upcomingSessions.map(session => (
-              <div key={session.id} className="session-card">
-                <div className="session-left">
-                  <div 
-                    className="session-indicator" 
-                    style={{ backgroundColor: session.color }}
-                  ></div>
-                  <div className="session-info">
-                    <h3 className="session-subject">{session.subject}</h3>
-                    <p className="session-time">{session.time}</p>
+          {/* Right Column */}
+          <div className="dashboard-right-col">
+            {/* Missed Sessions Alert */}
+            {missedSessions.length > 0 && (
+              <section className="missed-section">
+                <div className="missed-alert">
+                  <div className="missed-icon">⚠️</div>
+                  <div className="missed-content">
+                    <h3 className="missed-title">Missed Session</h3>
+                    <p className="missed-text">
+                      You've marked <strong>{missedSessions[0].subjectId?.subjectName || 'a session'}</strong> as missed.
+                      {missedSessions[0].startTime && missedSessions[0].endTime && (
+                        <span> ({missedSessions[0].startTime} - {missedSessions[0].endTime})</span>
+                      )}
+                    </p>
+                    {missedSessions.length > 1 && (
+                      <p className="missed-count">+{missedSessions.length - 1} more missed today</p>
+                    )}
                   </div>
                 </div>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M9 18L15 12L9 6" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-            ))}
-          </div>
-        </section>
+              </section>
+            )}
 
-        {/* AI Suggestion */}
-        <section className="ai-section">
+            {/* Today's Progress */}
+            <section className="progress-section">
+              <h2 className="section-title">Today's Progress</h2>
+              <div className="progress-card" onClick={() => navigate('/study-tracker')} style={{ cursor: 'pointer' }}>
+                <div className="progress-header">
+                  <span className="progress-label">Study Time</span>
+                  <span className="progress-time">
+                    {Math.floor(studyProgress.current / 60)}h {studyProgress.current % 60}m / {Math.floor(studyProgress.goal / 60)}h
+                  </span>
+                </div>
+                <div className="progress-bar">
+                  <div 
+                    className="progress-fill" 
+                    style={{ width: `${progressPercentage}%` }}
+                  ></div>
+                </div>
+              </div>
+            </section>
+
+            {/* Upcoming Sessions */}
+            <section className="dashboard-sessions">
+              <h2 className="section-title">Upcoming Sessions</h2>
+              <div className="dashboard-dashboard-sessions-list">
+                {upcomingSessions.map(session => (
+                  <div key={session.id} className="dashboard-session-card">
+                    <div className="dashboard-session-left">
+                      <div 
+                        className="dashboard-session-indicator" 
+                        style={{ backgroundColor: session.color }}
+                      ></div>
+                      <div className="dashboard-session-info">
+                        <h3 className="dashboard-session-subject">{session.subject}</h3>
+                        <p className="dashboard-session-time">{session.time}</p>
+                      </div>
+                    </div>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                      <path d="M9 18L15 12L9 6" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </div>
+        </div>
+
+        {/* AI Suggestion - Full Width */}
+        <section className="ai-section ai-section-full">
           <h2 className="section-title">AI Suggestion</h2>
           <div className="ai-card gradient-card">
             <div className="ai-icon">🤖</div>
@@ -319,6 +474,7 @@ const Dashboard = () => {
         isOpen={showMoodModal} 
         onClose={() => setShowMoodModal(false)} 
       />
+      </div>
 
       {/* Bottom Navigation */}
       <BottomNav />

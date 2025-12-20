@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BottomNav from '../../components/common/BottomNav';
+import SidebarNav from '../../components/common/SidebarNav';
 import { getVietnamTime, getVietnamDate } from '../../utils/helpers';
 import './StudyTracker.css';
 
@@ -11,7 +12,15 @@ const StudyTracker = () => {
   const [weekSchedule, setWeekSchedule] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [todayProgress, setTodayProgress] = useState([]);
-  const [streakData, setStreakData] = useState({ currentStreak: 0, totalHours: 0, calendar: [] });
+  const [streakData, setStreakData] = useState({ 
+    currentStreak: 0, 
+    longestStreak: 0,
+    totalActiveDays: 0,
+    totalHours: 0, 
+    calendar: [],
+    streakHistory: [],
+    lastActiveDate: null
+  });
 
   useEffect(() => {
     fetchStudyTrackerData();
@@ -135,20 +144,21 @@ const StudyTracker = () => {
     
     if (!session) return 'no-slot';
     
-    // Check if session is in the future
+    // Check if session is in the future by comparing date + end time
     const sessionDate = new Date(session.date);
-    const today = getVietnamDate();
-    today.setHours(0, 0, 0, 0);
-    sessionDate.setHours(0, 0, 0, 0);
+    const [endHour, endMinute] = (session.endTime || '23:59').split(':').map(Number);
+    sessionDate.setHours(endHour, endMinute, 0, 0);
     
-    // Future sessions = scheduled (show dash with color)
-    if (sessionDate > today) {
+    const now = getVietnamTime();
+    
+    // Future sessions or sessions that haven't ended yet = scheduled
+    if (sessionDate > now) {
       return 'scheduled';
     }
     
-    // Past/today sessions
+    // Past sessions - check actual status
     if (session.status === 'completed') return 'present';
-    if (session.status === 'cancelled') return 'absent';
+    if (session.status === 'cancelled' || session.status === 'missed') return 'absent';
     
     // Past but not marked = absent (missed)
     return 'absent';
@@ -178,16 +188,11 @@ const StudyTracker = () => {
   const timeSlots = ['Mor', 'Aft', 'Eve'];
 
   return (
-    <div className="study-tracker">
+    <div className="study-tracker-container">
+      <SidebarNav />
+      <div className="study-tracker">
       <header className="tracker-header">
-        <div className="tracker-title-wrapper">
-          <button className="back-button" onClick={() => navigate('/dashboard')}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
-          <h1>Study Tracker</h1>
-        </div>
+        <h1 className="tracker-page-title">Study Tracker</h1>
         <button className="notification-btn">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.37 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.64 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" fill="#E85D75"/>
@@ -337,16 +342,33 @@ const StudyTracker = () => {
 
         {/* Streak Stats */}
         <div className="streak-stats">
-          <div className="streak-icon-container">
+          <div className="streak-stat-item">
             <span className="streak-icon">🔥</span>
+            <div className="streak-stat-info">
+              <span className="streak-stat-value">{streakData.currentStreak || 0}</span>
+              <span className="streak-stat-label">Current Streak</span>
+            </div>
           </div>
-          <div className="streak-info">
-            <span className="streak-label">Current Streak</span>
-            <span className="streak-value">{streakData.currentStreak || 0} Days</span>
+          <div className="streak-stat-item">
+            <span className="streak-icon">🏆</span>
+            <div className="streak-stat-info">
+              <span className="streak-stat-value">{streakData.longestStreak || 0}</span>
+              <span className="streak-stat-label">Longest Streak</span>
+            </div>
           </div>
-          <div className="streak-hours">
-            <span className="streak-hours-label">Total Hours</span>
-            <span className="streak-hours-value">{streakData.totalHours || 0}h</span>
+          <div className="streak-stat-item">
+            <span className="streak-icon">📅</span>
+            <div className="streak-stat-info">
+              <span className="streak-stat-value">{streakData.totalActiveDays || 0}</span>
+              <span className="streak-stat-label">Total Days</span>
+            </div>
+          </div>
+          <div className="streak-stat-item">
+            <span className="streak-icon">⏱️</span>
+            <div className="streak-stat-info">
+              <span className="streak-stat-value">{streakData.totalHours || 0}h</span>
+              <span className="streak-stat-label">Study Hours</span>
+            </div>
           </div>
         </div>
       </section>
@@ -354,6 +376,7 @@ const StudyTracker = () => {
 
       {/* Bottom Navigation */}
       <BottomNav />
+      </div>
     </div>
   );
 };
