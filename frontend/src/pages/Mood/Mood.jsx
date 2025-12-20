@@ -69,7 +69,7 @@ const Mood = () => {
         setShowSuccess(true);
         setTimeout(() => {
           setShowSuccess(false);
-          navigate('/dashboard');
+          navigate('/mood/history');
         }, 2000);
       }
     } catch (error) {

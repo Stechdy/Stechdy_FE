@@ -77,19 +77,18 @@ const MoodCalendar = () => {
   const getMoodForDate = (day) => {
     if (!day) return null;
     
-    // Create date in local timezone
-    const targetDate = new Date(
-      currentMonth.getFullYear(),
-      currentMonth.getMonth(),
-      day
-    );
-    
     return moods.find(mood => {
-      // Parse mood date and compare in local timezone
+      // Parse mood date from backend (which is stored in Vietnam timezone)
       const moodDate = new Date(mood.date);
-      return moodDate.getFullYear() === targetDate.getFullYear() &&
-             moodDate.getMonth() === targetDate.getMonth() &&
-             moodDate.getDate() === targetDate.getDate();
+      
+      // Get date components in UTC+7 (Vietnam timezone)
+      const vietnamOffset = 7 * 60; // minutes
+      const localTime = new Date(moodDate.getTime());
+      
+      // Compare with target date
+      return localTime.getFullYear() === currentMonth.getFullYear() &&
+             localTime.getMonth() === currentMonth.getMonth() &&
+             localTime.getDate() === day;
     });
   };
 
