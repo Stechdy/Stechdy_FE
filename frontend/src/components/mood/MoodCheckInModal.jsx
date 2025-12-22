@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MoodCheckInModal.css';
 
@@ -23,21 +23,21 @@ const MoodCheckInModal = ({ isOpen, onClose }) => {
         <div className="modal-emoji-large">😊</div>
         
         <h2 className="modal-title">
-          Bạn cảm thấy hôm nay thế nào?
+          How are you feeling today?
         </h2>
         
         <p className="modal-description">
-          Hãy dành vài giây để ghi lại cảm xúc của bạn. 
-          Việc theo dõi tâm trạng giúp bạn hiểu rõ hơn về bản thân!
+          Take a few seconds to record your mood.
+          Tracking your emotions helps you understand yourself better!
         </p>
 
         <div className="modal-actions">
           <button className="check-in-btn" onClick={handleCheckIn}>
-            Ghi lại cảm xúc 💙
+            Record my mood 💙
           </button>
           
           <button className="skip-btn" onClick={handleSkip}>
-            Để sau
+            Maybe later
           </button>
         </div>
       </div>

@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import PublicRoute from "./components/common/PublicRoute";
 import PrivateRoute from "./components/common/PrivateRoute";
+import { SocketProvider } from "./context/SocketContext";
 
 // Landing Page
 import Landing from "./pages/Landing/Landing";
@@ -30,6 +31,7 @@ import UserInformation from "./pages/UserInformation/UserInformation";
 import SlotDetail from "./pages/SlotDetail/SlotDetail";
 import MoodHistory from "./pages/Mood/MoodHistory";
 import StudyTracker from "./pages/StudyTracker/StudyTracker";
+import Notifications from "./pages/Notifications/Notifications";
 
 // Placeholder Admin component
 const AdminDashboard = () => (
@@ -49,17 +51,18 @@ const AdminDashboard = () => (
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Public Routes - Redirect if authenticated */}
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <Login />
-            </PublicRoute>
-          }
-        />
+    <SocketProvider>
+      <Router>
+        <Routes>
+          {/* Public Routes - Redirect if authenticated */}
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
         <Route
           path="/register"
           element={
@@ -137,6 +140,14 @@ function App() {
           }
         />
         <Route
+          path="/notifications"
+          element={
+            <PrivateRoute>
+              <Notifications />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/study-tracker"
           element={
             <PrivateRoute>
@@ -192,6 +203,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Router>
+    </SocketProvider>
   );
 }
 

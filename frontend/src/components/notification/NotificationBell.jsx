@@ -1,31 +1,86 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import notificationService from '../../services/notificationService';
+import { useSocket } from '../../context/SocketContext';
 import './NotificationBell.css';
 
 const NotificationBell = () => {
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('all'); // 'all' or 'unread'
+  const dropdownRef = useRef(null);
+  
+  // Use Socket.IO context
+  const { 
+    isConnected, 
+    notifications: socketNotifications,
+    setNotifications: setSocketNotifications,
+    unreadCount: socketUnreadCount,
+    setUnreadCount: setSocketUnreadCount
+  } = useSocket();
 
   useEffect(() => {
     loadNotifications();
-    // Poll for new notifications every 30 seconds
-    const interval = setInterval(loadNotifications, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    
+    // Only use polling as fallback when socket is disconnected
+    if (!isConnected) {
+      console.log('Socket disconnected, using polling fallback');
+      const interval = setInterval(loadNotifications, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [isConnected]);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    if (showDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showDropdown]);
 
   const loadNotifications = async () => {
     try {
       const response = await notificationService.getNotifications();
       if (response.success) {
-        setNotifications(response.data);
+        const notifs = response.data;
+        setNotifications(notifs);
         setUnreadCount(response.unreadCount);
+        
+        // Update socket context state
+        if (setSocketNotifications) {
+          setSocketNotifications(notifs);
+        }
+        if (setSocketUnreadCount) {
+          setSocketUnreadCount(response.unreadCount);
+        }
       }
     } catch (error) {
       console.error('Error loading notifications:', error);
     }
   };
+
+  // Sync with socket notifications
+  useEffect(() => {
+    if (isConnected && socketNotifications) {
+      setNotifications(socketNotifications);
+    }
+  }, [socketNotifications, isConnected]);
+
+  // Sync with socket unread count
+  useEffect(() => {
+    if (isConnected && socketUnreadCount !== undefined) {
+      setUnreadCount(socketUnreadCount);
+    }
+  }, [socketUnreadCount, isConnected]);
 
   const handleMarkAsRead = async (id) => {
     try {
@@ -59,12 +114,29 @@ const NotificationBell = () => {
 
   const getNotificationIcon = (type) => {
     switch (type) {
+      case 'mood_checkin':
       case 'mood_reminder':
         return '😊';
       case 'study_reminder':
         return '📚';
+      case 'task_reminder':
+        return '✅';
       case 'achievement':
         return '🏆';
+      case 'level_up':
+        return '⭐';
+      case 'streak_milestone':
+        return '🔥';
+      case 'subscription':
+        return '💎';
+      case 'payment':
+        return '💳';
+      case 'admin_message':
+        return '👨‍💼';
+      case 'announcement':
+        return '📢';
+      case 'system':
+        return '🔔';
       default:
         return '🔔';
     }
@@ -85,11 +157,24 @@ const NotificationBell = () => {
     return `${diffInDays} ngày trước`;
   };
 
+  // Filter notifications based on active tab
+  const filteredNotifications = activeTab === 'all' 
+    ? notifications 
+    : notifications.filter(n => !n.read);
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+    if (!showDropdown) {
+      loadNotifications(); // Refresh when opening
+    }
+  };
+
   return (
-    <div className="notification-bell">
+    <div className="notification-bell" ref={dropdownRef}>
       <button 
-        className="bell-button"
-        onClick={() => setShowDropdown(!showDropdown)}
+        className={`bell-button ${isConnected ? 'connected' : 'disconnected'}`}
+        onClick={toggleDropdown}
+        title={isConnected ? 'Realtime connected' : 'Offline mode'}
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.37 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.64 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" fill="currentColor"/>
@@ -97,6 +182,7 @@ const NotificationBell = () => {
         {unreadCount > 0 && (
           <span className="badge">{unreadCount > 99 ? '99+' : unreadCount}</span>
         )}
+        {isConnected && <span className="connection-indicator"></span>}
       </button>
 
       {showDropdown && (
@@ -109,19 +195,41 @@ const NotificationBell = () => {
                 onClick={handleMarkAllAsRead}
                 disabled={loading}
               >
-                Đánh dấu đã đọc
+                {loading ? '...' : 'Đánh dấu đã đọc'}
               </button>
             )}
           </div>
 
+          {/* Tabs */}
+          <div className="notification-tabs">
+            <button 
+              className={`tab ${activeTab === 'all' ? 'active' : ''}`}
+              onClick={() => setActiveTab('all')}
+            >
+              Tất cả ({notifications.length})
+            </button>
+            <button 
+              className={`tab ${activeTab === 'unread' ? 'active' : ''}`}
+              onClick={() => setActiveTab('unread')}
+            >
+              Chưa đọc ({unreadCount})
+            </button>
+          </div>
+
           <div className="notification-list">
-            {notifications.length === 0 ? (
+            {filteredNotifications.length === 0 ? (
               <div className="empty-state">
-                <span className="empty-icon">🔔</span>
-                <p>Chưa có thông báo</p>
+                <span className="empty-icon">
+                  {activeTab === 'unread' ? '✅' : '🔔'}
+                </span>
+                <p>
+                  {activeTab === 'unread' 
+                    ? 'Bạn đã đọc hết thông báo!' 
+                    : 'Chưa có thông báo nào'}
+                </p>
               </div>
             ) : (
-              notifications.map((notif) => (
+              filteredNotifications.map((notif) => (
                 <div 
                   key={notif._id}
                   className={`notification-item ${!notif.read ? 'unread' : ''}`}
@@ -141,6 +249,7 @@ const NotificationBell = () => {
                       e.stopPropagation();
                       handleDelete(notif._id);
                     }}
+                    title="Xóa thông báo"
                   >
                     ×
                   </button>
@@ -148,6 +257,20 @@ const NotificationBell = () => {
               ))
             )}
           </div>
+
+          {notifications.length > 0 && (
+            <div className="dropdown-footer">
+              <button 
+                className="view-all-btn"
+                onClick={() => {
+                  setShowDropdown(false);
+                  navigate('/notifications');
+                }}
+              >
+                Xem tất cả thông báo
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
