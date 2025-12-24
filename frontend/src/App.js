@@ -31,6 +31,7 @@ import UserInformation from "./pages/UserInformation/UserInformation";
 import SlotDetail from "./pages/SlotDetail/SlotDetail";
 import MoodHistory from "./pages/Mood/MoodHistory";
 import StudyTracker from "./pages/StudyTracker/StudyTracker";
+import SubjectDetail from "./pages/SubjectDetail/SubjectDetail";
 import Notifications from "./pages/Notifications/Notifications";
 
 // Placeholder Admin component
@@ -168,6 +169,14 @@ function App() {
           element={
             <PrivateRoute>
               <SlotDetail />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/subject/:id"
+          element={
+            <PrivateRoute>
+              <SubjectDetail />
             </PrivateRoute>
           }
         />

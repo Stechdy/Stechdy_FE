@@ -190,14 +190,19 @@ const Dashboard = () => {
         completedMinutes = todaySessions
           .filter(s => s.status === 'completed')
           .reduce((total, session) => {
-            const duration = session.actualDuration || session.plannedDuration || 90;
-            return total + duration;
+            const plannedDuration = session.plannedDuration || 90;
+            const actualDuration = session.actualDuration || plannedDuration;
+            // Sum up actual duration of all completed sessions
+            return total + actualDuration;
           }, 0);
 
         // Calculate goal from all scheduled sessions today
         goalMinutes = todaySessions.reduce((total, session) => {
           return total + (session.plannedDuration || 90);
         }, 0) || 360;
+        
+        // Cap total completed at total goal to avoid showing more than 100%
+        completedMinutes = Math.min(completedMinutes, goalMinutes);
       }
 
       // Fetch upcoming sessions by subject (current semester)
@@ -226,10 +231,10 @@ const Dashboard = () => {
             
             return {
               id: session._id,
+              subjectId: session.subjectInfo?._id || session.subjectId,
               subject: session.subjectInfo?.subjectName || 'Study Session',
               time: `${dayOfWeek}, ${monthDay} ${year} • ${session.startTime} - ${session.endTime}`,
-              color: session.subjectInfo?.color || '#8AC0D5',
-              topic: session.topic
+              color: session.subjectInfo?.color || '#8AC0D5'
             };
           });
       }
@@ -434,7 +439,12 @@ const Dashboard = () => {
               <h2 className="section-title">Upcoming Sessions</h2>
               <div className="dashboard-dashboard-sessions-list">
                 {upcomingSessions.map(session => (
-                  <div key={session.id} className="dashboard-session-card">
+                  <div 
+                    key={session.id} 
+                    className="dashboard-session-card"
+                    onClick={() => session.subjectId && navigate(`/subject/${session.subjectId}`)}
+                    style={{ cursor: session.subjectId ? 'pointer' : 'default' }}
+                  >
                     <div className="dashboard-session-left">
                       <div 
                         className="dashboard-session-indicator" 

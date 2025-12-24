@@ -238,7 +238,7 @@
 
 .progress-bar {
   height: 8px;
-  background: var(--bg-hover);
+  background: var(--bg-secondary);
   border-radius: 10px;
   overflow: hidden;
   position: relative;

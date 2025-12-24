@@ -157,7 +157,8 @@
 .mood-label {
   font-size: 12px;
   font-weight: 600;
-  color: #a09d9d;
+  color: var(--text-tertiary);
+  transition: color var(--transition-normal);
 }
 
 .mood-option.selected .mood-label {
@@ -199,14 +200,15 @@
 }
 
 .note-input::placeholder {
-  color: #B8B8B8;
+  color: var(--text-tertiary);
 }
 
 .char-count {
   text-align: right;
   font-size: 12px;
-  color: #B8B8B8;
+  color: var(--text-tertiary);
   margin-top: 8px;
+  transition: color var(--transition-normal);
 }
 
 /* Energy Level Slider */
