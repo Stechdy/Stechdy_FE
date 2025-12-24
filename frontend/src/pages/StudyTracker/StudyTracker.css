@@ -386,7 +386,15 @@
   font-size: 13px;
   color: var(--text-secondary);
   font-weight: 500;
-  transition: color var(--transition-normal);
+  transition: all 0.3s ease;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.subject-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  transform: translateX(4px);
 }
 
 .subject-color {

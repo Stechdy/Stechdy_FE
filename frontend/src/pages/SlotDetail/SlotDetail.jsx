@@ -402,6 +402,11 @@ const SlotDetail = () => {
       <SidebarNav />
       <div className="slot-detail-page">
       <header className="slot-detail-header">
+        <button className="back-btn" onClick={() => navigate('/calendar')}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
         <h1 className="slot-detail-title">Slot Details</h1>
         <div className="header-spacer"></div>
       </header>
@@ -440,6 +445,87 @@ const SlotDetail = () => {
                    '⏱ Scheduled'}
                 </span>
               </div>
+
+              {/* Additional information for completed sessions */}
+              {session.status === 'completed' && (
+                <>
+                  {/* Actual Time & Duration */}
+                  {session.actualStartTime && session.actualEndTime && (
+                    <div className="slot-info-row highlight">
+                      <span className="slot-info-label">Actual Time</span>
+                      <span className="slot-info-value">⏱️ {new Date(session.actualStartTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} - {new Date(session.actualEndTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</span>
+                    </div>
+                  )}
+                  
+                  {session.actualDuration && (
+                    <div className="slot-info-row highlight">
+                      <span className="slot-info-label">Actual Duration</span>
+                      <span className="slot-info-value">⏳ {session.actualDuration} minutes</span>
+                    </div>
+                  )}
+
+                  {/* Focus Level */}
+                  {session.focusLevel && (
+                    <div className="slot-info-row highlight">
+                      <span className="slot-info-label">Focus Level</span>
+                      <span className="slot-info-value">
+                        🎯 {session.focusLevel}/5 
+                        <span className="focus-stars">{' '}{'⭐'.repeat(session.focusLevel)}</span>
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Completed Topics */}
+                  {session.completedTopics && session.completedTopics.length > 0 && (
+                    <div className="slot-info-row vertical">
+                      <span className="slot-info-label">Completed Topics</span>
+                      <ul className="completed-topics-list">
+                        {session.completedTopics.map((topic, idx) => (
+                          <li key={idx}>✓ {topic}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Resources */}
+                  {session.resources && session.resources.length > 0 && (
+                    <div className="slot-info-row vertical">
+                      <span className="slot-info-label">Resources Used</span>
+                      <ul className="resources-list">
+                        {session.resources.map((resource, idx) => (
+                          <li key={idx}>
+                            <span className="resource-type">
+                              {resource.type === 'textbook' ? '📚' :
+                               resource.type === 'video' ? '🎥' :
+                               resource.type === 'article' ? '📄' :
+                               resource.type === 'practice' ? '✍️' :
+                               resource.type === 'notes' ? '📝' : '📌'}
+                            </span>
+                            <span className="resource-name">{resource.name}</span>
+                            {resource.pages && <span className="resource-pages"> (Pages: {resource.pages})</span>}
+                            {resource.url && (
+                              <a href={resource.url} target="_blank" rel="noopener noreferrer" className="resource-link">
+                                🔗 Link
+                              </a>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {/* Completion Notes */}
+                  {session.completionNotes && (
+                    <div className="slot-info-row vertical">
+                      <span className="slot-info-label">Completion Notes</span>
+                      <div className="completion-notes">
+                        {session.completionNotes}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
               {canMoveSession() && (
                 <button className="slot-edit-btn" onClick={() => setIsEditing(true)}>
                   <span className="btn-icon">✏️</span>

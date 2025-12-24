@@ -87,26 +87,33 @@ const StudyTracker = () => {
   };
 
   const calculateProgressBySubject = (sessions) => {
-    const subjectMap = {};
+    // Calculate total progress for today instead of by subject
+    let totalCompleted = 0;
+    let totalGoal = 0;
     
     sessions.forEach(session => {
-      const subjectName = session.subjectId?.subjectName || 'Unknown';
-      if (!subjectMap[subjectName]) {
-        subjectMap[subjectName] = {
-          subject: subjectName,
-          completed: 0,
-          goal: 0,
-          color: session.subjectId?.color || '#8AC0D5'
-        };
-      }
+      const plannedDuration = session.plannedDuration || 90;
+      totalGoal += plannedDuration;
       
-      subjectMap[subjectName].goal += session.plannedDuration || 90;
       if (session.status === 'completed') {
-        subjectMap[subjectName].completed += session.actualDuration || session.plannedDuration || 90;
+        // Sum up actual duration of all completed sessions
+        const actualDuration = session.actualDuration || plannedDuration;
+        totalCompleted += actualDuration;
       }
     });
     
-    return Object.values(subjectMap);
+    // Cap total completed at total goal to avoid showing more than 100%
+    totalCompleted = Math.min(totalCompleted, totalGoal);
+    
+    // Return single item for total progress
+    if (totalGoal === 0) return [];
+    
+    return [{
+      subject: 'Total Study Time',
+      completed: totalCompleted,
+      goal: totalGoal,
+      color: '#8AC0D5'
+    }];
   };
 
   const getWeekDates = () => {
@@ -270,7 +277,12 @@ const StudyTracker = () => {
         <h3>Subject Legend</h3>
         <div className="subjects-grid">
           {subjects.map((subject, idx) => (
-            <div key={idx} className="subject-item">
+            <div 
+              key={idx} 
+              className="subject-item"
+              onClick={() => navigate(`/subject/${subject._id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <div className="subject-color" style={{ backgroundColor: subject.color }}></div>
               <span>{subject.subjectName}</span>
             </div>
