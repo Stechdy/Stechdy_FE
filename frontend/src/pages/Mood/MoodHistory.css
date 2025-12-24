@@ -395,3 +395,45 @@
     display: none !important;
   }
 }
+/* === FAB Breathing + Floating Icon (Mobile only) === */
+@keyframes fab-breathe {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 4px 16px rgba(255, 107, 157, 0.4);
+  }
+  50% {
+    transform: scale(1.06);
+    box-shadow: 0 6px 22px rgba(255, 107, 157, 0.55);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 4px 16px rgba(255, 107, 157, 0.4);
+  }
+}
+
+@keyframes float-icon {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0); }
+}
+
+/* Chỉ áp dụng cho app (mobile / tablet) */
+@media (max-width: 768px) {
+  .add-mood-fab {
+    animation: fab-breathe 3s ease-in-out infinite;
+  }
+
+  .add-mood-fab .fab-icon {
+    animation: float-icon 2s ease-in-out infinite;
+  }
+}
+@keyframes hint-label {
+  0%, 80% { opacity: 0; max-width: 0; }
+  100% { opacity: 1; max-width: 100px; }
+}
+
+@media (max-width: 768px) {
+  .fab-label {
+    animation: hint-label 6s infinite;
+  }
+}
