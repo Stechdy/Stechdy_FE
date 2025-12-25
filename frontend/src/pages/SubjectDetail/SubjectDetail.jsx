@@ -214,7 +214,7 @@ const SubjectDetail = () => {
       <div className="subject-detail-container">
         <SidebarNav />
         <div className="subject-detail-page">
-          <div className="loading">Loading...</div>
+          <div className="subject-loading">Loading...</div>
         </div>
       </div>
     );
@@ -225,7 +225,7 @@ const SubjectDetail = () => {
       <div className="subject-detail-container">
         <SidebarNav />
         <div className="subject-detail-page">
-          <div className="loading">Subject not found</div>
+          <div className="subject-loading">Subject not found</div>
         </div>
       </div>
     );
@@ -260,9 +260,9 @@ const SubjectDetail = () => {
               <h3>Overall Progress</h3>
               <span className="progress-percent">{progress.percent}%</span>
             </div>
-            <div className="progress-bar">
+            <div className="subject-progress-bar">
               <div 
-                className="progress-fill" 
+                className="subject-progress-fill" 
                 style={{ 
                   width: `${progress.percent}%`,
                   background: `linear-gradient(90deg, ${subject.color || '#8AC0D5'} 0%, ${adjustColor(subject.color || '#8AC0D5', 30)} 100%)`
@@ -362,14 +362,14 @@ const SubjectDetail = () => {
 
         {/* Add Deadline Modal */}
         {showAddDeadline && (
-          <div className="modal-overlay" onClick={() => setShowAddDeadline(false)}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <div className="modal-header">
+          <div className="subject-modal-overlay" onClick={() => setShowAddDeadline(false)}>
+            <div className="subject-modal-content" onClick={(e) => e.stopPropagation()}>
+              <div className="subject-modal-header">
                 <h3>Add New Deadline</h3>
-                <button className="modal-close" onClick={() => setShowAddDeadline(false)}>×</button>
+                <button className="subject-modal-close" onClick={() => setShowAddDeadline(false)}>×</button>
               </div>
-              <div className="modal-body">
-                <div className="form-group">
+              <div className="subject-subject-modal-body">
+                <div className="subject-form-group">
                   <label>Title</label>
                   <input
                     type="text"
@@ -378,7 +378,7 @@ const SubjectDetail = () => {
                     onChange={(e) => setNewDeadline({...newDeadline, title: e.target.value})}
                   />
                 </div>
-                <div className="form-group">
+                <div className="subject-form-group">
                   <label>Due Date</label>
                   <input
                     type="date"
@@ -386,7 +386,7 @@ const SubjectDetail = () => {
                     onChange={(e) => setNewDeadline({...newDeadline, dueDate: e.target.value})}
                   />
                 </div>
-                <div className="form-group">
+                <div className="subject-form-group">
                   <label>Type</label>
                   <select
                     value={newDeadline.deadlineType}
@@ -402,7 +402,7 @@ const SubjectDetail = () => {
                     <option value="other">Other</option>
                   </select>
                 </div>
-                <div className="form-group">
+                <div className="subject-form-group">
                   <label>Priority</label>
                   <select
                     value={newDeadline.priorityLevel}
@@ -415,12 +415,12 @@ const SubjectDetail = () => {
                   </select>
                 </div>
               </div>
-              <div className="modal-footer">
-                <button className="cancel-btn" onClick={() => setShowAddDeadline(false)}>
+              <div className="subject-modal-footer">
+                <button className="subject-cancel-btn" onClick={() => setShowAddDeadline(false)}>
                   Cancel
                 </button>
                 <button 
-                  className="submit-btn"
+                  className="subject-submit-btn"
                   onClick={handleAddDeadline}
                   disabled={!newDeadline.title || !newDeadline.dueDate}
                 >

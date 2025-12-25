@@ -43,27 +43,27 @@ const Register = () => {
     const newErrors = {};
 
     if (!formData.name) {
-      newErrors.name = 'Vui lòng nhập họ tên';
+      newErrors.name = 'Please enter your name';
     } else if (formData.name.length < 2) {
-      newErrors.name = 'Họ tên phải có ít nhất 2 ký tự';
+      newErrors.name = 'Name must be at least 2 characters';
     }
 
     if (!formData.email) {
-      newErrors.email = 'Vui lòng nhập email';
+      newErrors.email = 'Please enter email';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email không hợp lệ';
+      newErrors.email = 'Invalid email';
     }
 
     if (!formData.password) {
-      newErrors.password = 'Vui lòng nhập mật khẩu';
+      newErrors.password = 'Please enter password';
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+      newErrors.password = 'Password must be at least 6 characters';
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Vui lòng xác nhận mật khẩu';
+      newErrors.confirmPassword = 'Please confirm password';
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Mật khẩu không khớp';
+      newErrors.confirmPassword = 'Passwords do not match';
     }
 
     setErrors(newErrors);
@@ -92,7 +92,7 @@ const Register = () => {
         navigate('/dashboard');
       }
     } catch (error) {
-      setApiError(error.message || 'Đăng ký thất bại. Vui lòng thử lại.');
+      setApiError(error.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -114,23 +114,23 @@ const Register = () => {
         navigate('/dashboard');
       }
     } catch (error) {
-      setApiError(error.message || 'Đăng ký bằng Google thất bại. Vui lòng thử lại.');
+      setApiError(error.message || 'Google sign up failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleError = () => {
-    setApiError('Đăng ký bằng Google thất bại. Vui lòng thử lại.');
+    setApiError('Google sign up failed. Please try again.');
   };
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <AuthLayout>
         <div className="register-header">
-          <h1 className="auth-title">Tạo tài khoản</h1>
+          <h1 className="auth-title">Create Account</h1>
           <h2 className="auth-brand">S'techdy</h2>
-          <p className="auth-subtitle">Tham gia cùng chúng tôi và bắt đầu hành trình học tập</p>
+          <p className="auth-subtitle">Join us and start your learning journey</p>
         </div>
 
         <form onSubmit={handleSubmit} className="register-form">
@@ -141,11 +141,11 @@ const Register = () => {
         )}
 
         <div className="form-group">
-          <label className="form-label">Họ và tên</label>
+          <label className="form-label">Full Name</label>
           <AuthInput
             type="text"
             name="name"
-            placeholder="Nhập họ và tên"
+            placeholder="Enter your full name"
             value={formData.name}
             onChange={handleChange}
             icon="👤"
@@ -167,7 +167,7 @@ const Register = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Mật khẩu</label>
+          <label className="form-label">Password</label>
           <AuthInput
             type={showPassword ? 'text' : 'password'}
             name="password"
@@ -182,7 +182,7 @@ const Register = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Xác nhận mật khẩu</label>
+          <label className="form-label">Confirm Password</label>
           <AuthInput
             type={showConfirmPassword ? 'text' : 'password'}
             name="confirmPassword"
@@ -201,11 +201,11 @@ const Register = () => {
           loading={loading}
           disabled={loading}
         >
-          Tạo tài khoản
+          Create Account
         </AuthButton>
 
         <div className="divider">
-          <span>hoặc tiếp tục với</span>
+          <span>or continue with</span>
         </div>
 
         <div className="google-login-wrapper">
@@ -216,14 +216,14 @@ const Register = () => {
             size="large"
             text="continue_with"
             shape="rectangular"
-            locale="vi"
+            locale="en"
             width="100%"
           />
         </div>
 
         <div className="login-link">
-          Đã có tài khoản?{' '}
-          <Link to="/login">Đăng nhập</Link>
+          Already have an account?{' '}
+          <Link to="/login">Login</Link>
         </div>
       </form>
     </AuthLayout>

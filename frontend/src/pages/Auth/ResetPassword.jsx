@@ -39,15 +39,15 @@ const ResetPassword = () => {
     const newErrors = {};
 
     if (!formData.password) {
-      newErrors.password = 'Vui lòng nhập mật khẩu';
+      newErrors.password = 'Please enter password';
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+      newErrors.password = 'Password must be at least 6 characters';
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Vui lòng xác nhận mật khẩu';
+      newErrors.confirmPassword = 'Please confirm password';
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Mật khẩu không khớp';
+      newErrors.confirmPassword = 'Passwords do not match';
     }
 
     setErrors(newErrors);
@@ -74,7 +74,7 @@ const ResetPassword = () => {
         }, 3000);
       }
     } catch (error) {
-      setApiError(error.message || 'Đặt lại mật khẩu thất bại. Vui lòng thử lại.');
+      setApiError(error.message || 'Password reset failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -85,12 +85,12 @@ const ResetPassword = () => {
       <AuthLayout>
         <div className="success-message">
           <div className="success-icon">✅</div>
-          <h2>Đặt lại mật khẩu thành công!</h2>
+          <h2>Password Reset Successful!</h2>
           <p>
-            Mật khẩu của bạn đã được đặt lại thành công. Bạn sẽ được chuyển đến trang đăng nhập.
+            Your password has been reset successfully. You will be redirected to the login page.
           </p>
           <AuthButton onClick={() => navigate('/login')}>
-            Đến trang đăng nhập
+            Go to Login
           </AuthButton>
         </div>
       </AuthLayout>
@@ -100,10 +100,10 @@ const ResetPassword = () => {
   return (
     <AuthLayout>
       <div className="reset-password-header">
-        <h1 className="auth-title">Đặt lại mật khẩu</h1>
+        <h1 className="auth-title">Reset Password</h1>
         <h2 className="auth-brand">S'techdy</h2>
         <p className="auth-subtitle">
-          Nhập mật khẩu mới của bạn
+          Enter your new password
         </p>
       </div>
 
@@ -115,7 +115,7 @@ const ResetPassword = () => {
         )}
 
         <div className="form-group">
-          <label className="form-label">Mật khẩu mới</label>
+          <label className="form-label">New Password</label>
           <AuthInput
             type={showPassword ? 'text' : 'password'}
             name="password"
@@ -130,7 +130,7 @@ const ResetPassword = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Xác nhận mật khẩu mới</label>
+          <label className="form-label">Confirm New Password</label>
           <AuthInput
             type={showConfirmPassword ? 'text' : 'password'}
             name="confirmPassword"
@@ -149,11 +149,11 @@ const ResetPassword = () => {
           loading={loading}
           disabled={loading}
         >
-          Đặt lại mật khẩu
+          Reset Password
         </AuthButton>
 
         <div className="back-to-login">
-          <Link to="/login">← Quay lại đăng nhập</Link>
+          <Link to="/login">← Back to login</Link>
         </div>
       </form>
     </AuthLayout>

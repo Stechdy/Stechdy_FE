@@ -1,6 +1,29 @@
+/* Fade In Animation */
+@keyframes adminLoginFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .admin-badge {
   text-align: center;
   margin-bottom: 16px;
+  animation: adminLoginFadeIn 0.4s ease-out;
+}
+
+.admin-login-header {
+  animation: adminLoginFadeIn 0.4s ease-out;
+  animation-delay: 0.05s;
+}
+
+.admin-login-form {
+  animation: adminLoginFadeIn 0.4s ease-out;
+  animation-delay: 0.1s;
 }
 
 .admin-badge span {

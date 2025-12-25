@@ -154,7 +154,6 @@ const UserInformation = () => {
             </svg>
           </button>
           <h1 className="page-title">User Information</h1>
-          <div className="header-spacer"></div>
         </div>
 
         {error && (
