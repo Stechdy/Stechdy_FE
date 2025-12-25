@@ -1,19 +1,21 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import './MoodCheckInModal.css';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import "./MoodCheckInModal.css";
 
 const MoodCheckInModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (!isOpen) return null;
 
   const handleCheckIn = () => {
     onClose();
-    navigate('/mood');
+    navigate("/mood");
   };
 
   const handleSkip = () => {
-    localStorage.setItem('moodCheckInSkipped', new Date().toDateString());
+    localStorage.setItem("moodCheckInSkipped", new Date().toDateString());
     onClose();
   };
 
@@ -21,23 +23,18 @@ const MoodCheckInModal = ({ isOpen, onClose }) => {
     <div className="modal-overlay" onClick={handleSkip}>
       <div className="check-in-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-emoji-large">😊</div>
-        
-        <h2 className="modal-title">
-          How are you feeling today?
-        </h2>
-        
-        <p className="modal-description">
-          Take a few seconds to record your mood.
-          Tracking your emotions helps you understand yourself better!
-        </p>
+
+        <h2 className="modal-title">{t("moodCheckIn.title")}</h2>
+
+        <p className="modal-description">{t("moodCheckIn.description")}</p>
 
         <div className="modal-actions">
           <button className="check-in-btn" onClick={handleCheckIn}>
-            Record my mood 💙
+            {t("moodCheckIn.recordMood")}
           </button>
-          
+
           <button className="skip-btn" onClick={handleSkip}>
-            Maybe later
+            {t("moodCheckIn.maybeLater")}
           </button>
         </div>
       </div>

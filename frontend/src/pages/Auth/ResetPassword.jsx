@@ -1,44 +1,47 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import AuthLayout from '../../components/layout/AuthLayout';
-import AuthInput from '../../components/common/AuthInput';
-import AuthButton from '../../components/common/AuthButton';
-import { resetPassword } from '../../services/authService';
-import './ResetPassword.css';
+import React, { useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import AuthLayout from "../../components/layout/AuthLayout";
+import AuthInput from "../../components/common/AuthInput";
+import AuthButton from "../../components/common/AuthButton";
+import { resetPassword } from "../../services/authService";
+import "./ResetPassword.css";
 
 const ResetPassword = () => {
+  const { t } = useTranslation();
   const { resetToken } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    password: '',
-    confirmPassword: ''
+    password: "",
+    confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [apiError, setApiError] = useState('');
+  const [apiError, setApiError] = useState("");
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
-    setApiError('');
+    setApiError("");
   };
 
   const validateForm = () => {
     const newErrors = {};
 
     if (!formData.password) {
+<<<<<<< Updated upstream
       newErrors.password = 'Please enter password';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
@@ -48,6 +51,17 @@ const ResetPassword = () => {
       newErrors.confirmPassword = 'Please confirm password';
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Passwords do not match';
+=======
+      newErrors.password = t("auth.validation.passwordRequired");
+    } else if (formData.password.length < 6) {
+      newErrors.password = t("auth.validation.passwordMinLength");
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = t("auth.validation.confirmPasswordRequired");
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = t("auth.validation.passwordMismatch");
+>>>>>>> Stashed changes
     }
 
     setErrors(newErrors);
@@ -56,25 +70,29 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
-    setApiError('');
+    setApiError("");
 
     try {
       const response = await resetPassword(resetToken, formData.password);
-      
+
       if (response.success) {
         setSuccess(true);
         setTimeout(() => {
-          navigate('/login');
+          navigate("/login");
         }, 3000);
       }
     } catch (error) {
+<<<<<<< Updated upstream
       setApiError(error.message || 'Password reset failed. Please try again.');
+=======
+      setApiError(error.message || t("auth.resetPassword.failed"));
+>>>>>>> Stashed changes
     } finally {
       setLoading(false);
     }
@@ -85,12 +103,19 @@ const ResetPassword = () => {
       <AuthLayout>
         <div className="success-message">
           <div className="success-icon">✅</div>
+<<<<<<< Updated upstream
           <h2>Password Reset Successful!</h2>
           <p>
             Your password has been reset successfully. You will be redirected to the login page.
           </p>
           <AuthButton onClick={() => navigate('/login')}>
             Go to Login
+=======
+          <h2>{t("auth.resetPassword.success")}</h2>
+          <p>{t("auth.resetPassword.successMessage")}</p>
+          <AuthButton onClick={() => navigate("/login")}>
+            {t("auth.resetPassword.goToLogin")}
+>>>>>>> Stashed changes
           </AuthButton>
         </div>
       </AuthLayout>
@@ -100,24 +125,32 @@ const ResetPassword = () => {
   return (
     <AuthLayout>
       <div className="reset-password-header">
+<<<<<<< Updated upstream
         <h1 className="auth-title">Reset Password</h1>
         <h2 className="auth-brand">S'techdy</h2>
         <p className="auth-subtitle">
           Enter your new password
         </p>
+=======
+        <h1 className="auth-title">{t("auth.resetPassword.title")}</h1>
+        <h2 className="auth-brand">S'techdy</h2>
+        <p className="auth-subtitle">{t("auth.resetPassword.subtitle")}</p>
+>>>>>>> Stashed changes
       </div>
 
       <form onSubmit={handleSubmit} className="reset-password-form">
-        {apiError && (
-          <div className="alert alert-error">
-            {apiError}
-          </div>
-        )}
+        {apiError && <div className="alert alert-error">{apiError}</div>}
 
         <div className="form-group">
+<<<<<<< Updated upstream
           <label className="form-label">New Password</label>
+=======
+          <label className="form-label">
+            {t("auth.resetPassword.newPassword")}
+          </label>
+>>>>>>> Stashed changes
           <AuthInput
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             name="password"
             placeholder="••••••••"
             value={formData.password}
@@ -130,9 +163,15 @@ const ResetPassword = () => {
         </div>
 
         <div className="form-group">
+<<<<<<< Updated upstream
           <label className="form-label">Confirm New Password</label>
+=======
+          <label className="form-label">
+            {t("auth.resetPassword.confirmNewPassword")}
+          </label>
+>>>>>>> Stashed changes
           <AuthInput
-            type={showConfirmPassword ? 'text' : 'password'}
+            type={showConfirmPassword ? "text" : "password"}
             name="confirmPassword"
             placeholder="••••••••"
             value={formData.confirmPassword}
@@ -140,10 +179,13 @@ const ResetPassword = () => {
             icon="🔒"
             error={errors.confirmPassword}
             showPassword={showConfirmPassword}
-            onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
+            onTogglePassword={() =>
+              setShowConfirmPassword(!showConfirmPassword)
+            }
           />
         </div>
 
+<<<<<<< Updated upstream
         <AuthButton 
           type="submit" 
           loading={loading}
@@ -154,6 +196,14 @@ const ResetPassword = () => {
 
         <div className="back-to-login">
           <Link to="/login">← Back to login</Link>
+=======
+        <AuthButton type="submit" loading={loading} disabled={loading}>
+          {t("auth.resetPassword.submit")}
+        </AuthButton>
+
+        <div className="back-to-login">
+          <Link to="/login">← {t("auth.resetPassword.backToLogin")}</Link>
+>>>>>>> Stashed changes
         </div>
       </form>
     </AuthLayout>

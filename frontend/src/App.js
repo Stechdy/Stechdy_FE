@@ -27,12 +27,14 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Calendar from "./pages/Calendar/Calendar";
 import Mood from "./pages/Mood/Mood";
 import Account from "./pages/Account/Account";
+import About from "./pages/About/About";
 import UserInformation from "./pages/UserInformation/UserInformation";
 import SlotDetail from "./pages/SlotDetail/SlotDetail";
 import MoodHistory from "./pages/Mood/MoodHistory";
 import StudyTracker from "./pages/StudyTracker/StudyTracker";
 import SubjectDetail from "./pages/SubjectDetail/SubjectDetail";
 import Notifications from "./pages/Notifications/Notifications";
+import HelpSupport from "./pages/HelpSupport/HelpSupport";
 
 // Placeholder Admin component
 const AdminDashboard = () => (
@@ -64,154 +66,170 @@ function App() {
               </PublicRoute>
             }
           />
-        <Route
-          path="/register"
-          element={
-            <PublicRoute>
-              <Register />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/forgot-password"
-          element={
-            <PublicRoute>
-              <ForgotPassword />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/reset-password/:resetToken"
-          element={
-            <PublicRoute>
-              <ResetPassword />
-            </PublicRoute>
-          }
-        />
+          <Route
+            path="/register"
+            element={
+              <PublicRoute>
+                <Register />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <PublicRoute>
+                <ForgotPassword />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/reset-password/:resetToken"
+            element={
+              <PublicRoute>
+                <ResetPassword />
+              </PublicRoute>
+            }
+          />
 
-        {/* Admin Public Routes */}
-        <Route
-          path="/admin/login"
-          element={
-            <PublicRoute redirectTo="/admin/dashboard">
-              <AdminLogin />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/admin/forgot-password"
-          element={
-            <PublicRoute redirectTo="/admin/dashboard">
-              <AdminForgotPassword />
-            </PublicRoute>
-          }
-        />
+          {/* Admin Public Routes */}
+          <Route
+            path="/admin/login"
+            element={
+              <PublicRoute redirectTo="/admin/dashboard">
+                <AdminLogin />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/admin/forgot-password"
+            element={
+              <PublicRoute redirectTo="/admin/dashboard">
+                <AdminForgotPassword />
+              </PublicRoute>
+            }
+          />
 
-        {/* Private Routes - User Dashboard */}
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/calendar"
-          element={
-            <PrivateRoute>
-              <Calendar />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/mood"
-          element={
-            <PrivateRoute>
-              <Mood />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/mood/history"
-          element={
-            <PrivateRoute>
-              <MoodHistory />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/notifications"
-          element={
-            <PrivateRoute>
-              <Notifications />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/study-tracker"
-          element={
-            <PrivateRoute>
-              <StudyTracker />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/calendar"
-          element={
-            <PrivateRoute>
-              <Calendar />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/slot-detail/:id"
-          element={
-            <PrivateRoute>
-              <SlotDetail />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/subject/:id"
-          element={
-            <PrivateRoute>
-              <SubjectDetail />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/account"
-          element={
-            <PrivateRoute>
-              <Account />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <PrivateRoute>
-              <UserInformation />
-            </PrivateRoute>
-          }
-        />
+          {/* Private Routes - User Dashboard */}
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/calendar"
+            element={
+              <PrivateRoute>
+                <Calendar />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/mood"
+            element={
+              <PrivateRoute>
+                <Mood />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/mood/history"
+            element={
+              <PrivateRoute>
+                <MoodHistory />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              <PrivateRoute>
+                <Notifications />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/study-tracker"
+            element={
+              <PrivateRoute>
+                <StudyTracker />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/calendar"
+            element={
+              <PrivateRoute>
+                <Calendar />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/slot-detail/:id"
+            element={
+              <PrivateRoute>
+                <SlotDetail />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/subject/:id"
+            element={
+              <PrivateRoute>
+                <SubjectDetail />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/account"
+            element={
+              <PrivateRoute>
+                <Account />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <UserInformation />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <PrivateRoute>
+                <About />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/help"
+            element={
+              <PrivateRoute>
+                <HelpSupport />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Protected Admin Routes */}
-        <Route
-          path="/admin/dashboard"
-          element={
-            <PrivateRoute adminOnly={true}>
-              <AdminDashboard />
-            </PrivateRoute>
-          }
-        />
+          {/* Protected Admin Routes */}
+          <Route
+            path="/admin/dashboard"
+            element={
+              <PrivateRoute adminOnly={true}>
+                <AdminDashboard />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Default redirect */}
-        <Route path="/" element={<Landing />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+          {/* Default redirect */}
+          <Route path="/" element={<Landing />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Router>
     </SocketProvider>
   );
 }

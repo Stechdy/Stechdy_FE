@@ -1,0 +1,342 @@
+/* Help & Support Page Container */
+.help-page {
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    #e8d5f0 0%,
+    #f5e6f0 15%,
+    #f8f0f5 30%,
+    #f5f0f8 50%,
+    #f0e8f5 70%,
+    #f5e0f0 85%,
+    #f8d8e8 100%
+  );
+  padding-bottom: 40px;
+}
+
+/* Header */
+.help-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: transparent;
+}
+
+.help-back-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.help-back-btn svg {
+  color: #374151;
+}
+
+.help-back-btn:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.help-back-btn:active {
+  transform: scale(0.95);
+}
+
+.help-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.help-header-spacer {
+  width: 40px;
+}
+
+/* Content Wrapper */
+.help-content {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Search Bar */
+.help-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.search-icon {
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #374151;
+  background: transparent;
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+/* Section Styles */
+.help-section {
+  margin-bottom: 28px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 16px;
+}
+
+/* FAQ Section */
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.faq-item {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.faq-question {
+  width: 100%;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 400;
+  color: #374151;
+}
+
+.faq-chevron {
+  flex-shrink: 0;
+  color: #9ca3af;
+  transition: transform 0.3s ease;
+}
+
+.faq-item.expanded .faq-chevron {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.faq-item.expanded .faq-answer {
+  max-height: 300px;
+}
+
+.faq-answer p {
+  margin: 0;
+  padding: 0 20px 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+/* Contact Buttons */
+.contact-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 24px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chat-btn {
+  background: linear-gradient(135deg, #818cf8 0%, #6366f1 50%, #4f46e5 100%);
+  border: none;
+  color: #ffffff;
+}
+
+.chat-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+}
+
+.chat-btn:active {
+  transform: translateY(0);
+}
+
+.email-btn {
+  background: #ffffff;
+  border: 2px solid #3b82f6;
+  color: #3b82f6;
+}
+
+.email-btn:hover {
+  background: #eff6ff;
+  transform: translateY(-2px);
+}
+
+.email-btn:active {
+  transform: translateY(0);
+}
+
+/* Footer */
+.help-footer {
+  text-align: center;
+  padding: 32px 20px;
+}
+
+.help-footer p {
+  font-size: 15px;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Dark Theme Support */
+[data-theme="dark"] .help-page {
+  background: linear-gradient(
+    180deg,
+    #1a1625 0%,
+    #1e1a2e 15%,
+    #22203a 30%,
+    #252040 50%,
+    #22203a 70%,
+    #1e1a2e 85%,
+    #1a1625 100%
+  );
+}
+
+[data-theme="dark"] .help-back-btn svg {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .help-back-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .help-title {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .help-search {
+  background: rgba(45, 45, 45, 0.8);
+}
+
+[data-theme="dark"] .search-input {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .search-input::placeholder {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .section-title {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .faq-item {
+  background: rgba(45, 45, 45, 0.8);
+}
+
+[data-theme="dark"] .faq-question {
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .faq-answer p {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .email-btn {
+  background: rgba(45, 45, 45, 0.8);
+  border-color: #60a5fa;
+  color: #60a5fa;
+}
+
+[data-theme="dark"] .email-btn:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="dark"] .help-footer p {
+  color: #9ca3af;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .help-header {
+    padding: 12px 16px;
+  }
+
+  .help-content {
+    padding: 0 16px;
+  }
+
+  .help-search {
+    padding: 14px 16px;
+  }
+
+  .faq-question {
+    padding: 16px;
+    font-size: 14px;
+  }
+
+  .faq-answer p {
+    padding: 0 16px 16px;
+    font-size: 13px;
+  }
+
+  .contact-btn {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+}
+
+/* Large screens */
+@media (min-width: 768px) {
+  .help-content {
+    max-width: 500px;
+  }
+
+  .help-search {
+    padding: 18px 24px;
+  }
+
+  .faq-question {
+    font-size: 16px;
+  }
+}

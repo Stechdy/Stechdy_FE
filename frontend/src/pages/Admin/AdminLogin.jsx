@@ -1,48 +1,50 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import AuthLayout from '../../components/layout/AuthLayout';
-import AuthInput from '../../components/common/AuthInput';
-import AuthButton from '../../components/common/AuthButton';
-import { login } from '../../services/authService';
-import './AdminLogin.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import AuthLayout from "../../components/layout/AuthLayout";
+import AuthInput from "../../components/common/AuthInput";
+import AuthButton from "../../components/common/AuthButton";
+import { login } from "../../services/authService";
+import "./AdminLogin.css";
 
 const AdminLogin = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [apiError, setApiError] = useState('');
+  const [apiError, setApiError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
-    setApiError('');
+    setApiError("");
   };
 
   const validateForm = () => {
     const newErrors = {};
 
     if (!formData.email) {
-      newErrors.email = 'Vui lòng nhập email';
+      newErrors.email = t("auth.validation.emailRequired");
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email không hợp lệ';
+      newErrors.email = t("auth.validation.emailInvalid");
     }
 
     if (!formData.password) {
-      newErrors.password = 'Vui lòng nhập mật khẩu';
+      newErrors.password = t("auth.validation.passwordRequired");
     }
 
     setErrors(newErrors);
@@ -51,34 +53,37 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
-    setApiError('');
+    setApiError("");
 
     try {
       const response = await login(formData.email, formData.password);
-      
+
       if (response.success) {
         // Check if user is admin
-        if (response.data.role !== 'admin' && response.data.role !== 'moderator') {
-          setApiError('Truy cập bị từ chối. Yêu cầu quyền quản trị.');
+        if (
+          response.data.role !== "admin" &&
+          response.data.role !== "moderator"
+        ) {
+          setApiError(t("auth.admin.login.accessDenied"));
           setLoading(false);
           return;
         }
 
         // Store token and user data
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data));
-        
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data));
+
         // Redirect to admin dashboard
-        navigate('/admin/dashboard');
+        navigate("/admin/dashboard");
       }
     } catch (error) {
-      setApiError(error.message || 'Đăng nhập thất bại. Vui lòng thử lại.');
+      setApiError(error.message || t("auth.admin.login.failed"));
     } finally {
       setLoading(false);
     }
@@ -87,24 +92,22 @@ const AdminLogin = () => {
   return (
     <AuthLayout>
       <div className="admin-badge">
-        <span>🛡️ Cổng Quản Trị</span>
+        <span>🛡️ {t("auth.admin.badge")}</span>
       </div>
 
       <div className="admin-login-header">
-        <h1 className="auth-title">Truy cập Quản trị</h1>
+        <h1 className="auth-title">{t("auth.admin.login.title")}</h1>
         <h2 className="auth-brand">S'techdy</h2>
-        <p className="auth-subtitle">Đăng nhập để truy cập trang quản trị</p>
+        <p className="auth-subtitle">{t("auth.admin.login.subtitle")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="admin-login-form">
-        {apiError && (
-          <div className="alert alert-error">
-            {apiError}
-          </div>
-        )}
+        {apiError && <div className="alert alert-error">{apiError}</div>}
 
         <div className="form-group">
-          <label className="form-label">Email Quản trị</label>
+          <label className="form-label">
+            {t("auth.admin.login.adminEmail")}
+          </label>
           <AuthInput
             type="email"
             name="email"
@@ -117,9 +120,9 @@ const AdminLogin = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Mật khẩu</label>
+          <label className="form-label">{t("auth.admin.login.password")}</label>
           <AuthInput
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             name="password"
             placeholder="••••••••"
             value={formData.password}
@@ -132,19 +135,17 @@ const AdminLogin = () => {
         </div>
 
         <div className="forgot-password-link">
-          <Link to="/admin/forgot-password">Quên mật khẩu?</Link>
+          <Link to="/admin/forgot-password">
+            {t("auth.admin.login.forgotPassword")}
+          </Link>
         </div>
 
-        <AuthButton 
-          type="submit" 
-          loading={loading}
-          disabled={loading}
-        >
-          Đăng nhập với tư cách Quản trị
+        <AuthButton type="submit" loading={loading} disabled={loading}>
+          {t("auth.admin.login.submit")}
         </AuthButton>
 
         <div className="user-portal-link">
-          <Link to="/login">← Quay lại cổng người dùng</Link>
+          <Link to="/login">← {t("auth.admin.login.backToUser")}</Link>
         </div>
       </form>
     </AuthLayout>

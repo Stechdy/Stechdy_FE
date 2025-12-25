@@ -1,45 +1,50 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import AuthLayout from '../../components/layout/AuthLayout';
-import AuthInput from '../../components/common/AuthInput';
-import AuthButton from '../../components/common/AuthButton';
-import { login, googleLogin } from '../../services/authService';
-import './Login.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { useTranslation } from "react-i18next";
+import AuthLayout from "../../components/layout/AuthLayout";
+import AuthInput from "../../components/common/AuthInput";
+import AuthButton from "../../components/common/AuthButton";
+import { login, googleLogin } from "../../services/authService";
+import "./Login.css";
 
-const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '944831618827-2qgcaei2lpcko6ucl9lj9m21llvkj7nn.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID =
+  process.env.REACT_APP_GOOGLE_CLIENT_ID ||
+  "944831618827-2qgcaei2lpcko6ucl9lj9m21llvkj7nn.apps.googleusercontent.com";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [apiError, setApiError] = useState('');
+  const [apiError, setApiError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     // Clear error when user types
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
-    setApiError('');
+    setApiError("");
   };
 
   const validateForm = () => {
     const newErrors = {};
 
     if (!formData.email) {
+<<<<<<< Updated upstream
       newErrors.email = 'Please enter email';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Invalid email';
@@ -49,6 +54,17 @@ const Login = () => {
       newErrors.password = 'Please enter password';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
+=======
+      newErrors.email = t("auth.validation.emailRequired");
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = t("auth.validation.emailInvalid");
+    }
+
+    if (!formData.password) {
+      newErrors.password = t("auth.validation.passwordRequired");
+    } else if (formData.password.length < 6) {
+      newErrors.password = t("auth.validation.passwordMinLength");
+>>>>>>> Stashed changes
     }
 
     setErrors(newErrors);
@@ -57,31 +73,35 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
-    setApiError('');
+    setApiError("");
 
     try {
       const response = await login(formData.email, formData.password);
-      
+
       if (response.success) {
         // Store token and user data
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data));
-        
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data));
+
         // Redirect based on role
-        if (response.data.role === 'admin') {
-          navigate('/admin/dashboard');
+        if (response.data.role === "admin") {
+          navigate("/admin/dashboard");
         } else {
-          navigate('/dashboard');
+          navigate("/dashboard");
         }
       }
     } catch (error) {
+<<<<<<< Updated upstream
       setApiError(error.message || 'Login failed. Please try again.');
+=======
+      setApiError(error.message || t("auth.login.loginFailed"));
+>>>>>>> Stashed changes
     } finally {
       setLoading(false);
     }
@@ -90,37 +110,46 @@ const Login = () => {
   const handleGoogleLogin = async (credentialResponse) => {
     try {
       setLoading(true);
-      setApiError('');
-      
+      setApiError("");
+
       const response = await googleLogin(credentialResponse.credential);
-      
+
       if (response.success) {
         // Store token and user data
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data));
-        
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data));
+
         // Redirect based on role
-        if (response.data.role === 'admin') {
-          navigate('/admin/dashboard');
+        if (response.data.role === "admin") {
+          navigate("/admin/dashboard");
         } else {
-          navigate('/dashboard');
+          navigate("/dashboard");
         }
       }
     } catch (error) {
+<<<<<<< Updated upstream
       setApiError(error.message || 'Google login failed. Please try again.');
+=======
+      setApiError(error.message || t("auth.login.googleLoginFailed"));
+>>>>>>> Stashed changes
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleError = () => {
+<<<<<<< Updated upstream
     setApiError('Google login failed. Please try again.');
+=======
+    setApiError(t("auth.login.googleLoginFailed"));
+>>>>>>> Stashed changes
   };
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <AuthLayout>
         <form onSubmit={handleSubmit} className="login-form">
+<<<<<<< Updated upstream
           {apiError && (
             <div className="login-alert login-alert-error">
               {apiError}
@@ -129,6 +158,12 @@ const Login = () => {
 
           <div className="login-form-group">
             <label className="login-form-label">Email</label>
+=======
+          {apiError && <div className="alert alert-error">{apiError}</div>}
+
+          <div className="form-group">
+            <label className="form-label">{t("auth.login.email")}</label>
+>>>>>>> Stashed changes
             <AuthInput
               type="email"
               name="email"
@@ -140,10 +175,15 @@ const Login = () => {
             />
           </div>
 
+<<<<<<< Updated upstream
           <div className="login-form-group">
             <label className="login-form-label">Password</label>
+=======
+          <div className="form-group">
+            <label className="form-label">{t("auth.login.password")}</label>
+>>>>>>> Stashed changes
             <AuthInput
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="••••••••"
               value={formData.password}
@@ -156,6 +196,7 @@ const Login = () => {
           </div>
 
           <div className="forgot-password-link">
+<<<<<<< Updated upstream
             <Link to="/forgot-password">Forgot password?</Link>
           </div>
 
@@ -169,6 +210,17 @@ const Login = () => {
 
           <div className="login-divider">
             <span>or continue with</span>
+=======
+            <Link to="/forgot-password">{t("auth.login.forgotPassword")}</Link>
+          </div>
+
+          <AuthButton type="submit" loading={loading} disabled={loading}>
+            {t("auth.login.submit")}
+          </AuthButton>
+
+          <div className="divider">
+            <span>{t("auth.login.orContinueWith")}</span>
+>>>>>>> Stashed changes
           </div>
 
           <div className="google-login-wrapper">
@@ -179,14 +231,23 @@ const Login = () => {
               size="large"
               text="continue_with"
               shape="rectangular"
+<<<<<<< Updated upstream
               locale="en"
+=======
+              locale={i18n.language}
+>>>>>>> Stashed changes
               width="100%"
             />
           </div>
 
           <div className="signup-link">
+<<<<<<< Updated upstream
             Don't have an account?{' '}
             <Link to="/register">Sign up now</Link>
+=======
+            {t("auth.login.noAccount")}{" "}
+            <Link to="/register">{t("auth.login.signUpNow")}</Link>
+>>>>>>> Stashed changes
           </div>
         </form>
       </AuthLayout>

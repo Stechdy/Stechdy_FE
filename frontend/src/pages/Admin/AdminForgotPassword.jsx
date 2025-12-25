@@ -1,32 +1,34 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import AuthLayout from '../../components/layout/AuthLayout';
-import AuthInput from '../../components/common/AuthInput';
-import AuthButton from '../../components/common/AuthButton';
-import { forgotPassword } from '../../services/authService';
-import './AdminForgotPassword.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import AuthLayout from "../../components/layout/AuthLayout";
+import AuthInput from "../../components/common/AuthInput";
+import AuthButton from "../../components/common/AuthButton";
+import { forgotPassword } from "../../services/authService";
+import "./AdminForgotPassword.css";
 
 const AdminForgotPassword = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setEmail(e.target.value);
     if (error) {
-      setError('');
+      setError("");
     }
   };
 
   const validateEmail = () => {
     if (!email) {
-      setError('Vui lòng nhập email');
+      setError(t("auth.validation.emailRequired"));
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(email)) {
-      setError('Email không hợp lệ');
+      setError(t("auth.validation.emailInvalid"));
       return false;
     }
     return true;
@@ -34,22 +36,22 @@ const AdminForgotPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateEmail()) {
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       const response = await forgotPassword(email);
-      
+
       if (response.success) {
         setSuccess(true);
       }
     } catch (err) {
-      setError(err.message || 'Không thể gửi email. Vui lòng thử lại.');
+      setError(err.message || t("auth.admin.forgotPassword.failed"));
     } finally {
       setLoading(false);
     }
@@ -59,25 +61,22 @@ const AdminForgotPassword = () => {
     return (
       <AuthLayout>
         <div className="admin-badge">
-          <span>🛡️ Cổng Quản Trị</span>
+          <span>🛡️ {t("auth.admin.badge")}</span>
         </div>
-        
+
         <div className="success-message">
           <div className="success-icon">✉️</div>
-          <h2>Kiểm tra Email của bạn</h2>
+          <h2>{t("auth.admin.forgotPassword.checkEmail")}</h2>
           <p>
-            Chúng tôi đã gửi link đặt lại mật khẩu đến <strong>{email}</strong>. 
-            Vui lòng kiểm tra hộp thư và làm theo hướng dẫn.
+            {t("auth.admin.forgotPassword.emailSent")} <strong>{email}</strong>.
           </p>
-          <p className="note">
-            Không nhận được email? Kiểm tra thư mục spam hoặc thử lại.
-          </p>
-          <AuthButton onClick={() => navigate('/admin/login')}>
-            Quay lại đăng nhập quản trị
+          <p className="note">{t("auth.admin.forgotPassword.checkSpam")}</p>
+          <AuthButton onClick={() => navigate("/admin/login")}>
+            {t("auth.admin.forgotPassword.backToLogin")}
           </AuthButton>
           <div className="resend-link">
             <button onClick={() => setSuccess(false)} className="link-button">
-              Thử email khác
+              {t("auth.admin.forgotPassword.tryAnotherEmail")}
             </button>
           </div>
         </div>
@@ -88,26 +87,24 @@ const AdminForgotPassword = () => {
   return (
     <AuthLayout>
       <div className="admin-badge">
-        <span>🛡️ Cổng Quản Trị</span>
+        <span>🛡️ {t("auth.admin.badge")}</span>
       </div>
 
       <div className="admin-forgot-header">
-        <h1 className="auth-title">Khôi phục Mật khẩu Quản trị</h1>
+        <h1 className="auth-title">{t("auth.admin.forgotPassword.title")}</h1>
         <h2 className="auth-brand">S'techdy</h2>
         <p className="auth-subtitle">
-          Nhập email quản trị và chúng tôi sẽ gửi link đặt lại mật khẩu cho bạn
+          {t("auth.admin.forgotPassword.subtitle")}
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="admin-forgot-form">
-        {error && (
-          <div className="alert alert-error">
-            {error}
-          </div>
-        )}
+        {error && <div className="alert alert-error">{error}</div>}
 
         <div className="form-group">
-          <label className="form-label">Email Quản trị</label>
+          <label className="form-label">
+            {t("auth.admin.forgotPassword.adminEmail")}
+          </label>
           <AuthInput
             type="email"
             name="email"
@@ -119,16 +116,14 @@ const AdminForgotPassword = () => {
           />
         </div>
 
-        <AuthButton 
-          type="submit" 
-          loading={loading}
-          disabled={loading}
-        >
-          Gửi link đặt lại
+        <AuthButton type="submit" loading={loading} disabled={loading}>
+          {t("auth.admin.forgotPassword.submit")}
         </AuthButton>
 
         <div className="back-to-login">
-          <Link to="/admin/login">← Quay lại đăng nhập quản trị</Link>
+          <Link to="/admin/login">
+            ← {t("auth.admin.forgotPassword.backToLogin")}
+          </Link>
         </div>
       </form>
     </AuthLayout>

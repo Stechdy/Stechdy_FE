@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import BottomNav from "../../components/common/BottomNav";
 import "./UserInformation.css";
 
 const UserInformation = () => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -92,10 +94,10 @@ const UserInformation = () => {
         JSON.stringify({ ...storedUser, ...editData })
       );
 
-      setSuccess("Profile updated successfully!");
+      setSuccess(t("userInfo.profileUpdated"));
       setIsEditing(false);
     } catch (err) {
-      setError(err.message || "Failed to save changes");
+      setError(err.message || t("userInfo.failedToSave"));
     } finally {
       setSaving(false);
     }
@@ -115,15 +117,18 @@ const UserInformation = () => {
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    return new Date(dateString).toLocaleDateString(
+      i18n.language === "vi" ? "vi-VN" : "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }
+    );
   };
 
   const getPlanLabel = (status) => {
-    return status === "premium" ? "Premium" : "Free plan";
+    return status === "premium" ? "Premium" : t("account.freePlan");
   };
 
   if (loading) {
@@ -131,7 +136,7 @@ const UserInformation = () => {
       <div className="user-info-container">
         <div className="user-info-loading">
           <div className="loading-spinner"></div>
-          <p>Loading user information...</p>
+          <p>{t("userInfo.loading")}</p>
         </div>
         <BottomNav />
       </div>
@@ -153,7 +158,12 @@ const UserInformation = () => {
               />
             </svg>
           </button>
+<<<<<<< Updated upstream
           <h1 className="page-title">User Information</h1>
+=======
+          <h1 className="page-title">{t("userInfo.title")}</h1>
+          <div className="header-spacer"></div>
+>>>>>>> Stashed changes
         </div>
 
         {error && (
@@ -234,7 +244,7 @@ const UserInformation = () => {
 
         <div className="info-section">
           <div className="section-header">
-            <h3 className="section-title">Personal Information</h3>
+            <h3 className="section-title">{t("userInfo.personalInfo")}</h3>
             {!isEditing ? (
               <button className="edit-btn" onClick={() => setIsEditing(true)}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -253,19 +263,19 @@ const UserInformation = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                Edit
+                {t("userInfo.edit")}
               </button>
             ) : (
               <div className="edit-actions">
                 <button className="cancel-btn" onClick={handleCancel}>
-                  Cancel
+                  {t("userInfo.cancel")}
                 </button>
                 <button
                   className="save-btn"
                   onClick={handleSave}
                   disabled={saving}
                 >
-                  {saving ? "Saving..." : "Save"}
+                  {saving ? t("userInfo.saving") : t("userInfo.save")}
                 </button>
               </div>
             )}
@@ -292,7 +302,7 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Full Name</label>
+                <label className="info-label">{t("userInfo.name")}</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -300,11 +310,11 @@ const UserInformation = () => {
                     value={editData.name}
                     onChange={handleInputChange}
                     className="info-input"
-                    placeholder="Enter your name"
+                    placeholder={t("userInfo.name")}
                   />
                 ) : (
                   <span className="info-value">
-                    {userData?.name || "Not set"}
+                    {userData?.name || t("userInfo.notSet")}
                   </span>
                 )}
               </div>
@@ -330,7 +340,7 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Email Address</label>
+                <label className="info-label">{t("userInfo.email")}</label>
                 {isEditing ? (
                   <input
                     type="email"
@@ -338,11 +348,11 @@ const UserInformation = () => {
                     value={editData.email}
                     onChange={handleInputChange}
                     className="info-input"
-                    placeholder="Enter your email"
+                    placeholder={t("userInfo.email")}
                   />
                 ) : (
                   <span className="info-value">
-                    {userData?.email || "Not set"}
+                    {userData?.email || t("userInfo.notSet")}
                   </span>
                 )}
               </div>
@@ -361,7 +371,7 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Phone Number</label>
+                <label className="info-label">{t("userInfo.phone")}</label>
                 {isEditing ? (
                   <input
                     type="tel"
@@ -369,11 +379,11 @@ const UserInformation = () => {
                     value={editData.phone}
                     onChange={handleInputChange}
                     className="info-input"
-                    placeholder="Enter your phone number"
+                    placeholder={t("userInfo.phone")}
                   />
                 ) : (
                   <span className="info-value">
-                    {userData?.phone || "Not set"}
+                    {userData?.phone || t("userInfo.notSet")}
                   </span>
                 )}
               </div>
@@ -420,19 +430,19 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Bio</label>
+                <label className="info-label">{t("userInfo.bio")}</label>
                 {isEditing ? (
                   <textarea
                     name="bio"
                     value={editData.bio}
                     onChange={handleInputChange}
                     className="info-textarea"
-                    placeholder="Tell us about yourself"
+                    placeholder={t("userInfo.bioPlaceholder")}
                     rows="3"
                   />
                 ) : (
                   <span className="info-value">
-                    {userData?.bio || "No bio added yet"}
+                    {userData?.bio || t("userInfo.noBio")}
                   </span>
                 )}
               </div>
@@ -441,7 +451,7 @@ const UserInformation = () => {
         </div>
 
         <div className="info-section">
-          <h3 className="section-title">Account Details</h3>
+          <h3 className="section-title">{t("userInfo.accountDetails")}</h3>
           <div className="info-cards">
             <div className="info-card">
               <div className="info-icon status-icon">
@@ -463,8 +473,12 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Account Status</label>
-                <span className="info-value status-active">Active</span>
+                <label className="info-label">
+                  {t("userInfo.accountStatus")}
+                </label>
+                <span className="info-value status-active">
+                  {t("userInfo.active")}
+                </span>
               </div>
             </div>
 
@@ -502,7 +516,9 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Member Since</label>
+                <label className="info-label">
+                  {t("userInfo.memberSince")}
+                </label>
                 <span className="info-value">
                   {formatDate(userData?.joinedAt)}
                 </span>
@@ -529,9 +545,12 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Level</label>
+                <label className="info-label">{t("userInfo.level")}</label>
                 <span className="info-value">
-                  Level {userData?.level || 1} ({userData?.xp || 0} XP)
+                  {t("userInfo.levelValue", {
+                    level: userData?.level || 1,
+                    xp: userData?.xp || 0,
+                  })}
                 </span>
               </div>
             </div>
@@ -549,9 +568,13 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Current Streak</label>
+                <label className="info-label">
+                  {t("userInfo.currentStreak")}
+                </label>
                 <span className="info-value">
-                  {userData?.streakCount || 0} days
+                  {t("userInfo.streakDays", {
+                    days: userData?.streakCount || 0,
+                  })}
                 </span>
               </div>
             </div>
