@@ -78,17 +78,18 @@ const MoodCalendar = () => {
     if (!day) return null;
     
     return moods.find(mood => {
-      // Parse mood date from backend (which is stored in Vietnam timezone)
+      // Parse mood date from backend and extract just the date part
       const moodDate = new Date(mood.date);
       
-      // Get date components in UTC+7 (Vietnam timezone)
-      const vietnamOffset = 7 * 60; // minutes
-      const localTime = new Date(moodDate.getTime());
+      // Extract date components directly from the date string to avoid timezone issues
+      // If mood.date is "2024-12-25T00:00:00.000Z" or similar, extract the date part
+      const dateStr = mood.date.split('T')[0]; // Get "2024-12-25"
+      const [year, month, dayOfMonth] = dateStr.split('-').map(Number);
       
       // Compare with target date
-      return localTime.getFullYear() === currentMonth.getFullYear() &&
-             localTime.getMonth() === currentMonth.getMonth() &&
-             localTime.getDate() === day;
+      return year === currentMonth.getFullYear() &&
+             month === currentMonth.getMonth() + 1 && // month is 1-indexed in date string
+             dayOfMonth === day;
     });
   };
 
