@@ -1,3 +1,15 @@
+/* Fade In Animation */
+@keyframes userInfoFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .user-info-container {
   min-height: 100vh;
   background: var(--bg-primary);
@@ -9,6 +21,17 @@
 .user-info-content {
   padding: 16px 20px;
 }
+
+.user-info-content > * {
+  opacity: 0;
+  animation: userInfoFadeIn 0.4s ease-out forwards;
+}
+
+.user-info-content > *:nth-child(1) { animation-delay: 0.05s; }
+.user-info-content > *:nth-child(2) { animation-delay: 0.1s; }
+.user-info-content > *:nth-child(3) { animation-delay: 0.15s; }
+.user-info-content > *:nth-child(4) { animation-delay: 0.2s; }
+.user-info-content > *:nth-child(5) { animation-delay: 0.25s; }
 
 /* Loading State */
 .user-info-loading {
@@ -47,7 +70,7 @@
 .user-info-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 24px;
   padding: 16px 20px;
   background: transparent;
@@ -221,14 +244,34 @@
   margin: 0;
 }
 
-
+.edit-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #8AC0D5 0%, #7BB3C9 100%);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(138, 192, 213, 0.25);
+}
 
 .edit-btn:hover {
-  transform: scale(1.02);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(138, 192, 213, 0.4);
+}
+
+.edit-btn:active {
+  transform: translateY(0);
 }
 
 .edit-btn svg {
+  width: 18px;
+  height: 18px;
   color: white;
 }
 
@@ -438,7 +481,7 @@
   }
 
   .page-title {
-    font-size: 18px;
+    font-size: 30px;
   }
 
   .profile-avatar {

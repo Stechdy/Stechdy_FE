@@ -199,6 +199,17 @@ const StudyTracker = () => {
       <SidebarNav />
       <div className="study-tracker">
       <header className="tracker-header">
+        <button className="back-button" onClick={() => navigate('/dashboard')}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M15 18L9 12L15 6"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </button>
         <h1 className="tracker-page-title">Study Tracker</h1>
         <button className="notification-btn">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -321,34 +332,50 @@ const StudyTracker = () => {
       <section className="streak-calendar">
         <h3>Study Streak Calendar</h3>
         <div>
-          <div className="calendar-header">
+          <div className="tracker-calendar-header">
             {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, idx) => (
-              <div key={idx} className="weekday">{day}</div>
+              <div key={idx} className="tracker-weekday">{day}</div>
             ))}
           </div>
-          <div className="calendar-grid">
-            {Array.from({ length: 35 }, (_, i) => {
+          <div className="tracker-calendar-grid">
+            {(() => {
               const currentDate = getVietnamDate();
               const today = currentDate.getDate();
               const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-              const startDay = firstDay.getDay();
-              const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+              const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+              const daysInMonth = lastDay.getDate();
               
-              const mondayShift = startDay === 0 ? 6 : startDay - 1;
-              const dayNumber = i - mondayShift + 1;
-              const isValidDay = dayNumber > 0 && dayNumber <= daysInMonth;
-              const isActive = isValidDay && streakData.calendar?.includes(dayNumber);
-              const isToday = isValidDay && dayNumber === today;
+              // Get first day of month (0 = Sunday, 1 = Monday, etc.)
+              const firstDayOfWeek = firstDay.getDay();
+              // Convert to Monday-based (0 = Monday, 6 = Sunday)
+              const mondayShift = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
               
-              return (
-                <div
-                  key={i}
-                  className={`calendar-day ${isToday ? 'today' : ''} ${isActive ? 'active' : ''} ${!isValidDay ? 'empty' : ''}`}
-                >
-                  {isValidDay ? dayNumber : ''}
-                </div>
-              );
-            })}
+              const days = [];
+              
+              // Add empty cells for days before the first of the month
+              for (let i = 0; i < mondayShift; i++) {
+                days.push(
+                  <div key={`empty-${i}`} className="tracker-calendar-day empty"></div>
+                );
+              }
+              
+              // Add all days of the month
+              for (let dayNumber = 1; dayNumber <= daysInMonth; dayNumber++) {
+                const isActive = streakData.calendar?.includes(dayNumber);
+                const isToday = dayNumber === today;
+                
+                days.push(
+                  <div
+                    key={dayNumber}
+                    className={`tracker-calendar-day ${isToday ? 'today' : ''} ${isActive ? 'active' : ''}`}
+                  >
+                    {dayNumber}
+                  </div>
+                );
+              }
+              
+              return days;
+            })()}
           </div>
         </div>
 

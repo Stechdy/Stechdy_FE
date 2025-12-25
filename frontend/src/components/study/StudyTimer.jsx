@@ -323,7 +323,7 @@ const StudyTimer = ({ session, onEnd, onRefresh }) => {
               <textarea
                 value={completionNotes}
                 onChange={(e) => setCompletionNotes(e.target.value)}
-                placeholder="Hôm nay bạn đã học được gì?"
+                placeholder="What did you learn today?"
                 rows={3}
               />
             </div>

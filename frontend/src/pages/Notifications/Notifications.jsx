@@ -146,16 +146,16 @@ const Notifications = () => {
     const notifDate = new Date(date);
     const diffInMinutes = Math.floor((now - notifDate) / 60000);
 
-    if (diffInMinutes < 1) return 'Vừa xong';
-    if (diffInMinutes < 60) return `${diffInMinutes} phút trước`;
+    if (diffInMinutes < 1) return 'Just now';
+    if (diffInMinutes < 60) return `${diffInMinutes} min ago`;
     
     const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) return `${diffInHours} giờ trước`;
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
     
     const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays < 7) return `${diffInDays} ngày trước`;
+    if (diffInDays < 7) return `${diffInDays} days ago`;
 
-    return notifDate.toLocaleDateString('vi-VN', {
+    return notifDate.toLocaleDateString('en-US', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric'
@@ -163,12 +163,12 @@ const Notifications = () => {
   };
 
   const typeLabels = {
-    all: 'Tất cả',
+    all: 'All',
     mood: 'Mood Tracking',
-    study: 'Học tập',
+    study: 'Study',
     task: 'Task',
-    achievement: 'Thành tích',
-    system: 'Hệ thống'
+    achievement: 'Achievement',
+    system: 'System'
   };
 
   return (
@@ -177,12 +177,12 @@ const Notifications = () => {
         {/* Header */}
         <div className="page-header">
           <div className="header-left">
-            <h1>Thông báo</h1>
+            <h1>Notifications</h1>
             <span className="connection-status">
               {isConnected ? (
                 <>
                   <span className="status-dot online"></span>
-                  Đang kết nối
+                  Connected
                 </>
               ) : (
                 <>
@@ -203,14 +203,14 @@ const Notifications = () => {
                     setSelectedNotifs([]);
                   }}
                 >
-                  Hủy
+                  Cancel
                 </button>
                 <button 
                   className="action-btn danger"
                   onClick={handleDeleteSelected}
                   disabled={selectedNotifs.length === 0}
                 >
-                  Xóa ({selectedNotifs.length})
+                  Delete ({selectedNotifs.length})
                 </button>
               </>
             ) : (
@@ -220,14 +220,14 @@ const Notifications = () => {
                     className="action-btn primary"
                     onClick={handleMarkAllAsRead}
                   >
-                    Đánh dấu đã đọc
+                    Mark all as read
                   </button>
                 )}
                 <button 
                   className="action-btn secondary"
                   onClick={() => setSelectMode(true)}
                 >
-                  Chọn
+                  Select
                 </button>
               </>
             )}
@@ -237,7 +237,7 @@ const Notifications = () => {
         {/* Filters */}
         <div className="filters-section">
           <div className="filter-group">
-            <label>Trạng thái:</label>
+            <label>Status:</label>
             <div className="filter-buttons">
               {['all', 'unread', 'read'].map(filter => (
                 <button
@@ -245,16 +245,16 @@ const Notifications = () => {
                   className={`filter-btn ${activeFilter === filter ? 'active' : ''}`}
                   onClick={() => setActiveFilter(filter)}
                 >
-                  {filter === 'all' && `Tất cả (${notifications.length})`}
-                  {filter === 'unread' && `Chưa đọc (${unreadCount})`}
-                  {filter === 'read' && `Đã đọc (${notifications.length - unreadCount})`}
+                  {filter === 'all' && `All (${notifications.length})`}
+                  {filter === 'unread' && `Unread (${unreadCount})`}
+                  {filter === 'read' && `Read (${notifications.length - unreadCount})`}
                 </button>
               ))}
             </div>
           </div>
 
           <div className="filter-group">
-            <label>Loại:</label>
+            <label>Type:</label>
             <div className="filter-buttons">
               {Object.entries(typeLabels).map(([key, label]) => (
                 <button
@@ -278,7 +278,7 @@ const Notifications = () => {
                 checked={selectedNotifs.length === filteredNotifs.length}
                 onChange={handleSelectAll}
               />
-              Chọn tất cả ({filteredNotifs.length})
+              Select all ({filteredNotifs.length})
             </label>
           </div>
         )}
@@ -288,7 +288,7 @@ const Notifications = () => {
           {loading ? (
             <div className="loading-state">
               <div className="spinner"></div>
-              <p>Đang tải thông báo...</p>
+              <p>Loading notifications...</p>
             </div>
           ) : filteredNotifs.length === 0 ? (
             <div className="empty-state">
@@ -297,13 +297,13 @@ const Notifications = () => {
               </span>
               <h3>
                 {activeFilter === 'unread' 
-                  ? 'Bạn đã đọc hết thông báo!'
-                  : 'Chưa có thông báo nào'}
+                  ? 'All caught up!'
+                  : 'No notifications yet'}
               </h3>
               <p>
                 {activeFilter === 'unread'
-                  ? 'Tất cả thông báo đã được đọc'
-                  : 'Thông báo mới sẽ xuất hiện ở đây'}
+                  ? 'All notifications have been read'
+                  : 'New notifications will appear here'}
               </p>
             </div>
           ) : (
@@ -339,12 +339,12 @@ const Notifications = () => {
                   <div className="card-content">
                     <div className="card-header">
                       <h3>{notif.title}</h3>
-                      {!notif.read && <span className="unread-badge">Mới</span>}
+                      {!notif.read && <span className="unread-badge">New</span>}
                     </div>
                     <p className="card-message">{notif.message}</p>
                     <div className="card-footer">
                       <span className="card-time">{formatTime(notif.createdAt)}</span>
-                      <span className="card-type">{typeLabels[notif.type.split('_')[0]] || 'Khác'}</span>
+                      <span className="card-type">{typeLabels[notif.type.split('_')[0]] || 'Other'}</span>
                     </div>
                   </div>
 

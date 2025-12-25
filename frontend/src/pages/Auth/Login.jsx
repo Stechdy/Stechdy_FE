@@ -40,15 +40,15 @@ const Login = () => {
     const newErrors = {};
 
     if (!formData.email) {
-      newErrors.email = 'Vui lòng nhập email';
+      newErrors.email = 'Please enter email';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email không hợp lệ';
+      newErrors.email = 'Invalid email';
     }
 
     if (!formData.password) {
-      newErrors.password = 'Vui lòng nhập mật khẩu';
+      newErrors.password = 'Please enter password';
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+      newErrors.password = 'Password must be at least 6 characters';
     }
 
     setErrors(newErrors);
@@ -81,7 +81,7 @@ const Login = () => {
         }
       }
     } catch (error) {
-      setApiError(error.message || 'Đăng nhập thất bại. Vui lòng thử lại.');
+      setApiError(error.message || 'Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -107,14 +107,14 @@ const Login = () => {
         }
       }
     } catch (error) {
-      setApiError(error.message || 'Đăng nhập Google thất bại. Vui lòng thử lại.');
+      setApiError(error.message || 'Google login failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleError = () => {
-    setApiError('Đăng nhập Google thất bại. Vui lòng thử lại.');
+    setApiError('Google login failed. Please try again.');
   };
 
   return (
@@ -122,13 +122,13 @@ const Login = () => {
       <AuthLayout>
         <form onSubmit={handleSubmit} className="login-form">
           {apiError && (
-            <div className="alert alert-error">
+            <div className="login-alert login-alert-error">
               {apiError}
             </div>
           )}
 
-          <div className="form-group">
-            <label className="form-label">Email</label>
+          <div className="login-form-group">
+            <label className="login-form-label">Email</label>
             <AuthInput
               type="email"
               name="email"
@@ -140,8 +140,8 @@ const Login = () => {
             />
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Mật khẩu</label>
+          <div className="login-form-group">
+            <label className="login-form-label">Password</label>
             <AuthInput
               type={showPassword ? 'text' : 'password'}
               name="password"
@@ -156,7 +156,7 @@ const Login = () => {
           </div>
 
           <div className="forgot-password-link">
-            <Link to="/forgot-password">Quên mật khẩu?</Link>
+            <Link to="/forgot-password">Forgot password?</Link>
           </div>
 
           <AuthButton 
@@ -164,11 +164,11 @@ const Login = () => {
             loading={loading}
             disabled={loading}
           >
-            Đăng nhập
+            Login
           </AuthButton>
 
-          <div className="divider">
-            <span>hoặc tiếp tục với</span>
+          <div className="login-divider">
+            <span>or continue with</span>
           </div>
 
           <div className="google-login-wrapper">
@@ -179,14 +179,14 @@ const Login = () => {
               size="large"
               text="continue_with"
               shape="rectangular"
-              locale="vi"
+              locale="en"
               width="100%"
             />
           </div>
 
           <div className="signup-link">
-            Chưa có tài khoản?{' '}
-            <Link to="/register">Đăng ký ngay</Link>
+            Don't have an account?{' '}
+            <Link to="/register">Sign up now</Link>
           </div>
         </form>
       </AuthLayout>

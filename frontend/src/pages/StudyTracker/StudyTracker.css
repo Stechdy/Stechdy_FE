@@ -1,3 +1,15 @@
+/* Fade In Animation */
+@keyframes trackerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Study Tracker Container */
 .study-tracker-container {
   display: flex;
@@ -11,11 +23,23 @@
   background-color: var(--bg-primary);
   padding-bottom: 120px;
   transition: background-color var(--transition-normal);
+  animation: trackerFadeIn 0.4s ease-out;
 }
+
+.study-tracker > * {
+  animation: trackerFadeIn 0.4s ease-out;
+}
+
+.study-tracker > *:nth-child(1) { animation-delay: 0s; }
+.study-tracker > *:nth-child(2) { animation-delay: 0.05s; }
+.study-tracker > *:nth-child(3) { animation-delay: 0.1s; }
+.study-tracker > *:nth-child(4) { animation-delay: 0.15s; }
+.study-tracker > *:nth-child(5) { animation-delay: 0.2s; }
+.study-tracker > *:nth-child(6) { animation-delay: 0.25s; }
 
 .tracker-header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 16px 20px;
   border-bottom: 1px solid var(--border-secondary);
@@ -34,15 +58,45 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   margin: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tracker-header .back-button {
+  background: var(--bg-card);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+  z-index: 1;
+}
+
+.tracker-header .back-button:hover {
+  background: var(--bg-hover);
+}
+
+.tracker-header .back-button:active {
+  transform: scale(0.95);
+}
+
+.tracker-header .back-button svg {
+  color: var(--text-primary);
 }
 
 .tracker-header .notification-btn {
-  position: absolute;
-  right: 20px;
+  z-index: 1;
 }
 
 .tracker-main {
   padding: 10px;
+  margin-bottom: -60px;
 }
 
 .back-button {
@@ -371,6 +425,7 @@
   color: var(--text-primary);
   margin-bottom: 16px;
   transition: color var(--transition-normal);
+  margin-top: 0px;
 }
 
 .subjects-grid {
@@ -419,6 +474,7 @@
   color: var(--text-primary);
   margin-bottom: 16px;
   transition: color var(--transition-normal);
+  margin-top: 0px;
 }
 
 /* Study Streak Calendar */
@@ -440,14 +496,15 @@
   transition: color var(--transition-normal);
 }
 
-.calendar-container {
+.tracker-calendar-container {
   background: transparent;
   border-radius: 0;
   padding: 0;
   box-shadow: none;
+  margin-top: 0px;
 }
 
-.weekday {
+.tracker-weekday {
   text-align: center;
   font-size: 14px;
   font-weight: 700;
@@ -456,38 +513,48 @@
   transition: color var(--transition-normal);
 }
 
-.calendar-grid {
+.tracker-calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tracker-calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
 }
 
-.calendar-day {
+.tracker-calendar-day {
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
+  border-radius: 50%;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--text-tertiary);
   background-color: var(--bg-secondary);
   transition: all 0.2s ease;
+  width: 36px;
+  height: 36px;
+  margin: 0 auto;
 }
 
-.calendar-day.empty {
+.tracker-calendar-day.empty {
   background-color: transparent;
   color: transparent;
 }
 
-.calendar-day.active {
+.tracker-calendar-day.active {
   background: linear-gradient(135deg, #8AC0D5 0%, #EC4899 100%);
   color: white;
   font-weight: 700;
   box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
 }
 
-.calendar-day.today {
+.tracker-calendar-day.today {
   background: linear-gradient(135deg, #8AC0D5 0%, #6DBAD7 100%);
   color: white;
   font-weight: 700;
