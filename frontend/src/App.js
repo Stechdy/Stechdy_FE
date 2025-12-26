@@ -7,10 +7,12 @@ import {
 } from "react-router-dom";
 import PublicRoute from "./components/common/PublicRoute";
 import PrivateRoute from "./components/common/PrivateRoute";
+import ScrollToTop from "./components/common/ScrollToTop";
 import { SocketProvider } from "./context/SocketContext";
 
 // Landing Page
 import Landing from "./pages/Landing/Landing";
+import Pricing from "./pages/Pricing/Pricing";
 
 // Auth Pages
 import Login from "./pages/Auth/Login";
@@ -56,6 +58,7 @@ function App() {
   return (
     <SocketProvider>
       <Router>
+        <ScrollToTop />
         <Routes>
           {/* Public Routes - Redirect if authenticated */}
           <Route
@@ -227,6 +230,7 @@ function App() {
 
           {/* Default redirect */}
           <Route path="/" element={<Landing />} />
+          <Route path="/pricing" element={<Pricing />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>

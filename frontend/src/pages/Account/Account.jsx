@@ -58,7 +58,11 @@ const Account = () => {
           </div>
 
           {/* Upgrade to Premium Card */}
-          <div className="premium-card gradient-card">
+          <div
+            className="premium-card gradient-card"
+            onClick={() => navigate("/pricing")}
+            style={{ cursor: "pointer" }}
+          >
             <div className="premium-icon">💎</div>
             <span className="premium-text">{t("account.upgradePremium")}</span>
           </div>

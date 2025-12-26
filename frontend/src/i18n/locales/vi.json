@@ -3,6 +3,7 @@
     "features": "Tính năng",
     "howItWorks": "Cách hoạt động",
     "testimonials": "Đánh giá",
+    "pricing": "Bảng giá",
     "signIn": "Đăng nhập",
     "getStarted": "Bắt đầu"
   },
@@ -616,10 +617,117 @@
     "moodCalendar": "Lịch tâm trạng",
     "commonEmotions": "Cảm xúc phổ biến",
     "addNewEntry": "Thêm bản ghi tâm trạng mới",
-    "addMood": "Thêm tâm trạng"
+    "addMood": "Thêm tâm trạng",
+    "emotions": {
+      "Tired": "Mệt mỏi",
+      "Frustrated": "Thất vọng",
+      "Happy": "Vui vẻ",
+      "Excited": "Phấn khích",
+      "Confident": "Tự tin",
+      "Anxious": "Lo lắng",
+      "Stressed": "Căng thẳng",
+      "Motivated": "Có động lực",
+      "Overwhelmed": "Choáng ngợp",
+      "Calm": "Bình tĩnh",
+      "Sad": "Buồn",
+      "Energetic": "Năng động",
+      "Peaceful": "Yên bình",
+      "Angry": "Tức giận",
+      "Grateful": "Biết ơn",
+      "Hopeful": "Hy vọng",
+      "Confused": "Bối rối",
+      "Focused": "Tập trung",
+      "Relaxed": "Thư giãn",
+      "Worried": "Lo lắng"
+    }
   },
   "home": {
     "welcome": "Chào mừng đến với S-Techdy",
     "subtitle": "Ứng dụng web hiện đại của bạn"
+  },
+  "pricing": {
+    "badge": "Bảng giá",
+    "title": "Chọn Gói Phù Hợp",
+    "subtitle": "Chọn gói hoàn hảo cho hành trình học tập của bạn. Nâng cấp hoặc hạ cấp bất cứ lúc nào.",
+    "monthly": "Theo tháng",
+    "yearly": "Theo năm",
+    "month": "tháng",
+    "mostPopular": "Phổ biến nhất",
+    "currentPlan": "Gói hiện tại",
+    "plans": {
+      "free": {
+        "name": "Miễn phí",
+        "description": "Khám phá S'Techdy có thể làm gì",
+        "buttonText": "Bắt đầu",
+        "features": {
+          "basicScheduling": "Lên lịch học cơ bản",
+          "moodTracking": "Check-in tâm trạng hàng ngày",
+          "limitedAnalytics": "Phân tích tiến độ giới hạn",
+          "basicGoals": "Tối đa 3 mục tiêu học tập"
+        }
+      },
+      "starter": {
+        "name": "Starter",
+        "description": "Làm nhiều hơn với công cụ học thông minh",
+        "badge": "MỚI",
+        "buttonText": "Nâng cấp lên Starter",
+        "features": {
+          "everything": "Tất cả tính năng Miễn phí",
+          "advancedAnalytics": "Phân tích tiến độ nâng cao",
+          "customGoals": "Không giới hạn mục tiêu học tập",
+          "exportData": "Xuất dữ liệu của bạn",
+          "prioritySupport": "Hỗ trợ email ưu tiên"
+        }
+      },
+      "plus": {
+        "name": "Plus",
+        "description": "Mở khóa trải nghiệm đầy đủ",
+        "buttonText": "Dùng Plus",
+        "features": {
+          "everything": "Tất cả tính năng Starter",
+          "aiInsights": "Phân tích học tập bằng AI",
+          "collaboration": "Hợp tác nhóm học",
+          "customThemes": "Giao diện tùy chỉnh",
+          "advancedMood": "Phân tích tâm trạng nâng cao",
+          "integrations": "Tích hợp lịch"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "description": "Tối đa hóa năng suất",
+        "buttonText": "Dùng Pro",
+        "features": {
+          "everything": "Tất cả tính năng Plus",
+          "aiCoach": "Huấn luyện viên AI cá nhân",
+          "unlimitedStorage": "Lưu trữ đám mây không giới hạn",
+          "apiAccess": "Truy cập API",
+          "dedicatedSupport": "Hỗ trợ riêng",
+          "earlyAccess": "Truy cập sớm tính năng mới",
+          "customBranding": "Tùy chỉnh thương hiệu"
+        }
+      }
+    },
+    "faq": {
+      "title": "Câu Hỏi Thường Gặp",
+      "q1": {
+        "question": "Tôi có thể thay đổi gói sau không?",
+        "answer": "Có! Bạn có thể nâng cấp hoặc hạ cấp gói bất cứ lúc nào. Thay đổi có hiệu lực ngay lập tức và chúng tôi sẽ tính toán lại thanh toán."
+      },
+      "q2": {
+        "question": "Có dùng thử miễn phí cho gói trả phí không?",
+        "answer": "Tất cả gói trả phí đều có 7 ngày dùng thử miễn phí. Không cần thẻ tín dụng để bắt đầu."
+      },
+      "q3": {
+        "question": "Bạn chấp nhận phương thức thanh toán nào?",
+        "answer": "Chúng tôi chấp nhận tất cả thẻ tín dụng phổ biến, PayPal và chuyển khoản ngân hàng. Mọi thanh toán được xử lý an toàn."
+      },
+      "q4": {
+        "question": "Tôi có thể hủy đăng ký không?",
+        "answer": "Bạn có thể hủy đăng ký bất cứ lúc nào. Bạn vẫn có quyền truy cập đến hết kỳ thanh toán."
+      }
+    },
+    "footer": {
+      "helpText": "Cần giúp chọn gói? Liên hệ chúng tôi tại"
+    }
   }
 }

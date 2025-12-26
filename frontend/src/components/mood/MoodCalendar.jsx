@@ -4,12 +4,56 @@ import moodService from "../../services/moodService";
 import "./MoodCalendar.css";
 
 const MoodCalendar = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [moods, setMoods] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedMood, setSelectedMood] = useState(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [loading, setLoading] = useState(true);
+  const [currentLang, setCurrentLang] = useState(
+    localStorage.getItem("language") || "en"
+  );
+
+  // Update language when it changes
+  useEffect(() => {
+    const newLang = localStorage.getItem("language") || i18n.language || "en";
+    setCurrentLang(newLang);
+  }, [i18n.language]);
+
+  // Direct mapping for emotion translations
+  const emotionTranslations = {
+    vi: {
+      Tired: "Mệt mỏi",
+      Frustrated: "Thất vọng",
+      Happy: "Vui vẻ",
+      Excited: "Phấn khích",
+      Confident: "Tự tin",
+      Anxious: "Lo lắng",
+      Stressed: "Căng thẳng",
+      Motivated: "Có động lực",
+      Overwhelmed: "Choáng ngợp",
+      Calm: "Bình tĩnh",
+      Sad: "Buồn",
+      Energetic: "Năng động",
+      Peaceful: "Yên bình",
+      Angry: "Tức giận",
+      Grateful: "Biết ơn",
+      Hopeful: "Hy vọng",
+      Confused: "Bối rối",
+      Focused: "Tập trung",
+      Relaxed: "Thư giãn",
+      Worried: "Lo lắng",
+    },
+  };
+
+  // Helper function to translate emotion names
+  const translateEmotion = (emotion) => {
+    // Use currentLang state
+    if (currentLang.startsWith("vi") && emotionTranslations.vi[emotion]) {
+      return emotionTranslations.vi[emotion];
+    }
+    return emotion;
+  };
 
   const moodEmojis = {
     1: "😢",
@@ -255,7 +299,7 @@ const MoodCalendar = () => {
                     <div className="modal-emotion-tags">
                       {selectedMood.emotionTags.map((tag, idx) => (
                         <span key={idx} className="modal-emotion-tag">
-                          {tag}
+                          {translateEmotion(tag)}
                         </span>
                       ))}
                     </div>

@@ -3,6 +3,7 @@
     "features": "Features",
     "howItWorks": "How It Works",
     "testimonials": "Testimonials",
+    "pricing": "Pricing",
     "signIn": "Sign In",
     "getStarted": "Get Started"
   },
@@ -616,10 +617,117 @@
     "moodCalendar": "Mood Calendar",
     "commonEmotions": "Common Emotions",
     "addNewEntry": "Add new mood entry",
-    "addMood": "Add Mood"
+    "addMood": "Add Mood",
+    "emotions": {
+      "Tired": "Tired",
+      "Frustrated": "Frustrated",
+      "Happy": "Happy",
+      "Excited": "Excited",
+      "Confident": "Confident",
+      "Anxious": "Anxious",
+      "Stressed": "Stressed",
+      "Motivated": "Motivated",
+      "Overwhelmed": "Overwhelmed",
+      "Calm": "Calm",
+      "Sad": "Sad",
+      "Energetic": "Energetic",
+      "Peaceful": "Peaceful",
+      "Angry": "Angry",
+      "Grateful": "Grateful",
+      "Hopeful": "Hopeful",
+      "Confused": "Confused",
+      "Focused": "Focused",
+      "Relaxed": "Relaxed",
+      "Worried": "Worried"
+    }
   },
   "home": {
     "welcome": "Welcome to S-Techdy",
     "subtitle": "Your modern web application"
+  },
+  "pricing": {
+    "badge": "Pricing Plans",
+    "title": "Choose Your Plan",
+    "subtitle": "Select the perfect plan for your study journey. Upgrade or downgrade at any time.",
+    "monthly": "Monthly",
+    "yearly": "Yearly",
+    "month": "month",
+    "mostPopular": "Most Popular",
+    "currentPlan": "Your current plan",
+    "plans": {
+      "free": {
+        "name": "Free",
+        "description": "See what S'Techdy can do",
+        "buttonText": "Get Started",
+        "features": {
+          "basicScheduling": "Basic study scheduling",
+          "moodTracking": "Daily mood check-in",
+          "limitedAnalytics": "Limited progress analytics",
+          "basicGoals": "Up to 3 study goals"
+        }
+      },
+      "starter": {
+        "name": "Starter",
+        "description": "Do more with smart study tools",
+        "badge": "NEW",
+        "buttonText": "Upgrade to Starter",
+        "features": {
+          "everything": "Everything in Free",
+          "advancedAnalytics": "Advanced progress analytics",
+          "customGoals": "Unlimited study goals",
+          "exportData": "Export your data",
+          "prioritySupport": "Priority email support"
+        }
+      },
+      "plus": {
+        "name": "Plus",
+        "description": "Unlock the full experience",
+        "buttonText": "Get Plus",
+        "features": {
+          "everything": "Everything in Starter",
+          "aiInsights": "AI-powered study insights",
+          "collaboration": "Study group collaboration",
+          "customThemes": "Custom app themes",
+          "advancedMood": "Advanced mood analytics",
+          "integrations": "Calendar integrations"
+        }
+      },
+      "pro": {
+        "name": "Pro",
+        "description": "Maximize your productivity",
+        "buttonText": "Get Pro",
+        "features": {
+          "everything": "Everything in Plus",
+          "aiCoach": "Personal AI study coach",
+          "unlimitedStorage": "Unlimited cloud storage",
+          "apiAccess": "API access",
+          "dedicatedSupport": "Dedicated support",
+          "earlyAccess": "Early access to new features",
+          "customBranding": "Custom branding options"
+        }
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "Can I change my plan later?",
+        "answer": "Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately and we'll prorate any payments."
+      },
+      "q2": {
+        "question": "Is there a free trial for paid plans?",
+        "answer": "All paid plans come with a 7-day free trial. No credit card required to start."
+      },
+      "q3": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept all major credit cards, PayPal, and bank transfers. All payments are processed securely."
+      },
+      "q4": {
+        "question": "Can I cancel my subscription?",
+        "answer": "You can cancel your subscription at any time. You'll continue to have access until the end of your billing period."
+      }
+    },
+    "footer": {
+      "helpText": "Need help choosing? Contact us at"
+    }
   }
 }
