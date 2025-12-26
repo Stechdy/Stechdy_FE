@@ -242,11 +242,7 @@ const SubjectDetail = () => {
       <div className="subject-detail-container">
         <SidebarNav />
         <div className="subject-detail-page">
-<<<<<<< Updated upstream
-          <div className="subject-loading">Loading...</div>
-=======
           <div className="loading">{t("subjectDetail.loading")}</div>
->>>>>>> Stashed changes
         </div>
       </div>
     );
@@ -257,11 +253,7 @@ const SubjectDetail = () => {
       <div className="subject-detail-container">
         <SidebarNav />
         <div className="subject-detail-page">
-<<<<<<< Updated upstream
-          <div className="subject-loading">Subject not found</div>
-=======
           <div className="loading">{t("subjectDetail.notFound")}</div>
->>>>>>> Stashed changes
         </div>
       </div>
     );
@@ -302,17 +294,10 @@ const SubjectDetail = () => {
               <h3>{t("subjectDetail.overallProgress")}</h3>
               <span className="progress-percent">{progress.percent}%</span>
             </div>
-<<<<<<< Updated upstream
-            <div className="subject-progress-bar">
-              <div 
-                className="subject-progress-fill" 
-                style={{ 
-=======
             <div className="progress-bar">
               <div
                 className="progress-fill"
                 style={{
->>>>>>> Stashed changes
                   width: `${progress.percent}%`,
                   background: `linear-gradient(90deg, ${
                     subject.color || "#8AC0D5"
@@ -439,17 +424,6 @@ const SubjectDetail = () => {
 
         {/* Add Deadline Modal */}
         {showAddDeadline && (
-<<<<<<< Updated upstream
-          <div className="subject-modal-overlay" onClick={() => setShowAddDeadline(false)}>
-            <div className="subject-modal-content" onClick={(e) => e.stopPropagation()}>
-              <div className="subject-modal-header">
-                <h3>Add New Deadline</h3>
-                <button className="subject-modal-close" onClick={() => setShowAddDeadline(false)}>×</button>
-              </div>
-              <div className="subject-subject-modal-body">
-                <div className="subject-form-group">
-                  <label>Title</label>
-=======
           <div
             className="modal-overlay"
             onClick={() => setShowAddDeadline(false)}
@@ -467,7 +441,6 @@ const SubjectDetail = () => {
               <div className="modal-body">
                 <div className="form-group">
                   <label>{t("subjectDetail.title")}</label>
->>>>>>> Stashed changes
                   <input
                     type="text"
                     placeholder={t("subjectDetail.placeholder.title")}
@@ -477,13 +450,8 @@ const SubjectDetail = () => {
                     }
                   />
                 </div>
-<<<<<<< Updated upstream
-                <div className="subject-form-group">
-                  <label>Due Date</label>
-=======
                 <div className="form-group">
                   <label>{t("subjectDetail.dueDate")}</label>
->>>>>>> Stashed changes
                   <input
                     type="date"
                     value={newDeadline.dueDate}
@@ -495,13 +463,8 @@ const SubjectDetail = () => {
                     }
                   />
                 </div>
-<<<<<<< Updated upstream
-                <div className="subject-form-group">
-                  <label>Type</label>
-=======
                 <div className="form-group">
                   <label>{t("subjectDetail.type")}</label>
->>>>>>> Stashed changes
                   <select
                     value={newDeadline.deadlineType}
                     onChange={(e) =>
@@ -537,13 +500,8 @@ const SubjectDetail = () => {
                     </option>
                   </select>
                 </div>
-<<<<<<< Updated upstream
-                <div className="subject-form-group">
-                  <label>Priority</label>
-=======
                 <div className="form-group">
                   <label>{t("subjectDetail.priority")}</label>
->>>>>>> Stashed changes
                   <select
                     value={newDeadline.priorityLevel}
                     onChange={(e) =>
@@ -568,14 +526,6 @@ const SubjectDetail = () => {
                   </select>
                 </div>
               </div>
-<<<<<<< Updated upstream
-              <div className="subject-modal-footer">
-                <button className="subject-cancel-btn" onClick={() => setShowAddDeadline(false)}>
-                  Cancel
-                </button>
-                <button 
-                  className="subject-submit-btn"
-=======
               <div className="modal-footer">
                 <button
                   className="cancel-btn"
@@ -585,7 +535,6 @@ const SubjectDetail = () => {
                 </button>
                 <button
                   className="submit-btn"
->>>>>>> Stashed changes
                   onClick={handleAddDeadline}
                   disabled={!newDeadline.title || !newDeadline.dueDate}
                 >

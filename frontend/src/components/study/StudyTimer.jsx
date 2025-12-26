@@ -353,11 +353,7 @@ const StudyTimer = ({ session, onEnd, onRefresh }) => {
               <textarea
                 value={completionNotes}
                 onChange={(e) => setCompletionNotes(e.target.value)}
-<<<<<<< Updated upstream
-                placeholder="What did you learn today?"
-=======
                 placeholder={t("studyTimer.notesPlaceholder")}
->>>>>>> Stashed changes
                 rows={3}
               />
             </div>

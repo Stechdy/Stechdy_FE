@@ -148,31 +148,6 @@ const Notifications = () => {
     const notifDate = new Date(date);
     const diffInMinutes = Math.floor((now - notifDate) / 60000);
 
-<<<<<<< Updated upstream
-    if (diffInMinutes < 1) return 'Just now';
-    if (diffInMinutes < 60) return `${diffInMinutes} min ago`;
-    
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) return `${diffInHours} hours ago`;
-    
-    const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays < 7) return `${diffInDays} days ago`;
-
-    return notifDate.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const typeLabels = {
-    all: 'All',
-    mood: 'Mood Tracking',
-    study: 'Study',
-    task: 'Task',
-    achievement: 'Achievement',
-    system: 'System'
-=======
     if (diffInMinutes < 1) return t("notifications.time.justNow");
     if (diffInMinutes < 60)
       return `${diffInMinutes} ${t("notifications.time.minutesAgo")}`;
@@ -202,7 +177,6 @@ const Notifications = () => {
     task: t("notifications.types.task"),
     achievement: t("notifications.types.achievement"),
     system: t("notifications.types.system"),
->>>>>>> Stashed changes
   };
 
   return (
@@ -211,20 +185,12 @@ const Notifications = () => {
         {/* Header */}
         <div className="page-header">
           <div className="header-left">
-<<<<<<< Updated upstream
-            <h1>Notifications</h1>
-=======
             <h1>{t("notifications.title")}</h1>
->>>>>>> Stashed changes
             <span className="connection-status">
               {isConnected ? (
                 <>
                   <span className="status-dot online"></span>
-<<<<<<< Updated upstream
-                  Connected
-=======
                   {t("notifications.connected")}
->>>>>>> Stashed changes
                 </>
               ) : (
                 <>
@@ -245,22 +211,14 @@ const Notifications = () => {
                     setSelectedNotifs([]);
                   }}
                 >
-<<<<<<< Updated upstream
-                  Cancel
-=======
                   {t("notifications.cancel")}
->>>>>>> Stashed changes
                 </button>
                 <button
                   className="action-btn danger"
                   onClick={handleDeleteSelected}
                   disabled={selectedNotifs.length === 0}
                 >
-<<<<<<< Updated upstream
-                  Delete ({selectedNotifs.length})
-=======
                   {t("notifications.delete")} ({selectedNotifs.length})
->>>>>>> Stashed changes
                 </button>
               </>
             ) : (
@@ -270,22 +228,14 @@ const Notifications = () => {
                     className="action-btn primary"
                     onClick={handleMarkAllAsRead}
                   >
-<<<<<<< Updated upstream
-                    Mark all as read
-=======
                     {t("notifications.markAllRead")}
->>>>>>> Stashed changes
                   </button>
                 )}
                 <button
                   className="action-btn secondary"
                   onClick={() => setSelectMode(true)}
                 >
-<<<<<<< Updated upstream
-                  Select
-=======
                   {t("notifications.selectAll")}
->>>>>>> Stashed changes
                 </button>
               </>
             )}
@@ -295,10 +245,6 @@ const Notifications = () => {
         {/* Filters */}
         <div className="filters-section">
           <div className="filter-group">
-<<<<<<< Updated upstream
-            <label>Status:</label>
-=======
->>>>>>> Stashed changes
             <div className="filter-buttons">
               {["all", "unread", "read"].map((filter) => (
                 <button
@@ -308,11 +254,6 @@ const Notifications = () => {
                   }`}
                   onClick={() => setActiveFilter(filter)}
                 >
-<<<<<<< Updated upstream
-                  {filter === 'all' && `All (${notifications.length})`}
-                  {filter === 'unread' && `Unread (${unreadCount})`}
-                  {filter === 'read' && `Read (${notifications.length - unreadCount})`}
-=======
                   {filter === "all" &&
                     `${t("notifications.all")} (${notifications.length})`}
                   {filter === "unread" &&
@@ -321,17 +262,12 @@ const Notifications = () => {
                     `${t("notifications.read")} (${
                       notifications.length - unreadCount
                     })`}
->>>>>>> Stashed changes
                 </button>
               ))}
             </div>
           </div>
 
           <div className="filter-group">
-<<<<<<< Updated upstream
-            <label>Type:</label>
-=======
->>>>>>> Stashed changes
             <div className="filter-buttons">
               {Object.entries(typeLabels).map(([key, label]) => (
                 <button
@@ -355,11 +291,7 @@ const Notifications = () => {
                 checked={selectedNotifs.length === filteredNotifs.length}
                 onChange={handleSelectAll}
               />
-<<<<<<< Updated upstream
-              Select all ({filteredNotifs.length})
-=======
               {t("notifications.selectAll")} ({filteredNotifs.length})
->>>>>>> Stashed changes
             </label>
           </div>
         )}
@@ -369,31 +301,14 @@ const Notifications = () => {
           {loading ? (
             <div className="loading-state">
               <div className="spinner"></div>
-<<<<<<< Updated upstream
-              <p>Loading notifications...</p>
-=======
               <p>{t("common.loading")}</p>
->>>>>>> Stashed changes
             </div>
           ) : filteredNotifs.length === 0 ? (
             <div className="empty-state">
               <span className="empty-icon">
                 {activeFilter === "unread" ? "✅" : "🔔"}
               </span>
-<<<<<<< Updated upstream
-              <h3>
-                {activeFilter === 'unread' 
-                  ? 'All caught up!'
-                  : 'No notifications yet'}
-              </h3>
-              <p>
-                {activeFilter === 'unread'
-                  ? 'All notifications have been read'
-                  : 'New notifications will appear here'}
-              </p>
-=======
               <h3>{t("notifications.noNotifications")}</h3>
->>>>>>> Stashed changes
             </div>
           ) : (
             <div className="notifications-grid">
@@ -428,14 +343,6 @@ const Notifications = () => {
                   <div className="card-content">
                     <div className="card-header">
                       <h3>{notif.title}</h3>
-<<<<<<< Updated upstream
-                      {!notif.read && <span className="unread-badge">New</span>}
-                    </div>
-                    <p className="card-message">{notif.message}</p>
-                    <div className="card-footer">
-                      <span className="card-time">{formatTime(notif.createdAt)}</span>
-                      <span className="card-type">{typeLabels[notif.type.split('_')[0]] || 'Other'}</span>
-=======
                       {!notif.read && (
                         <span className="unread-badge">
                           {t("notifications.new")}
@@ -451,7 +358,6 @@ const Notifications = () => {
                         {typeLabels[notif.type.split("_")[0]] ||
                           t("notifications.types.other")}
                       </span>
->>>>>>> Stashed changes
                     </div>
                   </div>
 

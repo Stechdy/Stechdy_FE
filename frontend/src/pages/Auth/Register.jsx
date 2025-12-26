@@ -47,29 +47,6 @@ const Register = () => {
     const newErrors = {};
 
     if (!formData.name) {
-<<<<<<< Updated upstream
-      newErrors.name = 'Please enter your name';
-    } else if (formData.name.length < 2) {
-      newErrors.name = 'Name must be at least 2 characters';
-    }
-
-    if (!formData.email) {
-      newErrors.email = 'Please enter email';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Invalid email';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Please enter password';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-    }
-
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm password';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-=======
       newErrors.name = t("auth.validation.nameRequired");
     } else if (formData.name.length < 2) {
       newErrors.name = t("auth.validation.nameMinLength");
@@ -91,7 +68,6 @@ const Register = () => {
       newErrors.confirmPassword = t("auth.validation.confirmPasswordRequired");
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = t("auth.validation.passwordMismatch");
->>>>>>> Stashed changes
     }
 
     setErrors(newErrors);
@@ -124,11 +100,7 @@ const Register = () => {
         navigate("/dashboard");
       }
     } catch (error) {
-<<<<<<< Updated upstream
-      setApiError(error.message || 'Registration failed. Please try again.');
-=======
       setApiError(error.message || t("auth.register.registerFailed"));
->>>>>>> Stashed changes
     } finally {
       setLoading(false);
     }
@@ -150,37 +122,23 @@ const Register = () => {
         navigate("/dashboard");
       }
     } catch (error) {
-<<<<<<< Updated upstream
-      setApiError(error.message || 'Google sign up failed. Please try again.');
-=======
       setApiError(error.message || t("auth.register.googleSignupFailed"));
->>>>>>> Stashed changes
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleError = () => {
-<<<<<<< Updated upstream
-    setApiError('Google sign up failed. Please try again.');
-=======
     setApiError(t("auth.register.googleSignupFailed"));
->>>>>>> Stashed changes
   };
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <AuthLayout>
         <div className="register-header">
-<<<<<<< Updated upstream
-          <h1 className="auth-title">Create Account</h1>
-          <h2 className="auth-brand">S'techdy</h2>
-          <p className="auth-subtitle">Join us and start your learning journey</p>
-=======
           <h1 className="auth-title">{t("auth.register.title")}</h1>
           <h2 className="auth-brand">S'techdy</h2>
           <p className="auth-subtitle">{t("auth.register.subtitle")}</p>
->>>>>>> Stashed changes
         </div>
 
         <form onSubmit={handleSubmit} className="register-form">
@@ -199,20 +157,6 @@ const Register = () => {
             />
           </div>
 
-<<<<<<< Updated upstream
-        <div className="form-group">
-          <label className="form-label">Full Name</label>
-          <AuthInput
-            type="text"
-            name="name"
-            placeholder="Enter your full name"
-            value={formData.name}
-            onChange={handleChange}
-            icon="👤"
-            error={errors.name}
-          />
-        </div>
-=======
           <div className="form-group">
             <label className="form-label">{t("auth.register.email")}</label>
             <AuthInput
@@ -225,7 +169,6 @@ const Register = () => {
               error={errors.email}
             />
           </div>
->>>>>>> Stashed changes
 
           <div className="form-group">
             <label className="form-label">{t("auth.register.password")}</label>
@@ -242,69 +185,6 @@ const Register = () => {
             />
           </div>
 
-<<<<<<< Updated upstream
-        <div className="form-group">
-          <label className="form-label">Password</label>
-          <AuthInput
-            type={showPassword ? 'text' : 'password'}
-            name="password"
-            placeholder="••••••••"
-            value={formData.password}
-            onChange={handleChange}
-            icon="🔒"
-            error={errors.password}
-            showPassword={showPassword}
-            onTogglePassword={() => setShowPassword(!showPassword)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label className="form-label">Confirm Password</label>
-          <AuthInput
-            type={showConfirmPassword ? 'text' : 'password'}
-            name="confirmPassword"
-            placeholder="••••••••"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            icon="🔒"
-            error={errors.confirmPassword}
-            showPassword={showConfirmPassword}
-            onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
-          />
-        </div>
-
-        <AuthButton 
-          type="submit" 
-          loading={loading}
-          disabled={loading}
-        >
-          Create Account
-        </AuthButton>
-
-        <div className="divider">
-          <span>or continue with</span>
-        </div>
-
-        <div className="google-login-wrapper">
-          <GoogleLogin
-            onSuccess={handleGoogleSignup}
-            onError={handleGoogleError}
-            theme="outline"
-            size="large"
-            text="continue_with"
-            shape="rectangular"
-            locale="en"
-            width="100%"
-          />
-        </div>
-
-        <div className="login-link">
-          Already have an account?{' '}
-          <Link to="/login">Login</Link>
-        </div>
-      </form>
-    </AuthLayout>
-=======
           <div className="form-group">
             <label className="form-label">
               {t("auth.register.confirmPassword")}
@@ -351,7 +231,6 @@ const Register = () => {
           </div>
         </form>
       </AuthLayout>
->>>>>>> Stashed changes
     </GoogleOAuthProvider>
   );
 };

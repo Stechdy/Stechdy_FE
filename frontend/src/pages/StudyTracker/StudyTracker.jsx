@@ -233,28 +233,6 @@ const StudyTracker = () => {
     <div className="study-tracker-container">
       <SidebarNav />
       <div className="study-tracker">
-<<<<<<< Updated upstream
-      <header className="tracker-header">
-        <button className="back-button" onClick={() => navigate('/dashboard')}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M15 18L9 12L15 6"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-        <h1 className="tracker-page-title">Study Tracker</h1>
-        <button className="notification-btn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M12 22C13.1 22 14 21.1 14 20H10C10 21.1 10.9 22 12 22ZM18 16V11C18 7.93 16.37 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.64 5.36 6 7.92 6 11V16L4 18V19H20V18L18 16Z" fill="#E85D75"/>
-          </svg>
-          <span className="notification-badge"></span>
-        </button>
-      </header>
-=======
         <header className="tracker-header">
           <h1 className="tracker-page-title">{t("studyTracker.title")}</h1>
           <button className="notification-btn">
@@ -267,7 +245,6 @@ const StudyTracker = () => {
             <span className="notification-badge"></span>
           </button>
         </header>
->>>>>>> Stashed changes
 
         {/* Main Content */}
         <main className="tracker-main">
@@ -284,58 +261,6 @@ const StudyTracker = () => {
               </div>
             </div>
 
-<<<<<<< Updated upstream
-      {/* Study Streak Calendar */}
-      <section className="streak-calendar">
-        <h3>Study Streak Calendar</h3>
-        <div>
-          <div className="tracker-calendar-header">
-            {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, idx) => (
-              <div key={idx} className="tracker-weekday">{day}</div>
-            ))}
-          </div>
-          <div className="tracker-calendar-grid">
-            {(() => {
-              const currentDate = getVietnamDate();
-              const today = currentDate.getDate();
-              const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-              const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-              const daysInMonth = lastDay.getDate();
-              
-              // Get first day of month (0 = Sunday, 1 = Monday, etc.)
-              const firstDayOfWeek = firstDay.getDay();
-              // Convert to Monday-based (0 = Monday, 6 = Sunday)
-              const mondayShift = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
-              
-              const days = [];
-              
-              // Add empty cells for days before the first of the month
-              for (let i = 0; i < mondayShift; i++) {
-                days.push(
-                  <div key={`empty-${i}`} className="tracker-calendar-day empty"></div>
-                );
-              }
-              
-              // Add all days of the month
-              for (let dayNumber = 1; dayNumber <= daysInMonth; dayNumber++) {
-                const isActive = streakData.calendar?.includes(dayNumber);
-                const isToday = dayNumber === today;
-                
-                days.push(
-                  <div
-                    key={dayNumber}
-                    className={`tracker-calendar-day ${isToday ? 'today' : ''} ${isActive ? 'active' : ''}`}
-                  >
-                    {dayNumber}
-                  </div>
-                );
-              }
-              
-              return days;
-            })()}
-          </div>
-        </div>
-=======
             <div className="schedule-grid">
               <div className="schedule-row header-row">
                 <div className="time-slot-label"></div>
@@ -375,7 +300,6 @@ const StudyTracker = () => {
                 </div>
               ))}
             </div>
->>>>>>> Stashed changes
 
             <div className="schedule-legend">
               <div className="legend-item">

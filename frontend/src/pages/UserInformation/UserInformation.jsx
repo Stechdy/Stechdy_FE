@@ -158,12 +158,8 @@ const UserInformation = () => {
               />
             </svg>
           </button>
-<<<<<<< Updated upstream
-          <h1 className="page-title">User Information</h1>
-=======
           <h1 className="page-title">{t("userInfo.title")}</h1>
           <div className="header-spacer"></div>
->>>>>>> Stashed changes
         </div>
 
         {error && (
