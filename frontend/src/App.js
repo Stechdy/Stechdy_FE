@@ -37,6 +37,7 @@ import StudyTracker from "./pages/StudyTracker/StudyTracker";
 import SubjectDetail from "./pages/SubjectDetail/SubjectDetail";
 import Notifications from "./pages/Notifications/Notifications";
 import HelpSupport from "./pages/HelpSupport/HelpSupport";
+import TermsOfUse from "./pages/TermsOfUse/TermsOfUse";
 
 // Placeholder Admin component
 const AdminDashboard = () => (
@@ -214,6 +215,14 @@ function App() {
             element={
               <PrivateRoute>
                 <HelpSupport />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/terms"
+            element={
+              <PrivateRoute>
+                <TermsOfUse />
               </PrivateRoute>
             }
           />

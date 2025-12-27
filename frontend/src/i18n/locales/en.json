@@ -196,7 +196,9 @@
     }
   },
   "account": {
+    "pageTitle": "Account",
     "freePlan": "Free plan",
+    "unlockFeatures": "Unlock all premium features",
     "upgradePremium": "Upgrade to premium",
     "settings": "Settings",
     "userInformation": "User information",
@@ -217,10 +219,12 @@
     "connectWithUs": "Connect with Us",
     "connectText": "Follow us on social media to stay updated with the latest features, study tips, and community highlights.",
     "roles": {
-      "founderCeo": "Founder & CEO",
-      "leadAiEngineer": "Lead AI Engineer",
-      "uxuiDesigner": "UX/UI Designer",
-      "productManager": "Product Manager"
+      "founderCeo": "Chief Executive Officer",
+      "leadAiEngineer": "Chief Financial Officer",
+      "uxuiDesigner": "Chief Marketing Officer",
+      "productManager": "Chief Strategy Officer",
+      "backendEngineer": "Chief Financial Officer",
+      "dataScientist": "Chief Operating Officer"
     }
   },
   "helpSupport": {
@@ -729,5 +733,58 @@
     "footer": {
       "helpText": "Need help choosing? Contact us at"
     }
+  },
+  "termsOfUse": {
+    "title": "Terms of Use",
+    "subtitle": "Please read these terms carefully before using S'Techdy",
+    "lastUpdated": "Last Updated",
+    "effectiveDate": "December 27, 2025",
+    "introduction": "Welcome to S'Techdy! These Terms of Use govern your use of our study planning and mood tracking application. By accessing or using S'Techdy, you agree to be bound by these terms.",
+    "sections": {
+      "acceptance": {
+        "title": "Acceptance of Terms",
+        "content": "By creating an account or using S'Techdy, you acknowledge that you have read, understood, and agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use our services."
+      },
+      "eligibility": {
+        "title": "Eligibility",
+        "content": "You must be at least 13 years old to use S'Techdy. If you are under 18, you must have parental or guardian consent to use our services. By using S'Techdy, you represent that you meet these eligibility requirements."
+      },
+      "account": {
+        "title": "Account Responsibilities",
+        "content": "You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. Please use a strong password and notify us immediately of any unauthorized access."
+      },
+      "usage": {
+        "title": "Acceptable Use",
+        "content": "You agree to use S'Techdy only for lawful purposes and in accordance with these terms. You may not misuse our services, attempt to gain unauthorized access, or interfere with other users' enjoyment of the platform."
+      },
+      "intellectualProperty": {
+        "title": "Intellectual Property",
+        "content": "All content, features, and functionality of S'Techdy, including but not limited to text, graphics, logos, and software, are owned by S'Techdy and are protected by copyright and other intellectual property laws."
+      },
+      "privacy": {
+        "title": "Privacy & Data",
+        "content": "Your privacy is important to us. Our collection and use of personal information is governed by our Privacy Policy. By using S'Techdy, you consent to our data practices as described in our Privacy Policy."
+      },
+      "termination": {
+        "title": "Termination",
+        "content": "We reserve the right to suspend or terminate your account at any time for violations of these terms or for any other reason at our discretion. You may also delete your account at any time through your account settings."
+      },
+      "disclaimer": {
+        "title": "Disclaimer of Warranties",
+        "content": "S'Techdy is provided 'as is' without warranties of any kind. We do not guarantee that our services will be uninterrupted, error-free, or completely secure. Use our services at your own risk."
+      },
+      "changes": {
+        "title": "Changes to Terms",
+        "content": "We may update these Terms of Use from time to time. We will notify you of any significant changes by posting the new terms on this page and updating the effective date. Continued use constitutes acceptance of the updated terms."
+      },
+      "contact": {
+        "title": "Contact Us",
+        "content": "If you have any questions about these Terms of Use, please contact our legal team. We're here to help clarify any concerns you may have about your rights and responsibilities."
+      }
+    },
+    "footer": "For questions about these terms, contact us at"
+  },
+  "common": {
+    "back": "Go back"
   }
 }

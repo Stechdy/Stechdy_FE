@@ -10,27 +10,39 @@ const About = () => {
   const teamMembers = [
     {
       id: 1,
-      name: "Sarah Chen",
+      name: "Trần Hữu Tài",
       role: t("about.roles.founderCeo"),
-      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+      avatar: require("../../assets/THT.webp"),
     },
     {
       id: 2,
-      name: "Alex Rodriguez",
+      name: "Phan Thị Thảo Vân",
       role: t("about.roles.leadAiEngineer"),
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+      avatar: require("../../assets/PTTV.webp"),
     },
     {
       id: 3,
-      name: "Emma Thompson",
+      name: "Nguyễn Thị Ngọc Ánh",
       role: t("about.roles.uxuiDesigner"),
-      avatar: "https://randomuser.me/api/portraits/women/68.jpg",
+      avatar: require("../../assets/NTNA.webp"),
     },
     {
       id: 4,
-      name: "Michael Kim",
+      name: "Dương Ngọc Tuyên",
       role: t("about.roles.productManager"),
-      avatar: "https://randomuser.me/api/portraits/men/75.jpg",
+      avatar: require("../../assets/DNT.webp"),
+    },
+    {
+      id: 5,
+      name: "Nguyễn Thành Công",
+      role: t("about.roles.backendEngineer"),
+      avatar: require("../../assets/NTC.webp"),
+    },
+    {
+      id: 6,
+      name: "Trương Quốc Trường",
+      role: t("about.roles.dataScientist"),
+      avatar: require("../../assets/TQT.webp"),
     },
   ];
 
