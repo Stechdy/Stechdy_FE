@@ -204,7 +204,6 @@ const Account = () => {
       icon: getThemeIcon(),
       onClick: () => setShowThemeModal(true),
       iconBg: "icon-bg-purple",
-      displayMode: "dropdown",
     },
     {
       id: "language",
@@ -213,7 +212,6 @@ const Account = () => {
       icon: getLanguageIcon(),
       onClick: () => setShowLanguageModal(true),
       iconBg: "icon-bg-cyan",
-      displayMode: "dropdown",
     },
     {
       id: "notifications",
