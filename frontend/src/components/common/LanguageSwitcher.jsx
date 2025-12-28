@@ -41,7 +41,9 @@ const LanguageSwitcher = () => {
   ];
 
   const currentLanguage =
-    languages.find((lang) => lang.code === i18n.language) || languages[0];
+    languages.find(
+      (lang) => lang.code === (i18n.language || "en").split("-")[0]
+    ) || languages[0];
 
   const changeLanguage = (langCode) => {
     i18n.changeLanguage(langCode);
@@ -73,7 +75,7 @@ const LanguageSwitcher = () => {
       >
         <GlobeIcon />
         <span className="language-switcher-current">
-          {currentLanguage.flag}
+          {currentLanguage.name}
         </span>
         <ChevronDownIcon />
       </button>

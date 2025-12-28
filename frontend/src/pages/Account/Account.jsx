@@ -8,10 +8,11 @@ import "./Account.css";
 
 const Account = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const userData = JSON.parse(localStorage.getItem("user") || "{}");
   const { themeMode, setThemeMode, resolvedTheme } = useTheme();
   const [showThemeModal, setShowThemeModal] = useState(false);
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -21,7 +22,7 @@ const Account = () => {
   const themeOptions = [
     {
       value: "light",
-      label: t("theme.light"),
+      label: t("theme.lightMode"),
       icon: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2" />
@@ -36,7 +37,7 @@ const Account = () => {
     },
     {
       value: "dark",
-      label: t("theme.dark"),
+      label: t("theme.darkMode"),
       icon: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path
@@ -81,7 +82,100 @@ const Account = () => {
 
   const getThemeLabel = () => {
     const option = themeOptions.find((opt) => opt.value === themeMode);
-    return option ? option.label : t("theme.system");
+    return option ? option.label : t("theme.lightMode");
+  };
+
+  const languageOptions = [
+    {
+      value: "en",
+      label: "English",
+      flag: "🇺🇸",
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
+          <line
+            x1="2"
+            y1="12"
+            x2="22"
+            y2="12"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
+          <path
+            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
+        </svg>
+      ),
+    },
+    {
+      value: "vi",
+      label: "Tiếng Việt",
+      flag: "🇻🇳",
+      icon: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
+          <line
+            x1="2"
+            y1="12"
+            x2="22"
+            y2="12"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
+          <path
+            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"
+            stroke="currentColor"
+            strokeWidth="2"
+          />
+        </svg>
+      ),
+    },
+  ];
+
+  const getCurrentLanguage = () => {
+    const currentLang = (i18n.language || "en").split("-")[0]; // Handle cases like 'en-US' -> 'en'
+    const option = languageOptions.find((opt) => opt.value === currentLang);
+    return option ? option.label : "English";
+  };
+
+  const getLanguageIcon = () => {
+    const currentLang = (i18n.language || "en").split("-")[0];
+    const option = languageOptions.find((opt) => opt.value === currentLang);
+    return option ? option.icon : languageOptions[0].icon;
+  };
+
+  const changeLanguage = (langCode) => {
+    i18n.changeLanguage(langCode);
+    localStorage.setItem("language", langCode);
+    setShowLanguageModal(false);
+  };
+
+  const getPlanLabel = () => {
+    const premiumStatus =
+      userData?.premiumStatus || userData?.subscription?.status;
+    return premiumStatus === "premium" || premiumStatus === "active"
+      ? t("account.premiumPlan")
+      : t("account.freePlan");
+  };
+
+  const isPremiumUser = () => {
+    const premiumStatus =
+      userData?.premiumStatus || userData?.subscription?.status;
+    return premiumStatus === "premium" || premiumStatus === "active";
   };
 
   const settingsItems = [
@@ -110,6 +204,16 @@ const Account = () => {
       icon: getThemeIcon(),
       onClick: () => setShowThemeModal(true),
       iconBg: "icon-bg-purple",
+      displayMode: "dropdown",
+    },
+    {
+      id: "language",
+      label: t("account.language"),
+      value: getCurrentLanguage(),
+      icon: getLanguageIcon(),
+      onClick: () => setShowLanguageModal(true),
+      iconBg: "icon-bg-cyan",
+      displayMode: "dropdown",
     },
     {
       id: "notifications",
@@ -223,134 +327,115 @@ const Account = () => {
             {t("account.pageTitle") || "Account"}
           </h1>
 
-          {/* Profile Card */}
-          <div className="profile-card">
-            <div className="profile-card-inner">
-              <div className="profile-avatar-wrapper">
-                <img
-                  src={userData.avatarUrl || "https://i.pravatar.cc/150?img=5"}
-                  alt="Profile"
-                  className="profile-avatar"
-                />
-                <button
-                  className="profile-edit-btn"
-                  onClick={() => navigate("/profile")}
-                  aria-label="Edit profile"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+          <div className="account-content-grid">
+            {/* Left Column - Profile & Premium */}
+            <div className="account-left-column">
+              {/* Profile Card */}
+              <div className="profile-card">
+                <div className="profile-card-inner">
+                  <div className="profile-avatar-wrapper">
+                    <img
+                      src={
+                        userData.avatarUrl || "https://i.pravatar.cc/150?img=5"
+                      }
+                      alt="Profile"
+                      className="profile-avatar"
                     />
-                    <path
-                      d="M18.5 2.5C18.8978 2.10217 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10217 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10217 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              </div>
-              <div className="profile-details">
-                <h2 className="profile-name">
-                  {userData.name || "Sarah Johnson"}
-                </h2>
-                <p className="profile-email">
-                  {userData.email || "sarah.johnson@email.com"}
-                </p>
-                <div className="profile-plan-badge">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2Z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                  <span>{t("account.freePlan")}</span>
+                    <button
+                      className="profile-edit-btn"
+                      onClick={() => navigate("/profile")}
+                      aria-label="Edit profile"
+                    >
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                        <path
+                          d="M18.5 2.5C18.8978 2.10217 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10217 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10217 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div className="profile-details">
+                    <h2 className="profile-name">
+                      {userData.name || "Sarah Johnson"}
+                    </h2>
+                    <p className="profile-email">
+                      {userData.email || "sarah.johnson@email.com"}
+                    </p>
+                    <div className="profile-plan-badge">
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                      <span>{getPlanLabel()}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          {/* Upgrade Premium Card */}
-          <button
-            className="premium-upgrade-card"
-            onClick={() => navigate("/pricing")}
-          >
-            <div className="premium-upgrade-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M12 2L2 7L12 12L22 7L12 2Z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M2 17L12 22L22 17"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M2 12L12 17L22 12"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-            <div className="premium-upgrade-content">
-              <span className="premium-upgrade-title">
-                {t("account.upgradePremium")}
-              </span>
-              <span className="premium-upgrade-subtitle">
-                {t("account.unlockFeatures") || "Unlock all premium features"}
-              </span>
-            </div>
-            <svg
-              className="premium-upgrade-arrow"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M9 18L15 12L9 6"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-
-          {/* Settings Section */}
-          <div className="account-section">
-            <h3 className="section-title">{t("account.settings")}</h3>
-            <div className="settings-list">
-              {settingsItems.map((item) => (
+              {/* Upgrade Premium Card */}
+              {!isPremiumUser() && (
                 <button
-                  key={item.id}
-                  className="settings-item"
-                  onClick={item.onClick}
+                  className="premium-upgrade-card"
+                  onClick={() => navigate("/pricing")}
                 >
-                  <div className={`settings-item-icon ${item.iconBg}`}>
-                    {item.icon}
+                  <div className="premium-upgrade-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M12 2L2 7L12 12L22 7L12 2Z"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M2 17L12 22L22 17"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M2 12L12 17L22 12"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
                   </div>
-                  <div className="settings-item-content">
-                    <span className="settings-item-label">{item.label}</span>
-                    {item.value && (
-                      <span className="settings-item-value">{item.value}</span>
-                    )}
+                  <div className="premium-upgrade-content">
+                    <span className="premium-upgrade-title">
+                      {t("account.upgradePremium")}
+                    </span>
+                    <span className="premium-upgrade-subtitle">
+                      {t("account.unlockFeatures") ||
+                        "Unlock all premium features"}
+                    </span>
                   </div>
                   <svg
-                    className="settings-item-chevron"
+                    className="premium-upgrade-arrow"
                     width="20"
                     height="20"
                     viewBox="0 0 24 24"
@@ -365,43 +450,125 @@ const Account = () => {
                     />
                   </svg>
                 </button>
-              ))}
+              )}
             </div>
-          </div>
 
-          {/* Support Section */}
-          <div className="account-section">
-            <h3 className="section-title">{t("account.support")}</h3>
-            <div className="settings-list">
-              {supportItems.map((item) => (
-                <button
-                  key={item.id}
-                  className="settings-item"
-                  onClick={item.onClick}
-                >
-                  <div className={`settings-item-icon ${item.iconBg}`}>
-                    {item.icon}
-                  </div>
-                  <div className="settings-item-content">
-                    <span className="settings-item-label">{item.label}</span>
-                  </div>
-                  <svg
-                    className="settings-item-chevron"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                  >
-                    <path
-                      d="M9 18L15 12L9 6"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </button>
-              ))}
+            {/* Right Column - Settings & Support */}
+            <div className="account-right-column">
+              {/* Settings Section */}
+              <div className="account-section">
+                <h3 className="section-title">{t("account.settings")}</h3>
+                <div className="settings-list">
+                  {settingsItems.map((item) => (
+                    <button
+                      key={item.id}
+                      className={`settings-item ${
+                        item.displayMode === "dropdown"
+                          ? "settings-item-dropdown"
+                          : ""
+                      }`}
+                      onClick={item.onClick}
+                    >
+                      {item.displayMode === "dropdown" ? (
+                        <>
+                          <div className={`settings-item-icon ${item.iconBg}`}>
+                            {item.icon}
+                          </div>
+                          <div className="settings-item-content">
+                            <span className="settings-item-dropdown-value">
+                              {item.value}
+                            </span>
+                          </div>
+                          <svg
+                            className="settings-item-chevron"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <path
+                              d="M6 9L12 15L18 9"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </>
+                      ) : (
+                        <>
+                          <div className={`settings-item-icon ${item.iconBg}`}>
+                            {item.icon}
+                          </div>
+                          <div className="settings-item-content">
+                            <span className="settings-item-label">
+                              {item.label}
+                            </span>
+                            {item.value && (
+                              <span className="settings-item-value">
+                                {item.value}
+                              </span>
+                            )}
+                          </div>
+                          <svg
+                            className="settings-item-chevron"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                          >
+                            <path
+                              d="M9 18L15 12L9 6"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Support Section */}
+              <div className="account-section">
+                <h3 className="section-title">{t("account.support")}</h3>
+                <div className="settings-list">
+                  {supportItems.map((item) => (
+                    <button
+                      key={item.id}
+                      className="settings-item"
+                      onClick={item.onClick}
+                    >
+                      <div className={`settings-item-icon ${item.iconBg}`}>
+                        {item.icon}
+                      </div>
+                      <div className="settings-item-content">
+                        <span className="settings-item-label">
+                          {item.label}
+                        </span>
+                      </div>
+                      <svg
+                        className="settings-item-chevron"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M9 18L15 12L9 6"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -505,6 +672,76 @@ const Account = () => {
                   ({t("account.systemSettings")})
                 </p>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Language Selection Modal */}
+        {showLanguageModal && (
+          <div
+            className="language-modal-overlay"
+            onClick={() => setShowLanguageModal(false)}
+          >
+            <div
+              className="language-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="language-modal-header">
+                <h3>{t("account.chooseLanguage")}</h3>
+                <button
+                  className="language-modal-close"
+                  onClick={() => setShowLanguageModal(false)}
+                  aria-label="Close"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M18 6L6 18M6 6L18 18"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <div className="language-options">
+                {languageOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    className={`language-option ${
+                      i18n.language === option.value ? "active" : ""
+                    }`}
+                    onClick={() => changeLanguage(option.value)}
+                  >
+                    <div className="language-option-icon">{option.icon}</div>
+                    <div className="language-option-content">
+                      <span className="language-option-label">
+                        {option.label}
+                      </span>
+                      <span className="language-option-flag">
+                        {option.flag}
+                      </span>
+                    </div>
+                    {i18n.language === option.value && (
+                      <svg
+                        className="language-option-check"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M20 6L9 17L4 12"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         )}

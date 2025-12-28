@@ -128,7 +128,9 @@ const UserInformation = () => {
   };
 
   const getPlanLabel = (status) => {
-    return status === "premium" ? "Premium" : t("account.freePlan");
+    return status === "premium" || status === "active"
+      ? t("account.premiumPlan")
+      : t("account.freePlan");
   };
 
   if (loading) {

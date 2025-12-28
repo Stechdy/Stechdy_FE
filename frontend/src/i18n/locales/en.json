@@ -198,18 +198,21 @@
   "account": {
     "pageTitle": "Account",
     "freePlan": "Free plan",
+    "premiumPlan": "Premium",
     "unlockFeatures": "Unlock all premium features",
     "upgradePremium": "Upgrade to premium",
     "settings": "Settings",
     "userInformation": "User information",
     "appearance": "Appearance",
+    "language": "Language",
     "soundNotifications": "Sound & Notifications",
     "support": "Support",
     "helpSupport": "Help & Support",
     "aboutUs": "About us",
     "termsOfUse": "Terms of Use",
     "logout": "Logout",
-    "systemSettings": "based on your system settings"
+    "systemSettings": "based on your system settings",
+    "chooseLanguage": "Choose Language"
   },
   "about": {
     "title": "About Us",
@@ -223,7 +226,7 @@
       "leadAiEngineer": "Chief Financial Officer",
       "uxuiDesigner": "Chief Marketing Officer",
       "productManager": "Chief Strategy Officer",
-      "backendEngineer": "Chief Financial Officer",
+      "backendEngineer": "Chief Product Officer",
       "dataScientist": "Chief Operating Officer"
     }
   },

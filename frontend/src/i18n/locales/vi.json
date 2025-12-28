@@ -198,18 +198,21 @@
   "account": {
     "pageTitle": "Tài khoản",
     "freePlan": "Gói miễn phí",
+    "premiumPlan": "Premium",
     "unlockFeatures": "Mở khóa tất cả tính năng cao cấp",
     "upgradePremium": "Nâng cấp premium",
     "settings": "Cài đặt",
     "userInformation": "Thông tin người dùng",
     "appearance": "Giao diện",
+    "language": "Ngôn ngữ",
     "soundNotifications": "Âm thanh & Thông báo",
     "support": "Hỗ trợ",
     "helpSupport": "Trợ giúp & Hỗ trợ",
     "aboutUs": "Về chúng tôi",
     "termsOfUse": "Điều khoản sử dụng",
     "logout": "Đăng xuất",
-    "systemSettings": "dựa trên cài đặt hệ thống"
+    "systemSettings": "dựa trên cài đặt hệ thống",
+    "chooseLanguage": "Chọn ngôn ngữ"
   },
   "about": {
     "title": "Về chúng tôi",
@@ -223,7 +226,7 @@
       "leadAiEngineer": "Giám đốc tài chính",
       "uxuiDesigner": "Giám đốc Marketing",
       "productManager": "Giám đốc Chiến lược",
-      "backendEngineer": "Giám đốc tài chính",
+      "backendEngineer": "Giám đốc sản xuất",
       "dataScientist": "Giám đốc Vận hành"
     }
   },
