@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import AuthLayout from "../../components/layout/AuthLayout";
 import AuthInput from "../../components/common/AuthInput";
@@ -10,6 +10,8 @@ import "./AdminLogin.css";
 const AdminLogin = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || "/admin/dashboard";
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -79,8 +81,8 @@ const AdminLogin = () => {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data));
 
-        // Redirect to admin dashboard
-        navigate("/admin/dashboard");
+        // Redirect to intended page or admin dashboard
+        navigate(from, { replace: true });
       }
     } catch (error) {
       setApiError(error.message || t("auth.admin.login.failed"));

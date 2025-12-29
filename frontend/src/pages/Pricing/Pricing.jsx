@@ -1,25 +1,13 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../../context/ThemeContext";
-import LanguageSwitcher from "../../components/common/LanguageSwitcher";
+import BottomNav from "../../components/common/BottomNav";
+import SidebarNav from "../../components/common/SidebarNav";
+import PaymentModal from "../../components/payment/PaymentModal";
 import "./Pricing.css";
 
 // SVG Icons
-const BookIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-  </svg>
-);
-
 const CheckIcon = () => (
   <svg
     viewBox="0 0 24 24"
@@ -90,83 +78,18 @@ const ZapIcon = () => (
   </svg>
 );
 
-const ArrowLeftIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="19" y1="12" x2="5" y2="12" />
-    <polyline points="12 19 5 12 12 5" />
-  </svg>
-);
-
-const SunIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="12" cy="12" r="5" />
-    <line x1="12" y1="1" x2="12" y2="3" />
-    <line x1="12" y1="21" x2="12" y2="23" />
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-    <line x1="1" y1="12" x2="3" y2="12" />
-    <line x1="21" y1="12" x2="23" y2="12" />
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-  </svg>
-);
-
-const MoonIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-  </svg>
-);
-
-const CloseIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
-  </svg>
-);
-
 const Pricing = () => {
-  const [billingCycle, setBillingCycle] = useState("monthly");
-  const { resolvedTheme, setThemeMode } = useTheme();
+  const { resolvedTheme } = useTheme();
   const { t } = useTranslation();
   const navigate = useNavigate();
-
-  const toggleTheme = () => {
-    setThemeMode(resolvedTheme === "dark" ? "light" : "dark");
-  };
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
   const plans = [
     {
       id: "free",
       name: t("pricing.plans.free.name"),
-      price: { monthly: 0, yearly: 0 },
+      price: 0,
       currency: "VND",
       description: t("pricing.plans.free.description"),
       features: [
@@ -181,59 +104,66 @@ const Pricing = () => {
       isCurrent: true,
     },
     {
-      id: "starter",
-      name: t("pricing.plans.starter.name"),
-      price: { monthly: 49000, yearly: 39000 },
+      id: "oneMonth",
+      name: t("pricing.plans.oneMonth.name"),
+      price: 39000,
+      originalPrice: 39000,
+      duration: "1 " + t("pricing.month"),
       currency: "VND",
-      description: t("pricing.plans.starter.description"),
+      description: t("pricing.plans.oneMonth.description"),
       features: [
-        t("pricing.plans.starter.features.everything"),
-        t("pricing.plans.starter.features.advancedAnalytics"),
-        t("pricing.plans.starter.features.customGoals"),
-        t("pricing.plans.starter.features.exportData"),
-        t("pricing.plans.starter.features.prioritySupport"),
+        t("pricing.plans.oneMonth.features.everything"),
+        t("pricing.plans.oneMonth.features.advancedAnalytics"),
+        t("pricing.plans.oneMonth.features.customGoals"),
+        t("pricing.plans.oneMonth.features.exportData"),
+        t("pricing.plans.oneMonth.features.prioritySupport"),
       ],
       icon: <RocketIcon />,
-      buttonText: t("pricing.plans.starter.buttonText"),
+      buttonText: t("pricing.plans.oneMonth.buttonText"),
       buttonVariant: "primary",
-      badge: t("pricing.plans.starter.badge"),
     },
     {
-      id: "plus",
-      name: t("pricing.plans.plus.name"),
-      price: { monthly: 99000, yearly: 79000 },
+      id: "threeMonths",
+      name: t("pricing.plans.threeMonths.name"),
+      price: 99000,
+      originalPrice: 117000,
+      discount: "15%",
+      duration: "3 " + t("pricing.months"),
       currency: "VND",
-      description: t("pricing.plans.plus.description"),
+      description: t("pricing.plans.threeMonths.description"),
       features: [
-        t("pricing.plans.plus.features.everything"),
-        t("pricing.plans.plus.features.aiInsights"),
-        t("pricing.plans.plus.features.collaboration"),
-        t("pricing.plans.plus.features.customThemes"),
-        t("pricing.plans.plus.features.advancedMood"),
-        t("pricing.plans.plus.features.integrations"),
+        t("pricing.plans.threeMonths.features.everything"),
+        t("pricing.plans.threeMonths.features.aiInsights"),
+        t("pricing.plans.threeMonths.features.collaboration"),
+        t("pricing.plans.threeMonths.features.customThemes"),
+        t("pricing.plans.threeMonths.features.advancedMood"),
+        t("pricing.plans.threeMonths.features.integrations"),
       ],
       icon: <ZapIcon />,
-      buttonText: t("pricing.plans.plus.buttonText"),
+      buttonText: t("pricing.plans.threeMonths.buttonText"),
       buttonVariant: "primary",
       isPopular: true,
     },
     {
-      id: "pro",
-      name: t("pricing.plans.pro.name"),
-      price: { monthly: 199000, yearly: 159000 },
+      id: "oneYear",
+      name: t("pricing.plans.oneYear.name"),
+      price: 299000,
+      originalPrice: 468000,
+      discount: "36%",
+      duration: "1 " + t("pricing.year"),
       currency: "VND",
-      description: t("pricing.plans.pro.description"),
+      description: t("pricing.plans.oneYear.description"),
       features: [
-        t("pricing.plans.pro.features.everything"),
-        t("pricing.plans.pro.features.aiCoach"),
-        t("pricing.plans.pro.features.unlimitedStorage"),
-        t("pricing.plans.pro.features.apiAccess"),
-        t("pricing.plans.pro.features.dedicatedSupport"),
-        t("pricing.plans.pro.features.earlyAccess"),
-        t("pricing.plans.pro.features.customBranding"),
+        t("pricing.plans.oneYear.features.everything"),
+        t("pricing.plans.oneYear.features.aiCoach"),
+        t("pricing.plans.oneYear.features.unlimitedStorage"),
+        t("pricing.plans.oneYear.features.apiAccess"),
+        t("pricing.plans.oneYear.features.dedicatedSupport"),
+        t("pricing.plans.oneYear.features.earlyAccess"),
+        t("pricing.plans.oneYear.features.customBranding"),
       ],
       icon: <CrownIcon />,
-      buttonText: t("pricing.plans.pro.buttonText"),
+      buttonText: t("pricing.plans.oneYear.buttonText"),
       buttonVariant: "dark",
     },
   ];
@@ -243,198 +173,153 @@ const Pricing = () => {
     return new Intl.NumberFormat("vi-VN").format(price);
   };
 
-  const handleSelectPlan = (planId) => {
-    if (planId === "free") {
+  const handleSelectPlan = (plan) => {
+    if (plan.id === "free") {
       navigate("/register");
     } else {
-      // Navigate to register with selected plan
-      navigate(`/register?plan=${planId}&billing=${billingCycle}`);
+      // Open payment modal for paid plans
+      setSelectedPlan(plan);
+      setShowPaymentModal(true);
     }
   };
 
   return (
-    <div className="pricing-page">
-      {/* Navbar */}
-      <nav className="pricing-navbar">
-        <Link to="/" className="pricing-logo">
-          <div className="pricing-logo-icon">
-            <BookIcon />
-          </div>
-          <span className="pricing-logo-text">S'Techdy</span>
-        </Link>
-
-        <div className="pricing-nav-actions">
-          <LanguageSwitcher />
-          <button
-            className="pricing-theme-toggle"
-            onClick={toggleTheme}
-            aria-label={
-              resolvedTheme === "dark"
-                ? t("theme.switchToLight")
-                : t("theme.switchToDark")
-            }
-          >
-            {resolvedTheme === "dark" ? <SunIcon /> : <MoonIcon />}
+    <div className="pricing-page-container">
+      <SidebarNav />
+      <div className="pricing-page">
+        {/* Header */}
+        <div className="pricing-header">
+          <div className="pricing-header-spacer"></div>
+          <h1 className="pricing-page-title">{t("pricing.title")}</h1>
+          <button className="notification-btn" aria-label="Notifications">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M18 8A6 6 0 106 8C6 15 3 17 3 17H21S18 15 18 8Z"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </button>
-          <Link to="/login" className="pricing-btn pricing-btn-secondary">
-            {t("nav.signIn")}
-          </Link>
-          <Link to="/register" className="pricing-btn pricing-btn-primary">
-            {t("nav.getStarted")}
-          </Link>
         </div>
 
-        <button
-          className="pricing-back-btn"
-          onClick={() => navigate("/")}
-          aria-label="Go back"
-        >
-          <ArrowLeftIcon />
-        </button>
-      </nav>
-
-      {/* Hero Section */}
-      <section className="pricing-hero">
-        <div className="pricing-hero-content">
-          <span className="pricing-badge">{t("pricing.badge")}</span>
-          <h1 className="pricing-title">{t("pricing.title")}</h1>
+        {/* Main Content */}
+        <div className="pricing-main">
           <p className="pricing-subtitle">{t("pricing.subtitle")}</p>
 
-          {/* Billing Toggle */}
-          <div className="pricing-toggle-container">
-            <button
-              className={`pricing-toggle-btn ${
-                billingCycle === "monthly" ? "active" : ""
-              }`}
-              onClick={() => setBillingCycle("monthly")}
-            >
-              {t("pricing.monthly")}
-            </button>
-            <button
-              className={`pricing-toggle-btn ${
-                billingCycle === "yearly" ? "active" : ""
-              }`}
-              onClick={() => setBillingCycle("yearly")}
-            >
-              {t("pricing.yearly")}
-              <span className="pricing-discount-badge">-20%</span>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Cards */}
-      <section className="pricing-cards-section">
-        <div className="pricing-cards-grid">
-          {plans.map((plan) => (
-            <div
-              key={plan.id}
-              className={`pricing-card ${
-                plan.isPopular ? "pricing-card-popular" : ""
-              } ${plan.id === "pro" ? "pricing-card-dark" : ""}`}
-            >
-              {plan.isPopular && (
-                <div className="pricing-popular-badge">
-                  {t("pricing.mostPopular")}
-                </div>
-              )}
-              {plan.badge && (
-                <div className="pricing-new-badge">{plan.badge}</div>
-              )}
-
-              <div className="pricing-card-header">
-                <div className="pricing-card-icon">{plan.icon}</div>
-                <h3 className="pricing-card-name">{plan.name}</h3>
-              </div>
-
-              <div className="pricing-card-price">
-                <span className="pricing-currency">₫</span>
-                <span className="pricing-amount">
-                  {formatPrice(plan.price[billingCycle])}
-                </span>
-                <span className="pricing-period">
-                  {plan.price[billingCycle] === 0
-                    ? ""
-                    : `/${t("pricing.month")}`}
-                </span>
-              </div>
-
-              <p className="pricing-card-description">{plan.description}</p>
-
-              <button
-                className={`pricing-card-btn pricing-card-btn-${plan.buttonVariant}`}
-                onClick={() => handleSelectPlan(plan.id)}
+          {/* Pricing Cards */}
+          <div className="pricing-cards-grid">
+            {plans.map((plan) => (
+              <div
+                key={plan.id}
+                className={`pricing-card ${plan.isPopular ? "pricing-card-popular" : ""
+                  } ${plan.id === "oneYear" ? "pricing-card-dark" : ""}`}
               >
-                {plan.isCurrent ? t("pricing.currentPlan") : plan.buttonText}
-              </button>
+                {plan.isPopular && (
+                  <div className="pricing-popular-badge">
+                    {t("pricing.mostPopular")}
+                  </div>
+                )}
+                {plan.discount && (
+                  <div className="pricing-discount-badge-card">
+                    -{plan.discount}
+                  </div>
+                )}
 
-              <ul className="pricing-features-list">
-                {plan.features.map((feature, index) => (
-                  <li key={index} className="pricing-feature-item">
-                    <span className="pricing-feature-check">
-                      <CheckIcon />
+                <div className="pricing-card-header">
+                  <div className="pricing-card-icon">{plan.icon}</div>
+                  <h3 className="pricing-card-name">{plan.name}</h3>
+                </div>
+
+                <div className="pricing-card-price">
+                  <span className="pricing-currency">₫</span>
+                  <span className="pricing-amount">
+                    {formatPrice(plan.price)}
+                  </span>
+                  {plan.duration && (
+                    <span className="pricing-period">/{plan.duration}</span>
+                  )}
+                </div>
+
+                {plan.originalPrice && plan.originalPrice !== plan.price && (
+                  <div className="pricing-original-price">
+                    <span className="pricing-strikethrough">
+                      ₫{formatPrice(plan.originalPrice)}
                     </span>
-                    <span className="pricing-feature-text">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </section>
+                  </div>
+                )}
 
-      {/* FAQ Section */}
-      <section className="pricing-faq-section">
-        <h2 className="pricing-faq-title">{t("pricing.faq.title")}</h2>
-        <div className="pricing-faq-grid">
-          <div className="pricing-faq-item">
-            <h4 className="pricing-faq-question">
-              {t("pricing.faq.q1.question")}
-            </h4>
-            <p className="pricing-faq-answer">{t("pricing.faq.q1.answer")}</p>
-          </div>
-          <div className="pricing-faq-item">
-            <h4 className="pricing-faq-question">
-              {t("pricing.faq.q2.question")}
-            </h4>
-            <p className="pricing-faq-answer">{t("pricing.faq.q2.answer")}</p>
-          </div>
-          <div className="pricing-faq-item">
-            <h4 className="pricing-faq-question">
-              {t("pricing.faq.q3.question")}
-            </h4>
-            <p className="pricing-faq-answer">{t("pricing.faq.q3.answer")}</p>
-          </div>
-          <div className="pricing-faq-item">
-            <h4 className="pricing-faq-question">
-              {t("pricing.faq.q4.question")}
-            </h4>
-            <p className="pricing-faq-answer">{t("pricing.faq.q4.answer")}</p>
-          </div>
-        </div>
-      </section>
+                <p className="pricing-card-description">{plan.description}</p>
 
-      {/* Footer */}
-      <footer className="pricing-footer">
-        <div className="pricing-footer-content">
-          <div className="pricing-footer-logo">
-            <div className="pricing-footer-logo-icon">
-              <BookIcon />
-            </div>
-            <span className="pricing-footer-logo-text">S'Techdy</span>
+                <button
+                  className={`pricing-card-btn pricing-card-btn-${plan.buttonVariant}`}
+                  onClick={() => handleSelectPlan(plan)}
+                >
+                  {plan.isCurrent ? t("pricing.currentPlan") : plan.buttonText}
+                </button>
+
+                <ul className="pricing-features-list">
+                  {plan.features.map((feature, index) => (
+                    <li key={index} className="pricing-feature-item">
+                      <span className="pricing-feature-check">
+                        <CheckIcon />
+                      </span>
+                      <span className="pricing-feature-text">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
-          <p className="pricing-footer-text">
-            {t("pricing.footer.helpText")}{" "}
-            <a
-              href="mailto:support@stechdy.com"
-              className="pricing-footer-link"
-            >
-              support@stechdy.com
-            </a>
-          </p>
-          <p className="pricing-footer-copyright">{t("footer.copyright")}</p>
+
+          {/* FAQ Section */}
+          <section className="pricing-faq-section">
+            <h2 className="pricing-faq-title">{t("pricing.faq.title")}</h2>
+            <div className="pricing-faq-grid">
+              <div className="pricing-faq-item">
+                <h4 className="pricing-faq-question">
+                  {t("pricing.faq.q1.question")}
+                </h4>
+                <p className="pricing-faq-answer">{t("pricing.faq.q1.answer")}</p>
+              </div>
+              <div className="pricing-faq-item">
+                <h4 className="pricing-faq-question">
+                  {t("pricing.faq.q2.question")}
+                </h4>
+                <p className="pricing-faq-answer">{t("pricing.faq.q2.answer")}</p>
+              </div>
+              <div className="pricing-faq-item">
+                <h4 className="pricing-faq-question">
+                  {t("pricing.faq.q3.question")}
+                </h4>
+                <p className="pricing-faq-answer">{t("pricing.faq.q3.answer")}</p>
+              </div>
+              <div className="pricing-faq-item">
+                <h4 className="pricing-faq-question">
+                  {t("pricing.faq.q4.question")}
+                </h4>
+                <p className="pricing-faq-answer">{t("pricing.faq.q4.answer")}</p>
+              </div>
+            </div>
+          </section>
         </div>
-      </footer>
+        <BottomNav />
+      </div>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        planData={selectedPlan}
+      />
     </div>
   );
 };

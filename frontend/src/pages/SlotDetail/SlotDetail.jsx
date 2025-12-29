@@ -381,6 +381,7 @@ const SlotDetail = () => {
 
   const isSlotOccupied = (date, timeSlot) => {
     if (!Array.isArray(selectedDateSessions)) return false;
+    if (!timeSlot) return false;
     const normalizedTimeSlot = timeSlot.toLowerCase();
     const occupied = selectedDateSessions.some((s) => {
       const sessionTimeSlot = (s.timeSlot || s.sessionType || "").toLowerCase();
@@ -466,7 +467,7 @@ const SlotDetail = () => {
               </div>
               <div className="slot-info-title">
                 <h2>
-                  {t(`slotDetail.timeSlots.${session.timeSlot.toLowerCase()}`)}{" "}
+                  {session.timeSlot ? t(`slotDetail.timeSlots.${session.timeSlot.toLowerCase()}`) : ""}{" "}
                   {t("slotDetail.session")}
                 </h2>
                 <p>
@@ -772,9 +773,9 @@ const SlotDetail = () => {
                               {getTimeSlotIcon(slot.timeSlot)}
                             </span>
                             <span className="slot-name">
-                              {t(
+                              {slot.timeSlot ? t(
                                 `slotDetail.timeSlots.${slot.timeSlot.toLowerCase()}`
-                              )}
+                              ) : ""}
                             </span>
                             <span
                               className={`slot-status ${

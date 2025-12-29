@@ -2,14 +2,36 @@
 .slot-detail-container {
   display: flex;
   min-height: 100vh;
-  background-color: var(--bg-primary);
+  background: linear-gradient(
+    180deg,
+    #e8d5f0 0%,
+    #f5e6f0 15%,
+    #f8f0f5 30%,
+    #f5f0f8 50%,
+    #f0e8f5 70%,
+    #f5e0f0 85%,
+    #f8d8e8 100%
+  );
+}
+
+[data-theme="dark"] .slot-detail-container {
+  background: linear-gradient(
+    180deg,
+    #1a1625 0%,
+    #1e1a2e 15%,
+    #221e35 30%,
+    #1e1a2e 50%,
+    #1a1625 70%,
+    #1e1a2e 85%,
+    #221e35 100%
+  );
 }
 
 /* Slot Detail Page */
 .slot-detail-page {
   flex: 1;
   min-height: 100vh;
-  background-color: var(--bg-primary);
+  background: transparent;
   padding-bottom: 100px;
   animation: pageSlideIn 0.4s ease;
   transition: background-color var(--transition-normal);
@@ -71,23 +93,33 @@
 .slot-detail-title {
   font-size: 30px;
   font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+[data-theme="dark"] .slot-detail-title {
   background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin: 0;
+  color: transparent;
 }
 
 .slot-detail-header h1 {
   font-size: 30px;
   font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+[data-theme="dark"] .slot-detail-header h1 {
   background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin: 0;
-  flex: 1;
-  text-align: center;
+  color: transparent;
 }
 
 .header-spacer {
