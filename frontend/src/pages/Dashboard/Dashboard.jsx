@@ -5,6 +5,7 @@ import BottomNav from "../../components/common/BottomNav";
 import MoodCheckInModal from "../../components/mood/MoodCheckInModal";
 import StudyTimer from "../../components/study/StudyTimer";
 import NotificationBell from "../../components/notification/NotificationBell";
+import PremiumBanner from "../../components/common/PremiumBanner";
 import moodService from "../../services/moodService";
 import { getVietnamTime, getVietnamDate } from "../../utils/helpers";
 import "./Dashboard.css";
@@ -325,6 +326,9 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+      {/* Premium Banner */}
+      <PremiumBanner />
+      
       {/* Sidebar Navigation - Desktop Only */}
       <nav className="sidebar-nav">
         <button className="nav-item" onClick={() => navigate("/dashboard")}>

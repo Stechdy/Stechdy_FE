@@ -14,13 +14,34 @@
 .study-tracker-container {
   display: flex;
   min-height: 100vh;
-  background-color: var(--bg-primary);
+  background: linear-gradient(
+    180deg,
+    #e8d5f0 0%,
+    #f5e6f0 15%,
+    #f8f0f5 30%,
+    #f5f0f8 50%,
+    #f0e8f5 70%,
+    #f5e0f0 85%,
+    #f8d8e8 100%
+  );
+}
+
+[data-theme="dark"] .study-tracker-container {
+  background: linear-gradient(
+    180deg,
+    #1a1625 0%,
+    #1e1a2e 15%,
+    #221e35 30%,
+    #1e1a2e 50%,
+    #1a1625 70%,
+    #1e1a2e 85%,
+    #221e35 100%
+  );
 }
 
 .study-tracker {
   flex: 1;
   min-height: 100vh;
-  background-color: var(--bg-primary);
   padding-bottom: 120px;
   transition: background-color var(--transition-normal);
   animation: trackerFadeIn 0.4s ease-out;
@@ -53,14 +74,19 @@
 .tracker-page-title {
   font-size: 30px;
   font-weight: 700;
-  background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #1a1a1a;
   margin: 0;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+}
+
+[data-theme="dark"] .tracker-page-title {
+  background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 .tracker-header .back-button {
@@ -153,15 +179,6 @@
   border-radius: 50%;
   border: 2px solid var(--bg-card);
   transition: border-color var(--transition-normal);
-}
-
-.tracker-header h1 {
-  font-size: 28px;
-  font-weight: 700;
-  background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 /* Weekly Schedule */
@@ -526,7 +543,8 @@
   gap: 8px;
 }
 
-.tracker-calendar-day {
+.tracker-calendar-day,
+.calendar-day {
   aspect-ratio: 1;
   display: flex;
   align-items: center;
@@ -534,27 +552,36 @@
   border-radius: 50%;
   font-size: 16px;
   font-weight: 600;
-  color: var(--text-tertiary);
-  background-color: var(--bg-secondary);
+  color: #9ca3af;
+  background-color: #f3f4f6;
   transition: all 0.2s ease;
   width: 36px;
   height: 36px;
   margin: 0 auto;
 }
 
-.tracker-calendar-day.empty {
+[data-theme="dark"] .tracker-calendar-day,
+[data-theme="dark"] .calendar-day {
+  color: #6b7280;
+  background-color: #374151;
+}
+
+.tracker-calendar-day.empty,
+.calendar-day.empty {
   background-color: transparent;
   color: transparent;
 }
 
-.tracker-calendar-day.active {
-  background: linear-gradient(135deg, #8AC0D5 0%, #EC4899 100%);
+.tracker-calendar-day.active,
+.calendar-day.active {
+  background: linear-gradient(135deg, #F0C5D5 0%, #EC4899 100%);
   color: white;
   font-weight: 700;
   box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3);
 }
 
-.tracker-calendar-day.today {
+.tracker-calendar-day.today,
+.calendar-day.today {
   background: linear-gradient(135deg, #8AC0D5 0%, #6DBAD7 100%);
   color: white;
   font-weight: 700;

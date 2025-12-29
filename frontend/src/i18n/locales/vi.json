@@ -670,6 +670,8 @@
     "monthly": "Theo tháng",
     "yearly": "Theo năm",
     "month": "tháng",
+    "months": "tháng",
+    "year": "năm",
     "mostPopular": "Phổ biến nhất",
     "currentPlan": "Gói hiện tại",
     "plans": {
@@ -684,11 +686,10 @@
           "basicGoals": "Tối đa 3 mục tiêu học tập"
         }
       },
-      "starter": {
-        "name": "Starter",
-        "description": "Làm nhiều hơn với công cụ học thông minh",
-        "badge": "MỚI",
-        "buttonText": "Nâng cấp lên Starter",
+      "oneMonth": {
+        "name": "Gói 1 Tháng",
+        "description": "Dùng thử các tính năng Premium",
+        "buttonText": "Chọn gói 1 tháng",
         "features": {
           "everything": "Tất cả tính năng Miễn phí",
           "advancedAnalytics": "Phân tích tiến độ nâng cao",
@@ -697,12 +698,12 @@
           "prioritySupport": "Hỗ trợ email ưu tiên"
         }
       },
-      "plus": {
-        "name": "Plus",
-        "description": "Mở khóa trải nghiệm đầy đủ",
-        "buttonText": "Dùng Plus",
+      "threeMonths": {
+        "name": "Gói 3 Tháng",
+        "description": "Tiết kiệm 15% - Phổ biến nhất",
+        "buttonText": "Chọn gói 3 tháng",
         "features": {
-          "everything": "Tất cả tính năng Starter",
+          "everything": "Tất cả tính năng Gói 1 Tháng",
           "aiInsights": "Phân tích học tập bằng AI",
           "collaboration": "Hợp tác nhóm học",
           "customThemes": "Giao diện tùy chỉnh",
@@ -710,12 +711,12 @@
           "integrations": "Tích hợp lịch"
         }
       },
-      "pro": {
-        "name": "Pro",
-        "description": "Tối đa hóa năng suất",
-        "buttonText": "Dùng Pro",
+      "oneYear": {
+        "name": "Gói 1 Năm",
+        "description": "Tiết kiệm 36% - Giá trị tốt nhất",
+        "buttonText": "Chọn gói 1 năm",
         "features": {
-          "everything": "Tất cả tính năng Plus",
+          "everything": "Tất cả tính năng Gói 3 Tháng",
           "aiCoach": "Huấn luyện viên AI cá nhân",
           "unlimitedStorage": "Lưu trữ đám mây không giới hạn",
           "apiAccess": "Truy cập API",

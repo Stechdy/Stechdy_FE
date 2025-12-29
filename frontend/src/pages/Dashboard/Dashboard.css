@@ -1,11 +1,33 @@
 /* Dashboard Container */
 .dashboard-container {
   min-height: 100vh;
-  background: var(--bg-primary);
+  background: linear-gradient(
+    180deg,
+    #e8d5f0 0%,
+    #f5e6f0 15%,
+    #f8f0f5 30%,
+    #f5f0f8 50%,
+    #f0e8f5 70%,
+    #f5e0f0 85%,
+    #f8d8e8 100%
+  );
   padding-bottom: 80px;
   font-family: var(--font-family);
   transition: background-color var(--transition-normal);
   display: flex;
+}
+
+[data-theme="dark"] .dashboard-container {
+  background: linear-gradient(
+    180deg,
+    #1a1625 0%,
+    #1e1a2e 15%,
+    #221e35 30%,
+    #1e1a2e 50%,
+    #1a1625 70%,
+    #1e1a2e 85%,
+    #221e35 100%
+  );
 }
 
 /* Sidebar Navigation - Hidden on mobile */

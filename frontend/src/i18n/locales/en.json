@@ -670,6 +670,8 @@
     "monthly": "Monthly",
     "yearly": "Yearly",
     "month": "month",
+    "months": "months",
+    "year": "year",
     "mostPopular": "Most Popular",
     "currentPlan": "Your current plan",
     "plans": {
@@ -684,11 +686,10 @@
           "basicGoals": "Up to 3 study goals"
         }
       },
-      "starter": {
-        "name": "Starter",
-        "description": "Do more with smart study tools",
-        "badge": "NEW",
-        "buttonText": "Upgrade to Starter",
+      "oneMonth": {
+        "name": "1 Month Plan",
+        "description": "Try Premium features",
+        "buttonText": "Get 1 Month",
         "features": {
           "everything": "Everything in Free",
           "advancedAnalytics": "Advanced progress analytics",
@@ -697,12 +698,12 @@
           "prioritySupport": "Priority email support"
         }
       },
-      "plus": {
-        "name": "Plus",
-        "description": "Unlock the full experience",
-        "buttonText": "Get Plus",
+      "threeMonths": {
+        "name": "3 Months Plan",
+        "description": "Save 15% - Most Popular",
+        "buttonText": "Get 3 Months",
         "features": {
-          "everything": "Everything in Starter",
+          "everything": "Everything in 1 Month Plan",
           "aiInsights": "AI-powered study insights",
           "collaboration": "Study group collaboration",
           "customThemes": "Custom app themes",
@@ -710,12 +711,12 @@
           "integrations": "Calendar integrations"
         }
       },
-      "pro": {
-        "name": "Pro",
-        "description": "Maximize your productivity",
-        "buttonText": "Get Pro",
+      "oneYear": {
+        "name": "1 Year Plan",
+        "description": "Save 36% - Best Value",
+        "buttonText": "Get 1 Year",
         "features": {
-          "everything": "Everything in Plus",
+          "everything": "Everything in 3 Months Plan",
           "aiCoach": "Personal AI study coach",
           "unlimitedStorage": "Unlimited cloud storage",
           "apiAccess": "API access",

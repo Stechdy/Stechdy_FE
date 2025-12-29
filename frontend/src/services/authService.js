@@ -191,3 +191,34 @@ export const googleLogin = async (credential) => {
     throw error;
   }
 };
+
+// Refresh user data from server (to get latest premium status)
+export const refreshUserData = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    const response = await fetch(`${API_URL}/users/me`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (response.ok && data.success) {
+      // Update local storage with new user data
+      const currentUser = JSON.parse(localStorage.getItem('user'));
+      const updatedUser = { ...currentUser, ...data.user };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      return updatedUser;
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Error refreshing user data:', error);
+    return null;
+  }
+};
