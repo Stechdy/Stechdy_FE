@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import PublicRoute from "./components/common/PublicRoute";
 import PrivateRoute from "./components/common/PrivateRoute";
+import AdminPrivateRoute from "./components/common/AdminPrivateRoute";
 import ScrollToTop from "./components/common/ScrollToTop";
 import { SocketProvider } from "./context/SocketContext";
 
@@ -23,6 +24,7 @@ import ResetPassword from "./pages/Auth/ResetPassword";
 // Admin Auth Pages
 import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminForgotPassword from "./pages/Admin/AdminForgotPassword";
+import AdminPayments from "./pages/Admin/AdminPayments";
 
 // Main App Pages
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -110,6 +112,14 @@ function App() {
               <PublicRoute redirectTo="/admin/dashboard">
                 <AdminForgotPassword />
               </PublicRoute>
+            }
+          />
+          <Route
+            path="/admin/payments"
+            element={
+              <AdminPrivateRoute>
+                <AdminPayments />
+              </AdminPrivateRoute>
             }
           />
 
