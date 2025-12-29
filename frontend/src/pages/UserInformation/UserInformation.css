@@ -27,11 +27,21 @@
   animation: userInfoFadeIn 0.4s ease-out forwards;
 }
 
-.user-info-content > *:nth-child(1) { animation-delay: 0.05s; }
-.user-info-content > *:nth-child(2) { animation-delay: 0.1s; }
-.user-info-content > *:nth-child(3) { animation-delay: 0.15s; }
-.user-info-content > *:nth-child(4) { animation-delay: 0.2s; }
-.user-info-content > *:nth-child(5) { animation-delay: 0.25s; }
+.user-info-content > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.user-info-content > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.user-info-content > *:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.user-info-content > *:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.user-info-content > *:nth-child(5) {
+  animation-delay: 0.25s;
+}
 
 /* Loading State */
 .user-info-loading {
@@ -101,7 +111,7 @@
 .page-title {
   font-size: 30px;
   font-weight: 700;
-  background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
+  background: linear-gradient(135deg, #f0c5d5 0%, #d4b5d8 50%, #8ac0d5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -110,41 +120,6 @@
 
 .header-spacer {
   width: 40px;
-}
-
-/* Alerts */
-.alert {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  font-size: 14px;
-  animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.alert-error {
-  background: var(--alert-error-bg);
-  color: var(--alert-error-text);
-  border: 1px solid var(--alert-error-border);
-}
-
-.alert-success {
-  background: var(--alert-success-bg);
-  color: var(--alert-success-text);
-  border: 1px solid var(--alert-success-border);
 }
 
 /* Profile Avatar Section */
@@ -251,7 +226,7 @@
   padding: 10px 18px;
   border: none;
   border-radius: 12px;
-  background: linear-gradient(135deg, #8AC0D5 0%, #7BB3C9 100%);
+  background: linear-gradient(135deg, #8ac0d5 0%, #7bb3c9 100%);
   color: white;
   font-size: 14px;
   font-weight: 600;
@@ -506,4 +481,117 @@
     width: 40px;
     height: 40px;
   }
+}
+
+/* Avatar Upload Styles */
+.avatar-upload-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.avatar-upload-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Avatar Menu */
+.avatar-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 8px;
+  min-width: 180px;
+  z-index: 100;
+  animation: avatarMenuSlideIn 0.2s ease-out;
+}
+
+@keyframes avatarMenuSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.avatar-menu::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid var(--bg-card);
+}
+
+.avatar-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.avatar-menu-item:hover {
+  background: var(--bg-hover);
+}
+
+.avatar-menu-item svg {
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.avatar-menu-item:hover svg {
+  color: var(--text-primary);
+}
+
+.avatar-menu-item-danger {
+  color: #ef4444;
+}
+
+.avatar-menu-item-danger svg {
+  color: #ef4444;
+}
+
+.avatar-menu-item-danger:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.avatar-menu-item-danger:hover svg {
+  color: #dc2626;
+}
+
+/* Disabled state for avatar button */
+.edit-avatar-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }

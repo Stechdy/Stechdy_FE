@@ -383,7 +383,18 @@
     "currentStreak": "Current Streak",
     "level": "Level",
     "levelValue": "Level {{level}} ({{xp}} XP)",
-    "streakDays": "{{days}} days"
+    "streakDays": "{{days}} days",
+    "avatar": {
+      "upload": "Upload Photo",
+      "remove": "Remove Photo",
+      "uploadSuccess": "Avatar uploaded successfully!",
+      "uploadFailed": "Failed to upload avatar",
+      "deleteSuccess": "Avatar removed successfully!",
+      "deleteFailed": "Failed to remove avatar",
+      "invalidType": "Invalid file type. Please upload JPEG, PNG, GIF or WebP images.",
+      "fileTooLarge": "File is too large. Maximum size is 5MB.",
+      "noAvatar": "No avatar to remove"
+    }
   },
   "studyTimer": {
     "waiting": "Waiting",

@@ -334,7 +334,8 @@ const Account = () => {
                   <div className="profile-avatar-wrapper">
                     <img
                       src={
-                        userData.avatarUrl || "https://i.pravatar.cc/150?img=5"
+                        userData.avatarUrl ||
+                        require("../../assets/STECHDY.webp")
                       }
                       alt="Profile"
                       className="profile-avatar"

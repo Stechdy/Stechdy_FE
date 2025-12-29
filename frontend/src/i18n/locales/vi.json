@@ -383,7 +383,18 @@
     "currentStreak": "Chuỗi ngày hiện tại",
     "level": "Cấp độ",
     "levelValue": "Cấp {{level}} ({{xp}} XP)",
-    "streakDays": "{{days}} ngày"
+    "streakDays": "{{days}} ngày",
+    "avatar": {
+      "upload": "Tải ảnh lên",
+      "remove": "Xóa ảnh",
+      "uploadSuccess": "Tải ảnh đại diện thành công!",
+      "uploadFailed": "Không thể tải ảnh đại diện",
+      "deleteSuccess": "Đã xóa ảnh đại diện!",
+      "deleteFailed": "Không thể xóa ảnh đại diện",
+      "invalidType": "Định dạng file không hợp lệ. Vui lòng tải ảnh JPEG, PNG, GIF hoặc WebP.",
+      "fileTooLarge": "File quá lớn. Kích thước tối đa là 5MB.",
+      "noAvatar": "Không có ảnh đại diện để xóa"
+    }
   },
   "studyTimer": {
     "waiting": "Chờ",
