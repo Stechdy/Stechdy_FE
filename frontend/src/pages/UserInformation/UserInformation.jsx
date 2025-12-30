@@ -1,19 +1,78 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import BottomNav from "../../components/common/BottomNav";
 import "./UserInformation.css";
 
 const UserInformation = () => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState({});
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [showAvatarMenu, setShowAvatarMenu] = useState(false);
+  const fileInputRef = useRef(null);
 
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001/api";
+
+  // Helper function to handle API errors
+  const handleApiError = (error, response = null) => {
+    let errorMessage = "An unexpected error occurred";
+
+    if (error.name === "AbortError" || error.message.includes("timeout")) {
+      errorMessage = "Request Timeout";
+    } else if (
+      error.message.includes("Failed to fetch") ||
+      error.message.includes("NetworkError")
+    ) {
+      errorMessage = "Network error. Please check your connection.";
+    } else if (response) {
+      switch (response.status) {
+        case 400:
+          errorMessage = "Bad request. Please check your input.";
+          break;
+        case 401:
+          errorMessage = "Unauthorized. Please login again.";
+          break;
+        case 403:
+          errorMessage = "Access denied.";
+          break;
+        case 404:
+          errorMessage = "Resource not found.";
+          break;
+        case 408:
+          errorMessage = "Request Timeout";
+          break;
+        case 500:
+          errorMessage = "Server error. Please try again later.";
+          break;
+        case 503:
+          errorMessage = "Service unavailable. Please try again later.";
+          break;
+        default:
+          errorMessage = error.message || `Error: ${response.status}`;
+      }
+    } else {
+      errorMessage = error.message || errorMessage;
+    }
+
+    return errorMessage;
+  };
+
+  // Helper function to fetch with timeout
+  const fetchWithTimeout = (url, options = {}, timeout = 10000) => {
+    return Promise.race([
+      fetch(url, options),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Request timeout")), timeout)
+      ),
+    ]);
+  };
 
   useEffect(() => {
     fetchUserData();
@@ -22,7 +81,7 @@ const UserInformation = () => {
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/users/profile`, {
+      const response = await fetchWithTimeout(`${API_URL}/users/profile`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -30,7 +89,8 @@ const UserInformation = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to fetch user data");
+        const errorMessage = handleApiError(new Error(), response);
+        throw new Error(errorMessage);
       }
 
       const data = await response.json();
@@ -45,6 +105,13 @@ const UserInformation = () => {
       setLoading(false);
     } catch (err) {
       console.error("Error fetching user data:", err);
+      const errorMessage = handleApiError(err);
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 3000,
+      });
+
+      // Fallback to stored user data
       const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
       setUserData(storedUser);
       setEditData({
@@ -65,12 +132,10 @@ const UserInformation = () => {
 
   const handleSave = async () => {
     setSaving(true);
-    setError("");
-    setSuccess("");
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${API_URL}/users/profile`, {
+      const response = await fetchWithTimeout(`${API_URL}/users/profile`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -80,7 +145,8 @@ const UserInformation = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update profile");
+        const errorMessage = handleApiError(new Error(), response);
+        throw new Error(errorMessage);
       }
 
       const updatedData = await response.json();
@@ -92,10 +158,17 @@ const UserInformation = () => {
         JSON.stringify({ ...storedUser, ...editData })
       );
 
-      setSuccess("Profile updated successfully!");
+      toast.success(t("userInfo.profileUpdated"), {
+        position: "top-center",
+        autoClose: 3000,
+      });
       setIsEditing(false);
     } catch (err) {
-      setError(err.message || "Failed to save changes");
+      const errorMessage = handleApiError(err);
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 3000,
+      });
     } finally {
       setSaving(false);
     }
@@ -110,20 +183,192 @@ const UserInformation = () => {
       timezone: userData?.timezone || "UTC",
     });
     setIsEditing(false);
-    setError("");
   };
+
+  // Avatar upload handlers
+  const handleAvatarClick = () => {
+    setShowAvatarMenu(!showAvatarMenu);
+  };
+
+  const handleFileSelect = () => {
+    fileInputRef.current?.click();
+    setShowAvatarMenu(false);
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error(t("userInfo.avatar.invalidType"), {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error(t("userInfo.avatar.fileTooLarge"), {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    setUploadingAvatar(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      const response = await fetchWithTimeout(
+        `${API_URL}/upload/avatar`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        },
+        15000
+      ); // Longer timeout for file upload
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        if (!response.ok) {
+          throw new Error(handleApiError(new Error(), response));
+        }
+        throw parseError;
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || handleApiError(new Error(), response));
+      }
+
+      // Update user data with new avatar URL
+      setUserData((prev) => ({ ...prev, avatarUrl: data.avatarUrl }));
+
+      // Update localStorage
+      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...storedUser, avatarUrl: data.avatarUrl })
+      );
+
+      toast.success(t("userInfo.avatar.uploadSuccess"), {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    } catch (err) {
+      const errorMessage = handleApiError(err);
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    } finally {
+      setUploadingAvatar(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
+  const handleRemoveAvatar = async () => {
+    setShowAvatarMenu(false);
+
+    if (!userData?.avatarUrl) {
+      toast.error(t("userInfo.avatar.noAvatar"), {
+        position: "top-center",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    setUploadingAvatar(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetchWithTimeout(`${API_URL}/upload/avatar`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        if (!response.ok) {
+          throw new Error(handleApiError(new Error(), response));
+        }
+        throw parseError;
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || handleApiError(new Error(), response));
+      }
+
+      // Update user data - remove avatar URL
+      setUserData((prev) => ({ ...prev, avatarUrl: null }));
+
+      // Update localStorage
+      const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...storedUser, avatarUrl: null })
+      );
+
+      toast.success(t("userInfo.avatar.deleteSuccess"), {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    } catch (err) {
+      const errorMessage = handleApiError(err);
+      toast.error(errorMessage, {
+        position: "top-center",
+        autoClose: 3000,
+      });
+    } finally {
+      setUploadingAvatar(false);
+    }
+  };
+
+  // Close avatar menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showAvatarMenu && !event.target.closest(".avatar-wrapper")) {
+        setShowAvatarMenu(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [showAvatarMenu]);
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    return new Date(dateString).toLocaleDateString(
+      i18n.language === "vi" ? "vi-VN" : "en-US",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }
+    );
   };
 
   const getPlanLabel = (status) => {
-    return status === "premium" ? "Premium" : "Free plan";
+    return status === "premium" || status === "active"
+      ? t("account.premiumPlan")
+      : t("account.freePlan");
   };
 
   if (loading) {
@@ -131,7 +376,7 @@ const UserInformation = () => {
       <div className="user-info-container">
         <div className="user-info-loading">
           <div className="loading-spinner"></div>
-          <p>Loading user information...</p>
+          <p>{t("userInfo.loading")}</p>
         </div>
         <BottomNav />
       </div>
@@ -140,6 +385,7 @@ const UserInformation = () => {
 
   return (
     <div className="user-info-container">
+      <ToastContainer />
       <div className="user-info-content">
         <div className="user-info-header">
           <button className="back-button" onClick={() => navigate("/account")}>
@@ -153,54 +399,27 @@ const UserInformation = () => {
               />
             </svg>
           </button>
-          <h1 className="page-title">User Information</h1>
+          <h1 className="page-title">{t("userInfo.title")}</h1>
           <div className="header-spacer"></div>
         </div>
 
-        {error && (
-          <div className="alert alert-error">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 8V12M12 16H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span>{error}</span>
-          </div>
-        )}
-        {success && (
-          <div className="alert alert-success">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.709 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18457 2.99721 7.13633 4.39828 5.49707C5.79935 3.85782 7.69279 2.71538 9.79619 2.24015C11.8996 1.76491 14.1003 1.98234 16.07 2.86"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M22 4L12 14.01L9 11.01"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span>{success}</span>
-          </div>
-        )}
-
         <div className="profile-avatar-section">
           <div className="avatar-wrapper">
+            {uploadingAvatar && (
+              <div className="avatar-upload-overlay">
+                <div className="avatar-upload-spinner"></div>
+              </div>
+            )}
             <img
-              src={userData?.avatarUrl || "https://i.pravatar.cc/150?img=5"}
+              src={userData?.avatarUrl || require("../../assets/STECHDY.webp")}
               alt="Profile"
               className="profile-avatar"
             />
-            <button className="edit-avatar-btn">
+            <button
+              className="edit-avatar-btn"
+              onClick={handleAvatarClick}
+              disabled={uploadingAvatar}
+            >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path
                   d="M23 19C23 19.5304 22.7893 20.0391 22.4142 20.4142C22.0391 20.7893 21.5304 21 21 21H3C2.46957 21 1.96086 20.7893 1.58579 20.4142C1.21071 20.0391 1 19.5304 1 19V8C1 7.46957 1.21071 6.96086 1.58579 6.58579C1.96086 6.21071 2.46957 6 3 6H7L9 3H15L17 6H21C21.5304 6 22.0391 6.21071 22.4142 6.58579C22.7893 6.96086 23 7.46957 23 8V19Z"
@@ -218,6 +437,71 @@ const UserInformation = () => {
                 />
               </svg>
             </button>
+
+            {/* Hidden file input */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              accept="image/jpeg,image/png,image/gif,image/webp"
+              style={{ display: "none" }}
+            />
+
+            {/* Avatar menu dropdown */}
+            {showAvatarMenu && (
+              <div className="avatar-menu">
+                <button className="avatar-menu-item" onClick={handleFileSelect}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M17 8L12 3L7 8"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                    <path
+                      d="M12 3V15"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <span>{t("userInfo.avatar.upload")}</span>
+                </button>
+                {userData?.avatarUrl && (
+                  <button
+                    className="avatar-menu-item avatar-menu-item-danger"
+                    onClick={handleRemoveAvatar}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M3 6H5H21"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                    <span>{t("userInfo.avatar.remove")}</span>
+                  </button>
+                )}
+              </div>
+            )}
           </div>
           <div className="profile-name-section">
             <h2 className="profile-display-name">{userData?.name || "User"}</h2>
@@ -235,7 +519,7 @@ const UserInformation = () => {
 
         <div className="info-section">
           <div className="section-header">
-            <h3 className="section-title">Personal Information</h3>
+            <h3 className="section-title">{t("userInfo.personalInfo")}</h3>
             {!isEditing ? (
               <button className="edit-btn" onClick={() => setIsEditing(true)}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -254,19 +538,19 @@ const UserInformation = () => {
                     strokeLinejoin="round"
                   />
                 </svg>
-                Edit
+                {t("userInfo.edit")}
               </button>
             ) : (
               <div className="edit-actions">
                 <button className="cancel-btn" onClick={handleCancel}>
-                  Cancel
+                  {t("userInfo.cancel")}
                 </button>
                 <button
                   className="save-btn"
                   onClick={handleSave}
                   disabled={saving}
                 >
-                  {saving ? "Saving..." : "Save"}
+                  {saving ? t("userInfo.saving") : t("userInfo.save")}
                 </button>
               </div>
             )}
@@ -293,7 +577,7 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Full Name</label>
+                <label className="info-label">{t("userInfo.name")}</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -301,11 +585,11 @@ const UserInformation = () => {
                     value={editData.name}
                     onChange={handleInputChange}
                     className="info-input"
-                    placeholder="Enter your name"
+                    placeholder={t("userInfo.name")}
                   />
                 ) : (
                   <span className="info-value">
-                    {userData?.name || "Not set"}
+                    {userData?.name || t("userInfo.notSet")}
                   </span>
                 )}
               </div>
@@ -331,7 +615,7 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Email Address</label>
+                <label className="info-label">{t("userInfo.email")}</label>
                 {isEditing ? (
                   <input
                     type="email"
@@ -339,11 +623,11 @@ const UserInformation = () => {
                     value={editData.email}
                     onChange={handleInputChange}
                     className="info-input"
-                    placeholder="Enter your email"
+                    placeholder={t("userInfo.email")}
                   />
                 ) : (
                   <span className="info-value">
-                    {userData?.email || "Not set"}
+                    {userData?.email || t("userInfo.notSet")}
                   </span>
                 )}
               </div>
@@ -362,7 +646,7 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Phone Number</label>
+                <label className="info-label">{t("userInfo.phone")}</label>
                 {isEditing ? (
                   <input
                     type="tel"
@@ -370,11 +654,11 @@ const UserInformation = () => {
                     value={editData.phone}
                     onChange={handleInputChange}
                     className="info-input"
-                    placeholder="Enter your phone number"
+                    placeholder={t("userInfo.phone")}
                   />
                 ) : (
                   <span className="info-value">
-                    {userData?.phone || "Not set"}
+                    {userData?.phone || t("userInfo.notSet")}
                   </span>
                 )}
               </div>
@@ -421,19 +705,19 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Bio</label>
+                <label className="info-label">{t("userInfo.bio")}</label>
                 {isEditing ? (
                   <textarea
                     name="bio"
                     value={editData.bio}
                     onChange={handleInputChange}
                     className="info-textarea"
-                    placeholder="Tell us about yourself"
+                    placeholder={t("userInfo.bioPlaceholder")}
                     rows="3"
                   />
                 ) : (
                   <span className="info-value">
-                    {userData?.bio || "No bio added yet"}
+                    {userData?.bio || t("userInfo.noBio")}
                   </span>
                 )}
               </div>
@@ -442,7 +726,7 @@ const UserInformation = () => {
         </div>
 
         <div className="info-section">
-          <h3 className="section-title">Account Details</h3>
+          <h3 className="section-title">{t("userInfo.accountDetails")}</h3>
           <div className="info-cards">
             <div className="info-card">
               <div className="info-icon status-icon">
@@ -464,8 +748,12 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Account Status</label>
-                <span className="info-value status-active">Active</span>
+                <label className="info-label">
+                  {t("userInfo.accountStatus")}
+                </label>
+                <span className="info-value status-active">
+                  {t("userInfo.active")}
+                </span>
               </div>
             </div>
 
@@ -503,7 +791,9 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Member Since</label>
+                <label className="info-label">
+                  {t("userInfo.memberSince")}
+                </label>
                 <span className="info-value">
                   {formatDate(userData?.joinedAt)}
                 </span>
@@ -530,9 +820,12 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Level</label>
+                <label className="info-label">{t("userInfo.level")}</label>
                 <span className="info-value">
-                  Level {userData?.level || 1} ({userData?.xp || 0} XP)
+                  {t("userInfo.levelValue", {
+                    level: userData?.level || 1,
+                    xp: userData?.xp || 0,
+                  })}
                 </span>
               </div>
             </div>
@@ -550,9 +843,13 @@ const UserInformation = () => {
                 </svg>
               </div>
               <div className="info-content">
-                <label className="info-label">Current Streak</label>
+                <label className="info-label">
+                  {t("userInfo.currentStreak")}
+                </label>
                 <span className="info-value">
-                  {userData?.streakCount || 0} days
+                  {t("userInfo.streakDays", {
+                    days: userData?.streakCount || 0,
+                  })}
                 </span>
               </div>
             </div>

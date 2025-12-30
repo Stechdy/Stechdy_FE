@@ -1,3 +1,15 @@
+/* Fade In Animation */
+@keyframes moodHistoryFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Mood History Container */
 .mood-history-container {
   display: flex;
@@ -11,7 +23,16 @@
   min-height: 100vh;
   background: var(--bg-primary);
   padding-bottom: 80px;
+  animation: moodHistoryFadeIn 0.4s ease-out;
 }
+
+.mood-history-page > * {
+  animation: moodHistoryFadeIn 0.4s ease-out;
+}
+
+.mood-history-page > *:nth-child(1) { animation-delay: 0s; }
+.mood-history-page > *:nth-child(2) { animation-delay: 0.05s; }
+.mood-history-page > *:nth-child(3) { animation-delay: 0.1s; }
 
 .history-header {
   display: flex;

@@ -1,21 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useSocket } from '../../context/SocketContext';
-import notificationService from '../../services/notificationService';
-import './Notifications.css';
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { useSocket } from "../../context/SocketContext";
+import notificationService from "../../services/notificationService";
+import "./Notifications.css";
 
 const Notifications = () => {
+  const { t, i18n } = useTranslation();
   const [notifications, setNotifications] = useState([]);
   const [filteredNotifs, setFilteredNotifs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState('all'); // all, unread, read
-  const [activeType, setActiveType] = useState('all'); // all, mood, study, task, etc.
+  const [activeFilter, setActiveFilter] = useState("all"); // all, unread, read
+  const [activeType, setActiveType] = useState("all"); // all, mood, study, task, etc.
   const [selectedNotifs, setSelectedNotifs] = useState([]);
   const [selectMode, setSelectMode] = useState(false);
 
-  const { 
+  const {
     isConnected,
     notifications: socketNotifications,
-    unreadCount 
+    unreadCount,
   } = useSocket();
 
   useEffect(() => {
@@ -34,15 +36,15 @@ const Notifications = () => {
     let filtered = [...notifications];
 
     // Filter by read status
-    if (activeFilter === 'unread') {
-      filtered = filtered.filter(n => !n.read);
-    } else if (activeFilter === 'read') {
-      filtered = filtered.filter(n => n.read);
+    if (activeFilter === "unread") {
+      filtered = filtered.filter((n) => !n.read);
+    } else if (activeFilter === "read") {
+      filtered = filtered.filter((n) => n.read);
     }
 
     // Filter by type
-    if (activeType !== 'all') {
-      filtered = filtered.filter(n => n.type.includes(activeType));
+    if (activeType !== "all") {
+      filtered = filtered.filter((n) => n.type.includes(activeType));
     }
 
     setFilteredNotifs(filtered);
@@ -56,7 +58,7 @@ const Notifications = () => {
         setNotifications(response.data);
       }
     } catch (error) {
-      console.error('Error loading notifications:', error);
+      console.error("Error loading notifications:", error);
     } finally {
       setLoading(false);
     }
@@ -65,53 +67,53 @@ const Notifications = () => {
   const handleMarkAsRead = async (id) => {
     try {
       await notificationService.markAsRead(id);
-      setNotifications(prev =>
-        prev.map(n => n._id === id ? { ...n, read: true } : n)
+      setNotifications((prev) =>
+        prev.map((n) => (n._id === id ? { ...n, read: true } : n))
       );
     } catch (error) {
-      console.error('Error marking as read:', error);
+      console.error("Error marking as read:", error);
     }
   };
 
   const handleMarkAllAsRead = async () => {
     try {
       await notificationService.markAllAsRead();
-      setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     } catch (error) {
-      console.error('Error marking all as read:', error);
+      console.error("Error marking all as read:", error);
     }
   };
 
   const handleDelete = async (id) => {
     try {
       await notificationService.deleteNotification(id);
-      setNotifications(prev => prev.filter(n => n._id !== id));
-      setSelectedNotifs(prev => prev.filter(nId => nId !== id));
+      setNotifications((prev) => prev.filter((n) => n._id !== id));
+      setSelectedNotifs((prev) => prev.filter((nId) => nId !== id));
     } catch (error) {
-      console.error('Error deleting notification:', error);
+      console.error("Error deleting notification:", error);
     }
   };
 
   const handleDeleteSelected = async () => {
     try {
       await Promise.all(
-        selectedNotifs.map(id => notificationService.deleteNotification(id))
+        selectedNotifs.map((id) => notificationService.deleteNotification(id))
       );
-      setNotifications(prev => 
-        prev.filter(n => !selectedNotifs.includes(n._id))
+      setNotifications((prev) =>
+        prev.filter((n) => !selectedNotifs.includes(n._id))
       );
       setSelectedNotifs([]);
       setSelectMode(false);
     } catch (error) {
-      console.error('Error deleting notifications:', error);
+      console.error("Error deleting notifications:", error);
     }
   };
 
   const handleSelectNotif = (id) => {
     if (selectedNotifs.includes(id)) {
-      setSelectedNotifs(prev => prev.filter(nId => nId !== id));
+      setSelectedNotifs((prev) => prev.filter((nId) => nId !== id));
     } else {
-      setSelectedNotifs(prev => [...prev, id]);
+      setSelectedNotifs((prev) => [...prev, id]);
     }
   };
 
@@ -119,26 +121,26 @@ const Notifications = () => {
     if (selectedNotifs.length === filteredNotifs.length) {
       setSelectedNotifs([]);
     } else {
-      setSelectedNotifs(filteredNotifs.map(n => n._id));
+      setSelectedNotifs(filteredNotifs.map((n) => n._id));
     }
   };
 
   const getNotificationIcon = (type) => {
     const icons = {
-      mood_checkin: '😊',
-      mood_reminder: '💭',
-      study_reminder: '📚',
-      task_reminder: '✅',
-      achievement: '🏆',
-      level_up: '⭐',
-      streak_milestone: '🔥',
-      subscription: '💎',
-      payment: '💳',
-      admin_message: '👨‍💼',
-      announcement: '📢',
-      system: '🔔'
+      mood_checkin: "😊",
+      mood_reminder: "💭",
+      study_reminder: "📚",
+      task_reminder: "✅",
+      achievement: "🏆",
+      level_up: "⭐",
+      streak_milestone: "🔥",
+      subscription: "💎",
+      payment: "💳",
+      admin_message: "👨‍💼",
+      announcement: "📢",
+      system: "🔔",
     };
-    return icons[type] || '🔔';
+    return icons[type] || "🔔";
   };
 
   const formatTime = (date) => {
@@ -146,29 +148,35 @@ const Notifications = () => {
     const notifDate = new Date(date);
     const diffInMinutes = Math.floor((now - notifDate) / 60000);
 
-    if (diffInMinutes < 1) return 'Vừa xong';
-    if (diffInMinutes < 60) return `${diffInMinutes} phút trước`;
-    
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) return `${diffInHours} giờ trước`;
-    
-    const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays < 7) return `${diffInDays} ngày trước`;
+    if (diffInMinutes < 1) return t("notifications.time.justNow");
+    if (diffInMinutes < 60)
+      return `${diffInMinutes} ${t("notifications.time.minutesAgo")}`;
 
-    return notifDate.toLocaleDateString('vi-VN', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24)
+      return `${diffInHours} ${t("notifications.time.hoursAgo")}`;
+
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7)
+      return `${diffInDays} ${t("notifications.time.daysAgo")}`;
+
+    return notifDate.toLocaleDateString(
+      i18n.language === "vi" ? "vi-VN" : "en-US",
+      {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }
+    );
   };
 
   const typeLabels = {
-    all: 'Tất cả',
-    mood: 'Mood Tracking',
-    study: 'Học tập',
-    task: 'Task',
-    achievement: 'Thành tích',
-    system: 'Hệ thống'
+    all: t("notifications.types.all"),
+    mood: t("notifications.types.mood"),
+    study: t("notifications.types.study"),
+    task: t("notifications.types.task"),
+    achievement: t("notifications.types.achievement"),
+    system: t("notifications.types.system"),
   };
 
   return (
@@ -177,17 +185,17 @@ const Notifications = () => {
         {/* Header */}
         <div className="page-header">
           <div className="header-left">
-            <h1>Thông báo</h1>
+            <h1>{t("notifications.title")}</h1>
             <span className="connection-status">
               {isConnected ? (
                 <>
                   <span className="status-dot online"></span>
-                  Đang kết nối
+                  {t("notifications.connected")}
                 </>
               ) : (
                 <>
                   <span className="status-dot offline"></span>
-                  Offline
+                  {t("notifications.offline")}
                 </>
               )}
             </span>
@@ -196,38 +204,38 @@ const Notifications = () => {
           <div className="header-actions">
             {selectMode ? (
               <>
-                <button 
+                <button
                   className="action-btn secondary"
                   onClick={() => {
                     setSelectMode(false);
                     setSelectedNotifs([]);
                   }}
                 >
-                  Hủy
+                  {t("notifications.cancel")}
                 </button>
-                <button 
+                <button
                   className="action-btn danger"
                   onClick={handleDeleteSelected}
                   disabled={selectedNotifs.length === 0}
                 >
-                  Xóa ({selectedNotifs.length})
+                  {t("notifications.delete")} ({selectedNotifs.length})
                 </button>
               </>
             ) : (
               <>
                 {unreadCount > 0 && (
-                  <button 
+                  <button
                     className="action-btn primary"
                     onClick={handleMarkAllAsRead}
                   >
-                    Đánh dấu đã đọc
+                    {t("notifications.markAllRead")}
                   </button>
                 )}
-                <button 
+                <button
                   className="action-btn secondary"
                   onClick={() => setSelectMode(true)}
                 >
-                  Chọn
+                  {t("notifications.selectAll")}
                 </button>
               </>
             )}
@@ -237,29 +245,34 @@ const Notifications = () => {
         {/* Filters */}
         <div className="filters-section">
           <div className="filter-group">
-            <label>Trạng thái:</label>
             <div className="filter-buttons">
-              {['all', 'unread', 'read'].map(filter => (
+              {["all", "unread", "read"].map((filter) => (
                 <button
                   key={filter}
-                  className={`filter-btn ${activeFilter === filter ? 'active' : ''}`}
+                  className={`filter-btn ${
+                    activeFilter === filter ? "active" : ""
+                  }`}
                   onClick={() => setActiveFilter(filter)}
                 >
-                  {filter === 'all' && `Tất cả (${notifications.length})`}
-                  {filter === 'unread' && `Chưa đọc (${unreadCount})`}
-                  {filter === 'read' && `Đã đọc (${notifications.length - unreadCount})`}
+                  {filter === "all" &&
+                    `${t("notifications.all")} (${notifications.length})`}
+                  {filter === "unread" &&
+                    `${t("notifications.unread")} (${unreadCount})`}
+                  {filter === "read" &&
+                    `${t("notifications.read")} (${
+                      notifications.length - unreadCount
+                    })`}
                 </button>
               ))}
             </div>
           </div>
 
           <div className="filter-group">
-            <label>Loại:</label>
             <div className="filter-buttons">
               {Object.entries(typeLabels).map(([key, label]) => (
                 <button
                   key={key}
-                  className={`filter-btn ${activeType === key ? 'active' : ''}`}
+                  className={`filter-btn ${activeType === key ? "active" : ""}`}
                   onClick={() => setActiveType(key)}
                 >
                   {label}
@@ -278,7 +291,7 @@ const Notifications = () => {
                 checked={selectedNotifs.length === filteredNotifs.length}
                 onChange={handleSelectAll}
               />
-              Chọn tất cả ({filteredNotifs.length})
+              {t("notifications.selectAll")} ({filteredNotifs.length})
             </label>
           </div>
         )}
@@ -288,32 +301,23 @@ const Notifications = () => {
           {loading ? (
             <div className="loading-state">
               <div className="spinner"></div>
-              <p>Đang tải thông báo...</p>
+              <p>{t("common.loading")}</p>
             </div>
           ) : filteredNotifs.length === 0 ? (
             <div className="empty-state">
               <span className="empty-icon">
-                {activeFilter === 'unread' ? '✅' : '🔔'}
+                {activeFilter === "unread" ? "✅" : "🔔"}
               </span>
-              <h3>
-                {activeFilter === 'unread' 
-                  ? 'Bạn đã đọc hết thông báo!'
-                  : 'Chưa có thông báo nào'}
-              </h3>
-              <p>
-                {activeFilter === 'unread'
-                  ? 'Tất cả thông báo đã được đọc'
-                  : 'Thông báo mới sẽ xuất hiện ở đây'}
-              </p>
+              <h3>{t("notifications.noNotifications")}</h3>
             </div>
           ) : (
             <div className="notifications-grid">
-              {filteredNotifs.map(notif => (
+              {filteredNotifs.map((notif) => (
                 <div
                   key={notif._id}
-                  className={`notification-card ${!notif.read ? 'unread' : ''} ${
-                    selectedNotifs.includes(notif._id) ? 'selected' : ''
-                  }`}
+                  className={`notification-card ${
+                    !notif.read ? "unread" : ""
+                  } ${selectedNotifs.includes(notif._id) ? "selected" : ""}`}
                   onClick={() => {
                     if (selectMode) {
                       handleSelectNotif(notif._id);
@@ -339,12 +343,21 @@ const Notifications = () => {
                   <div className="card-content">
                     <div className="card-header">
                       <h3>{notif.title}</h3>
-                      {!notif.read && <span className="unread-badge">Mới</span>}
+                      {!notif.read && (
+                        <span className="unread-badge">
+                          {t("notifications.new")}
+                        </span>
+                      )}
                     </div>
                     <p className="card-message">{notif.message}</p>
                     <div className="card-footer">
-                      <span className="card-time">{formatTime(notif.createdAt)}</span>
-                      <span className="card-type">{typeLabels[notif.type.split('_')[0]] || 'Khác'}</span>
+                      <span className="card-time">
+                        {formatTime(notif.createdAt)}
+                      </span>
+                      <span className="card-type">
+                        {typeLabels[notif.type.split("_")[0]] ||
+                          t("notifications.types.other")}
+                      </span>
                     </div>
                   </div>
 

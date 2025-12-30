@@ -1,53 +1,55 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import AuthLayout from '../../components/layout/AuthLayout';
-import AuthInput from '../../components/common/AuthInput';
-import AuthButton from '../../components/common/AuthButton';
-import { resetPassword } from '../../services/authService';
-import './ResetPassword.css';
+import React, { useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import AuthLayout from "../../components/layout/AuthLayout";
+import AuthInput from "../../components/common/AuthInput";
+import AuthButton from "../../components/common/AuthButton";
+import { resetPassword } from "../../services/authService";
+import "./ResetPassword.css";
 
 const ResetPassword = () => {
+  const { t } = useTranslation();
   const { resetToken } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    password: '',
-    confirmPassword: ''
+    password: "",
+    confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [apiError, setApiError] = useState('');
+  const [apiError, setApiError] = useState("");
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
-    setApiError('');
+    setApiError("");
   };
 
   const validateForm = () => {
     const newErrors = {};
 
     if (!formData.password) {
-      newErrors.password = 'Vui lòng nhập mật khẩu';
+      newErrors.password = t("auth.validation.passwordRequired");
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+      newErrors.password = t("auth.validation.passwordMinLength");
     }
 
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Vui lòng xác nhận mật khẩu';
+      newErrors.confirmPassword = t("auth.validation.confirmPasswordRequired");
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Mật khẩu không khớp';
+      newErrors.confirmPassword = t("auth.validation.passwordMismatch");
     }
 
     setErrors(newErrors);
@@ -56,25 +58,25 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
-    setApiError('');
+    setApiError("");
 
     try {
       const response = await resetPassword(resetToken, formData.password);
-      
+
       if (response.success) {
         setSuccess(true);
         setTimeout(() => {
-          navigate('/login');
+          navigate("/login");
         }, 3000);
       }
     } catch (error) {
-      setApiError(error.message || 'Đặt lại mật khẩu thất bại. Vui lòng thử lại.');
+      setApiError(error.message || t("auth.resetPassword.failed"));
     } finally {
       setLoading(false);
     }
@@ -85,12 +87,10 @@ const ResetPassword = () => {
       <AuthLayout>
         <div className="success-message">
           <div className="success-icon">✅</div>
-          <h2>Đặt lại mật khẩu thành công!</h2>
-          <p>
-            Mật khẩu của bạn đã được đặt lại thành công. Bạn sẽ được chuyển đến trang đăng nhập.
-          </p>
-          <AuthButton onClick={() => navigate('/login')}>
-            Đến trang đăng nhập
+          <h2>{t("auth.resetPassword.success")}</h2>
+          <p>{t("auth.resetPassword.successMessage")}</p>
+          <AuthButton onClick={() => navigate("/login")}>
+            {t("auth.resetPassword.goToLogin")}
           </AuthButton>
         </div>
       </AuthLayout>
@@ -100,24 +100,20 @@ const ResetPassword = () => {
   return (
     <AuthLayout>
       <div className="reset-password-header">
-        <h1 className="auth-title">Đặt lại mật khẩu</h1>
+        <h1 className="auth-title">{t("auth.resetPassword.title")}</h1>
         <h2 className="auth-brand">S'techdy</h2>
-        <p className="auth-subtitle">
-          Nhập mật khẩu mới của bạn
-        </p>
+        <p className="auth-subtitle">{t("auth.resetPassword.subtitle")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="reset-password-form">
-        {apiError && (
-          <div className="alert alert-error">
-            {apiError}
-          </div>
-        )}
+        {apiError && <div className="alert alert-error">{apiError}</div>}
 
         <div className="form-group">
-          <label className="form-label">Mật khẩu mới</label>
+          <label className="form-label">
+            {t("auth.resetPassword.newPassword")}
+          </label>
           <AuthInput
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             name="password"
             placeholder="••••••••"
             value={formData.password}
@@ -130,9 +126,11 @@ const ResetPassword = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Xác nhận mật khẩu mới</label>
+          <label className="form-label">
+            {t("auth.resetPassword.confirmNewPassword")}
+          </label>
           <AuthInput
-            type={showConfirmPassword ? 'text' : 'password'}
+            type={showConfirmPassword ? "text" : "password"}
             name="confirmPassword"
             placeholder="••••••••"
             value={formData.confirmPassword}
@@ -140,20 +138,18 @@ const ResetPassword = () => {
             icon="🔒"
             error={errors.confirmPassword}
             showPassword={showConfirmPassword}
-            onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
+            onTogglePassword={() =>
+              setShowConfirmPassword(!showConfirmPassword)
+            }
           />
         </div>
 
-        <AuthButton 
-          type="submit" 
-          loading={loading}
-          disabled={loading}
-        >
-          Đặt lại mật khẩu
+        <AuthButton type="submit" loading={loading} disabled={loading}>
+          {t("auth.resetPassword.submit")}
         </AuthButton>
 
         <div className="back-to-login">
-          <Link to="/login">← Quay lại đăng nhập</Link>
+          <Link to="/login">← {t("auth.resetPassword.backToLogin")}</Link>
         </div>
       </form>
     </AuthLayout>

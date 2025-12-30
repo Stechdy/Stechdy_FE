@@ -185,8 +185,22 @@ const MoonIcon = () => (
   </svg>
 );
 
+const ChevronUpIcon = () => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <polyline points="18 15 12 9 6 15" />
+  </svg>
+);
+
 const Landing = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const { resolvedTheme, setThemeMode } = useTheme();
   const { t } = useTranslation();
 
@@ -206,6 +220,10 @@ const Landing = () => {
     setMobileMenuOpen(false);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   // Close mobile menu when resizing to desktop view
   useEffect(() => {
     const handleResize = () => {
@@ -217,6 +235,20 @@ const Landing = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [mobileMenuOpen]);
+
+  // Show/hide scroll to top button based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const features = [
     {
@@ -320,6 +352,9 @@ const Landing = () => {
           >
             {t("nav.testimonials")}
           </span>
+          <Link to="/pricing" className="landing-nav-link">
+            {t("nav.pricing")}
+          </Link>
         </div>
 
         <div className="landing-nav-actions">
@@ -372,6 +407,13 @@ const Landing = () => {
         >
           {t("nav.testimonials")}
         </span>
+        <Link
+          to="/pricing"
+          className="landing-mobile-menu-link"
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          {t("nav.pricing")}
+        </Link>
         <div className="landing-mobile-menu-settings">
           <LanguageSwitcher />
           <button className="landing-mobile-theme-toggle" onClick={toggleTheme}>
@@ -579,6 +621,9 @@ const Landing = () => {
             >
               {t("nav.testimonials")}
             </span>
+            <Link to="/pricing" className="landing-footer-link">
+              {t("nav.pricing")}
+            </Link>
             <Link to="/login" className="landing-footer-link">
               {t("nav.signIn")}
             </Link>
@@ -587,6 +632,15 @@ const Landing = () => {
           <p className="landing-footer-copyright">{t("footer.copyright")}</p>
         </div>
       </footer>
+
+      {/* Scroll To Top Button */}
+      <button
+        className={`scroll-to-top-btn ${showScrollTop ? "visible" : ""}`}
+        onClick={scrollToTop}
+        aria-label="Scroll to top"
+      >
+        <ChevronUpIcon />
+      </button>
     </div>
   );
 };

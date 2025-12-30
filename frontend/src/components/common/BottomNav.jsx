@@ -1,10 +1,12 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import "./BottomNav.css";
 
 const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const isActive = (path) => {
     // For account, also check if on profile page
@@ -28,7 +30,7 @@ const BottomNav = () => {
             fill="currentColor"
           />
         </svg>
-        <span>Dashboard</span>
+        <span>{t("bottomNav.dashboard")}</span>
       </button>
 
       <button
@@ -41,7 +43,7 @@ const BottomNav = () => {
             fill="currentColor"
           />
         </svg>
-        <span>Calendar</span>
+        <span>{t("bottomNav.calendar")}</span>
       </button>
 
       <button className="nav-item nav-item-ai" onClick={() => navigate("/ai")}>
@@ -53,7 +55,7 @@ const BottomNav = () => {
             />
           </svg>
         </div>
-        <span>AI</span>
+        <span>{t("bottomNav.ai")}</span>
       </button>
 
       <button
@@ -66,7 +68,7 @@ const BottomNav = () => {
             fill="currentColor"
           />
         </svg>
-        <span>Mood</span>
+        <span>{t("bottomNav.mood")}</span>
       </button>
 
       <button
@@ -79,7 +81,7 @@ const BottomNav = () => {
             fill="currentColor"
           />
         </svg>
-        <span>Account</span>
+        <span>{t("bottomNav.account")}</span>
       </button>
     </nav>
   );

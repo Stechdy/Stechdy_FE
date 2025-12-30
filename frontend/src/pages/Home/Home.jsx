@@ -1,11 +1,14 @@
-import React from 'react';
-import './Home.css';
+import React from "react";
+import { useTranslation } from "react-i18next";
+import "./Home.css";
 
 const Home = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="home">
-      <h1>Welcome to S-Techdy</h1>
-      <p>Your modern web application</p>
+      <h1>{t("home.welcome")}</h1>
+      <p>{t("home.subtitle")}</p>
     </div>
   );
 };

@@ -1,21 +1,24 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import BottomNav from '../../components/common/BottomNav';
-import MoodCheckInModal from '../../components/mood/MoodCheckInModal';
-import StudyTimer from '../../components/study/StudyTimer';
-import NotificationBell from '../../components/notification/NotificationBell';
-import moodService from '../../services/moodService';
-import { getVietnamTime, getVietnamDate } from '../../utils/helpers';
-import './Dashboard.css';
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import BottomNav from "../../components/common/BottomNav";
+import MoodCheckInModal from "../../components/mood/MoodCheckInModal";
+import StudyTimer from "../../components/study/StudyTimer";
+import NotificationBell from "../../components/notification/NotificationBell";
+import PremiumBanner from "../../components/common/PremiumBanner";
+import moodService from "../../services/moodService";
+import { getVietnamTime, getVietnamDate } from "../../utils/helpers";
+import "./Dashboard.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [userData, setUserData] = useState(null);
   const [studyProgress, setStudyProgress] = useState({ current: 0, goal: 360 });
   const [streak, setStreak] = useState(12);
   const [upcomingSessions, setUpcomingSessions] = useState([]);
-  const [aiSuggestion, setAiSuggestion] = useState('');
-  const [greeting, setGreeting] = useState('Good morning!');
+  const [aiSuggestion, setAiSuggestion] = useState("");
+  const [greeting, setGreeting] = useState("");
   const [showMoodModal, setShowMoodModal] = useState(false);
   const [activeSession, setActiveSession] = useState(null);
   const [missedSessions, setMissedSessions] = useState([]);
@@ -23,36 +26,39 @@ const Dashboard = () => {
   // Get time-based greeting
   const getGreeting = () => {
     const hour = getVietnamTime().getHours();
-    if (hour < 12) return 'Good morning!';
-    if (hour < 18) return 'Good afternoon!';
-    return 'Good evening!';
+    if (hour < 12) return t("dashboard.goodMorning");
+    if (hour < 18) return t("dashboard.goodAfternoon");
+    return t("dashboard.goodEvening");
   };
 
   // Fetch active session
   const fetchActiveSession = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) return;
 
-      const response = await fetch('http://localhost:3001/api/study-sessions/active', {
-        headers: {
-          'Authorization': `Bearer ${token}`
+      const response = await fetch(
+        "http://localhost:3001/api/study-sessions/active",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
 
       if (response.ok) {
         const data = await response.json();
         setActiveSession(data);
       }
     } catch (error) {
-      console.error('Error fetching active session:', error);
+      console.error("Error fetching active session:", error);
     }
   }, []);
 
   // Fetch missed sessions from today
   const fetchMissedSessions = useCallback(async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) return;
 
       const today = new Date();
@@ -64,8 +70,8 @@ const Dashboard = () => {
         `http://localhost:3001/api/study-sessions?startDate=${today.toISOString()}&endDate=${tomorrow.toISOString()}&status=missed`,
         {
           headers: {
-            'Authorization': `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -74,7 +80,7 @@ const Dashboard = () => {
         setMissedSessions(data);
       }
     } catch (error) {
-      console.error('Error fetching missed sessions:', error);
+      console.error("Error fetching missed sessions:", error);
     }
   }, []);
 
@@ -84,7 +90,11 @@ const Dashboard = () => {
     // Refresh dashboard data
     fetchDashboardData();
     // Show success message or notification
-    alert(`🎉 Chúc mừng! Bạn đã hoàn thành ${data.stats.actualDuration} phút học!`);
+    alert(
+      `🎉 ${t("dashboard.congratulations")} ${data.stats.actualDuration} ${t(
+        "dashboard.minutesStudy"
+      )}`
+    );
   };
 
   useEffect(() => {
@@ -106,12 +116,12 @@ const Dashboard = () => {
 
   // Check if user needs mood check-in
   const checkMoodCheckIn = async () => {
-    const lastSkipped = localStorage.getItem('moodCheckInSkipped');
+    const lastSkipped = localStorage.getItem("moodCheckInSkipped");
     const today = new Date().toDateString();
-    
+
     // Don't show if already skipped today
     if (lastSkipped === today) return;
-    
+
     try {
       const response = await moodService.getTodayMood();
       // Show modal if no mood entry today
@@ -119,49 +129,52 @@ const Dashboard = () => {
         setTimeout(() => setShowMoodModal(true), 2000); // Show after 2 seconds
       }
     } catch (error) {
-      console.error('Error checking mood:', error);
+      console.error("Error checking mood:", error);
     }
   };
 
   // Load cached data immediately for instant display
   const loadCachedData = () => {
-    const storedUser = localStorage.getItem('user');
-    const cachedDashboard = localStorage.getItem('dashboardData');
-    
+    const storedUser = localStorage.getItem("user");
+    const cachedDashboard = localStorage.getItem("dashboardData");
+
     if (storedUser) {
       setUserData(JSON.parse(storedUser));
     }
-    
+
     if (cachedDashboard) {
       const data = JSON.parse(cachedDashboard);
       setStudyProgress(data.studyProgress || { current: 0, goal: 360 });
       setStreak(data.streak || 0);
       setUpcomingSessions(data.upcomingSessions || []);
-      setAiSuggestion(data.aiSuggestion || '');
+      setAiSuggestion(data.aiSuggestion || "");
     }
   };
 
   const fetchDashboardData = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (!token) {
-        navigate('/login');
+        navigate("/login");
         return;
       }
 
       // Fetch user data first
-      const userResponse = await fetch('http://localhost:3001/api/users/profile', {
-        headers: {
-          'Authorization': `Bearer ${token}`
+      const userResponse = await fetch(
+        "http://localhost:3001/api/users/profile",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
 
       let currentUser = null;
       if (userResponse.ok) {
         currentUser = await userResponse.json();
         setUserData(currentUser);
         setStreak(currentUser.streakCount || 0);
-        localStorage.setItem('user', JSON.stringify(currentUser));
+        localStorage.setItem("user", JSON.stringify(currentUser));
       }
 
       // Get today's date range
@@ -174,8 +187,8 @@ const Dashboard = () => {
         `http://localhost:3001/api/study-sessions/today?start=${todayStart.toISOString()}&end=${todayEnd.toISOString()}`,
         {
           headers: {
-            'Authorization': `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -185,10 +198,10 @@ const Dashboard = () => {
 
       if (sessionsResponse.ok) {
         todaySessions = await sessionsResponse.json();
-        
+
         // Calculate completed study time from TODAY's sessions
         completedMinutes = todaySessions
-          .filter(s => s.status === 'completed')
+          .filter((s) => s.status === "completed")
           .reduce((total, session) => {
             const plannedDuration = session.plannedDuration || 90;
             const actualDuration = session.actualDuration || plannedDuration;
@@ -197,101 +210,111 @@ const Dashboard = () => {
           }, 0);
 
         // Calculate goal from all scheduled sessions today
-        goalMinutes = todaySessions.reduce((total, session) => {
-          return total + (session.plannedDuration || 90);
-        }, 0) || 360;
-        
+        goalMinutes =
+          todaySessions.reduce((total, session) => {
+            return total + (session.plannedDuration || 90);
+          }, 0) || 360;
+
         // Cap total completed at total goal to avoid showing more than 100%
         completedMinutes = Math.min(completedMinutes, goalMinutes);
       }
 
       // Fetch upcoming sessions by subject (current semester)
       const upcomingResponse = await fetch(
-        'http://localhost:3001/api/study-sessions/upcoming-by-subject',
+        "http://localhost:3001/api/study-sessions/upcoming-by-subject",
         {
           headers: {
-            'Authorization': `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
       let upcomingSessions = [];
-      
+
       if (upcomingResponse.ok) {
         const upcomingData = await upcomingResponse.json();
-        
+
         // Map to display format with full date and time
         upcomingSessions = upcomingData
           .slice(0, 3) // Show max 3 subjects
-          .map(session => {
+          .map((session) => {
             const sessionDate = new Date(session.date);
-            const dayOfWeek = sessionDate.toLocaleDateString('en-US', { weekday: 'short' });
-            const monthDay = sessionDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const dayOfWeek = sessionDate.toLocaleDateString("en-US", {
+              weekday: "short",
+            });
+            const monthDay = sessionDate.toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+            });
             const year = sessionDate.getFullYear();
-            
+
             return {
               id: session._id,
               subjectId: session.subjectInfo?._id || session.subjectId,
-              subject: session.subjectInfo?.subjectName || 'Study Session',
+              subject:
+                session.subjectInfo?.subjectName || t("dashboard.studySession"),
               time: `${dayOfWeek}, ${monthDay} ${year} • ${session.startTime} - ${session.endTime}`,
-              color: session.subjectInfo?.color || '#8AC0D5'
+              color: session.subjectInfo?.color || "#8AC0D5",
             };
           });
       }
 
       // Generate AI suggestion based on progress
-      let suggestion = 'Consider taking a 15-minute break';
+      let suggestion = t("dashboard.aiSuggestions.takeBreak");
       const progressPercent = (completedMinutes / goalMinutes) * 100;
-      
+
       if (progressPercent >= 80) {
-        suggestion = "Great progress today! You're almost done with your study goals 🎉";
+        suggestion = t("dashboard.aiSuggestions.greatProgress");
       } else if (progressPercent >= 50) {
-        suggestion = "You're halfway through! Keep up the good work 💪";
+        suggestion = t("dashboard.aiSuggestions.halfwayThrough");
       } else if (upcomingSessions.length > 2) {
-        suggestion = "You have multiple sessions today. Stay focused and take breaks! 🧘";
+        suggestion = t("dashboard.aiSuggestions.multipleSessions");
       } else if (completedMinutes >= 120) {
-        suggestion = "You've been studying for 2+ hours. Time for a break! ☕";
+        suggestion = t("dashboard.aiSuggestions.twoHoursBreak");
       }
 
       const dashboardData = {
         studyProgress: { current: completedMinutes, goal: goalMinutes },
         streak: currentUser?.streakCount || 0,
-        upcomingSessions: upcomingSessions.length > 0 ? upcomingSessions : [
-          {
-            id: 'placeholder1',
-            subject: 'No upcoming sessions',
-            time: 'Enjoy your free time!',
-            color: '#8AC0D5'
-          }
-        ],
-        aiSuggestion: suggestion
+        upcomingSessions:
+          upcomingSessions.length > 0
+            ? upcomingSessions
+            : [
+                {
+                  id: "placeholder1",
+                  subject: t("dashboard.noSessions"),
+                  time: t("dashboard.enjoyFreeTime"),
+                  color: "#8AC0D5",
+                },
+              ],
+        aiSuggestion: suggestion,
       };
 
       setStudyProgress(dashboardData.studyProgress);
       setUpcomingSessions(dashboardData.upcomingSessions);
       setAiSuggestion(dashboardData.aiSuggestion);
-      
+
       // Cache dashboard data
-      localStorage.setItem('dashboardData', JSON.stringify(dashboardData));
+      localStorage.setItem("dashboardData", JSON.stringify(dashboardData));
     } catch (error) {
-      console.error('Error fetching dashboard data:', error);
+      console.error("Error fetching dashboard data:", error);
       // Fallback to mock data on error
       const today = new Date();
       const tomorrow = new Date(today);
       tomorrow.setDate(tomorrow.getDate() + 1);
-      
+
       const fallbackData = {
         studyProgress: { current: 0, goal: 360 },
         streak: 12,
         upcomingSessions: [
           {
-            id: 'fallback1',
-            subject: 'Backend Server Not Running',
-            time: 'Please start the server to see your sessions',
-            color: '#FF6B6B'
-          }
+            id: "fallback1",
+            subject: t("dashboard.serverNotRunning"),
+            time: t("dashboard.pleaseStartServer"),
+            color: "#FF6B6B",
+          },
         ],
-        aiSuggestion: 'Unable to connect to server. Please check your backend connection.'
+        aiSuggestion: t("dashboard.unableToConnect"),
       };
       setStudyProgress(fallbackData.studyProgress);
       setUpcomingSessions(fallbackData.upcomingSessions);
@@ -303,183 +326,298 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard-container">
+      {/* Premium Banner */}
+      <PremiumBanner />
+      
       {/* Sidebar Navigation - Desktop Only */}
       <nav className="sidebar-nav">
-        <button className="nav-item" onClick={() => navigate('/dashboard')}>
+        <button className="nav-item" onClick={() => navigate("/dashboard")}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
-          <span>Dashboard</span>
+          <span>{t("sidebarNav.dashboard")}</span>
         </button>
-        <button className="nav-item" onClick={() => navigate('/calendar')}>
+        <button className="nav-item" onClick={() => navigate("/calendar")}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M16 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M8 2V6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M3 10H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M16 2V6"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M8 2V6"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <path
+              d="M3 10H21"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
-          <span>Calendar</span>
+          <span>{t("sidebarNav.calendar")}</span>
         </button>
-        <button className="nav-item nav-item-ai" onClick={() => navigate('/ai')}>
+        <button
+          className="nav-item nav-item-ai"
+          onClick={() => navigate("/ai")}
+        >
           <div className="ai-fab">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
-              <circle cx="12" cy="12" r="10" fill="white"/>
-              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z" fill="#8AC0D5"/>
+              <circle cx="12" cy="12" r="10" fill="white" />
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z"
+                fill="#8AC0D5"
+              />
             </svg>
           </div>
-          <span>AI</span>
+          <span>{t("sidebarNav.ai")}</span>
         </button>
-        <button className="nav-item" onClick={() => navigate('/mood')}>
+        <button className="nav-item" onClick={() => navigate("/mood")}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-            <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            <circle cx="9" cy="9" r="1" fill="currentColor"/>
-            <circle cx="15" cy="9" r="1" fill="currentColor"/>
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+            <path
+              d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <circle cx="9" cy="9" r="1" fill="currentColor" />
+            <circle cx="15" cy="9" r="1" fill="currentColor" />
           </svg>
-          <span>Mood</span>
+          <span>{t("sidebarNav.mood")}</span>
         </button>
-        <button className="nav-item" onClick={() => navigate('/account')}>
+        <button className="nav-item" onClick={() => navigate("/account")}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            <circle
+              cx="12"
+              cy="7"
+              r="4"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
-          <span>Account</span>
+          <span>{t("sidebarNav.account")}</span>
         </button>
       </nav>
 
       {/* Main Wrapper */}
       <div className="dashboard-wrapper">
-      {/* Header */}
-      <header className="dashboard-header">
-        <div className="header-left">
-          <img 
-            src={userData?.avatarUrl || 'https://i.pravatar.cc/150?img=1'} 
-            alt="Profile" 
-            className="profile-avatar"
-          />
-          <div className="header-text">
-            <h1 className="greeting">{greeting}</h1>
-            <p className="username">{userData?.name || 'User'}</p>
+        {/* Header */}
+        <header className="dashboard-header">
+          <div className="header-left">
+            <img
+              src={userData?.avatarUrl || "https://i.pravatar.cc/150?img=1"}
+              alt="Profile"
+              className="profile-avatar"
+            />
+            <div className="header-text">
+              <h1 className="greeting">{greeting}</h1>
+              <p className="username">{userData?.name || t("common.user")}</p>
+            </div>
           </div>
-        </div>
-        <NotificationBell />
-      </header>
+          <NotificationBell />
+        </header>
 
-      {/* Main Content */}
-      <main className="dashboard-main">
-        <div className="dashboard-grid">
-          {/* Left Column */}
-          <div className="dashboard-left-col">
-            {/* Streak Card */}
-            <div className="streak-card gradient-card">
-              <div className="streak-content">
-                <div className="streak-info">
-                  <p className="streak-label">Current Streak</p>
-                  <h2 className="streak-days">{streak} Days</h2>
+        {/* Main Content */}
+        <main className="dashboard-main">
+          <div className="dashboard-grid">
+            {/* Left Column */}
+            <div className="dashboard-left-col">
+              {/* Streak Card */}
+              <div className="streak-card gradient-card">
+                <div className="streak-content">
+                  <div className="streak-info">
+                    <p className="streak-label">
+                      {t("dashboard.currentStreak")}
+                    </p>
+                    <h2 className="streak-days">
+                      {streak} {t("dashboard.days")}
+                    </h2>
+                  </div>
+                  <div className="streak-icon">🔥</div>
                 </div>
-                <div className="streak-icon">🔥</div>
+                <button className="quotes-btn">{t("dashboard.quotes")}</button>
               </div>
-              <button className="quotes-btn">Quotes</button>
+
+              {/* Active Study Timer */}
+              {activeSession && (
+                <StudyTimer
+                  session={activeSession}
+                  onEnd={handleSessionEnd}
+                  onRefresh={fetchActiveSession}
+                />
+              )}
             </div>
 
-            {/* Active Study Timer */}
-            {activeSession && (
-              <StudyTimer 
-                session={activeSession}
-                onEnd={handleSessionEnd}
-                onRefresh={fetchActiveSession}
-              />
-            )}
-          </div>
-
-          {/* Right Column */}
-          <div className="dashboard-right-col">
-            {/* Missed Sessions Alert */}
-            {missedSessions.length > 0 && (
-              <section className="missed-section">
-                <div className="missed-alert">
-                  <div className="missed-icon">⚠️</div>
-                  <div className="missed-content">
-                    <h3 className="missed-title">Missed Session</h3>
-                    <p className="missed-text">
-                      You've marked <strong>{missedSessions[0].subjectId?.subjectName || 'a session'}</strong> as missed.
-                      {missedSessions[0].startTime && missedSessions[0].endTime && (
-                        <span> ({missedSessions[0].startTime} - {missedSessions[0].endTime})</span>
+            {/* Right Column */}
+            <div className="dashboard-right-col">
+              {/* Missed Sessions Alert */}
+              {missedSessions.length > 0 && (
+                <section className="missed-section">
+                  <div className="missed-alert">
+                    <div className="missed-icon">⚠️</div>
+                    <div className="missed-content">
+                      <h3 className="missed-title">
+                        {t("dashboard.missedSession")}
+                      </h3>
+                      <p className="missed-text">
+                        {t("dashboard.missedSessionText")}{" "}
+                        <strong>
+                          {missedSessions[0].subjectId?.subjectName ||
+                            t("dashboard.aSession")}
+                        </strong>{" "}
+                        {t("dashboard.asMissed")}
+                        {missedSessions[0].startTime &&
+                          missedSessions[0].endTime && (
+                            <span>
+                              {" "}
+                              ({missedSessions[0].startTime} -{" "}
+                              {missedSessions[0].endTime})
+                            </span>
+                          )}
+                      </p>
+                      {missedSessions.length > 1 && (
+                        <p className="missed-count">
+                          +{missedSessions.length - 1}{" "}
+                          {t("dashboard.moreMissedToday")}
+                        </p>
                       )}
-                    </p>
-                    {missedSessions.length > 1 && (
-                      <p className="missed-count">+{missedSessions.length - 1} more missed today</p>
-                    )}
+                    </div>
+                  </div>
+                </section>
+              )}
+
+              {/* Today's Progress */}
+              <section className="progress-section">
+                <h2 className="section-title">
+                  {t("dashboard.todaysProgress")}
+                </h2>
+                <div
+                  className="progress-card"
+                  onClick={() => navigate("/study-tracker")}
+                  style={{ cursor: "pointer" }}
+                >
+                  <div className="progress-header">
+                    <span className="progress-label">
+                      {t("dashboard.studyTime")}
+                    </span>
+                    <span className="progress-time">
+                      {Math.floor(studyProgress.current / 60)}h{" "}
+                      {studyProgress.current % 60}m /{" "}
+                      {Math.floor(studyProgress.goal / 60)}h
+                    </span>
+                  </div>
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{ width: `${progressPercentage}%` }}
+                    ></div>
                   </div>
                 </div>
               </section>
-            )}
 
-            {/* Today's Progress */}
-            <section className="progress-section">
-              <h2 className="section-title">Today's Progress</h2>
-              <div className="progress-card" onClick={() => navigate('/study-tracker')} style={{ cursor: 'pointer' }}>
-                <div className="progress-header">
-                  <span className="progress-label">Study Time</span>
-                  <span className="progress-time">
-                    {Math.floor(studyProgress.current / 60)}h {studyProgress.current % 60}m / {Math.floor(studyProgress.goal / 60)}h
-                  </span>
-                </div>
-                <div className="progress-bar">
-                  <div 
-                    className="progress-fill" 
-                    style={{ width: `${progressPercentage}%` }}
-                  ></div>
-                </div>
-              </div>
-            </section>
-
-            {/* Upcoming Sessions */}
-            <section className="dashboard-sessions">
-              <h2 className="section-title">Upcoming Sessions</h2>
-              <div className="dashboard-dashboard-sessions-list">
-                {upcomingSessions.map(session => (
-                  <div 
-                    key={session.id} 
-                    className="dashboard-session-card"
-                    onClick={() => session.subjectId && navigate(`/subject/${session.subjectId}`)}
-                    style={{ cursor: session.subjectId ? 'pointer' : 'default' }}
-                  >
-                    <div className="dashboard-session-left">
-                      <div 
-                        className="dashboard-session-indicator" 
-                        style={{ backgroundColor: session.color }}
-                      ></div>
-                      <div className="dashboard-session-info">
-                        <h3 className="dashboard-session-subject">{session.subject}</h3>
-                        <p className="dashboard-session-time">{session.time}</p>
+              {/* Upcoming Sessions */}
+              <section className="dashboard-sessions">
+                <h2 className="section-title">
+                  {t("dashboard.upcomingSessions")}
+                </h2>
+                <div className="dashboard-dashboard-sessions-list">
+                  {upcomingSessions.map((session) => (
+                    <div
+                      key={session.id}
+                      className="dashboard-session-card"
+                      onClick={() =>
+                        session.subjectId &&
+                        navigate(`/subject/${session.subjectId}`)
+                      }
+                      style={{
+                        cursor: session.subjectId ? "pointer" : "default",
+                      }}
+                    >
+                      <div className="dashboard-session-left">
+                        <div
+                          className="dashboard-session-indicator"
+                          style={{ backgroundColor: session.color }}
+                        ></div>
+                        <div className="dashboard-session-info">
+                          <h3 className="dashboard-session-subject">
+                            {session.subject}
+                          </h3>
+                          <p className="dashboard-session-time">
+                            {session.time}
+                          </p>
+                        </div>
                       </div>
+                      <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M9 18L15 12L9 6"
+                          stroke="#9CA3AF"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
                     </div>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                      <path d="M9 18L15 12L9 6" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  ))}
+                </div>
+              </section>
+            </div>
           </div>
-        </div>
 
-        {/* AI Suggestion - Full Width */}
-        <section className="ai-section ai-section-full">
-          <h2 className="section-title">AI Suggestion</h2>
-          <div className="ai-card gradient-card">
-            <div className="ai-icon">🤖</div>
-            <p className="ai-text">{aiSuggestion}</p>
-          </div>
-        </section>
-      </main>
+          {/* AI Suggestion - Full Width */}
+          <section className="ai-section ai-section-full">
+            <h2 className="section-title">{t("dashboard.aiSuggestion")}</h2>
+            <div className="ai-card gradient-card">
+              <div className="ai-icon">🤖</div>
+              <p className="ai-text">{aiSuggestion}</p>
+            </div>
+          </section>
+        </main>
 
-      {/* Mood Check-in Modal */}
-      <MoodCheckInModal 
-        isOpen={showMoodModal} 
-        onClose={() => setShowMoodModal(false)} 
-      />
+        {/* Mood Check-in Modal */}
+        <MoodCheckInModal
+          isOpen={showMoodModal}
+          onClose={() => setShowMoodModal(false)}
+        />
       </div>
 
       {/* Bottom Navigation */}

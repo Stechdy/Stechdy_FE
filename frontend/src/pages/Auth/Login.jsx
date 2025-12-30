@@ -1,54 +1,58 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import AuthLayout from '../../components/layout/AuthLayout';
-import AuthInput from '../../components/common/AuthInput';
-import AuthButton from '../../components/common/AuthButton';
-import { login, googleLogin } from '../../services/authService';
-import './Login.css';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { useTranslation } from "react-i18next";
+import AuthLayout from "../../components/layout/AuthLayout";
+import AuthInput from "../../components/common/AuthInput";
+import AuthButton from "../../components/common/AuthButton";
+import { login, googleLogin } from "../../services/authService";
+import "./Login.css";
 
-const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID || '944831618827-2qgcaei2lpcko6ucl9lj9m21llvkj7nn.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID =
+  process.env.REACT_APP_GOOGLE_CLIENT_ID ||
+  "944831618827-2qgcaei2lpcko6ucl9lj9m21llvkj7nn.apps.googleusercontent.com";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [apiError, setApiError] = useState('');
+  const [apiError, setApiError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     // Clear error when user types
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: ''
+        [name]: "",
       }));
     }
-    setApiError('');
+    setApiError("");
   };
 
   const validateForm = () => {
     const newErrors = {};
 
     if (!formData.email) {
-      newErrors.email = 'Vui lòng nhập email';
+      newErrors.email = t("auth.validation.emailRequired");
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email không hợp lệ';
+      newErrors.email = t("auth.validation.emailInvalid");
     }
 
     if (!formData.password) {
-      newErrors.password = 'Vui lòng nhập mật khẩu';
+      newErrors.password = t("auth.validation.passwordRequired");
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+      newErrors.password = t("auth.validation.passwordMinLength");
     }
 
     setErrors(newErrors);
@@ -57,31 +61,31 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setLoading(true);
-    setApiError('');
+    setApiError("");
 
     try {
       const response = await login(formData.email, formData.password);
-      
+
       if (response.success) {
         // Store token and user data
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data));
-        
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data));
+
         // Redirect based on role
-        if (response.data.role === 'admin') {
-          navigate('/admin/dashboard');
+        if (response.data.role === "admin") {
+          navigate("/admin/dashboard");
         } else {
-          navigate('/dashboard');
+          navigate("/dashboard");
         }
       }
     } catch (error) {
-      setApiError(error.message || 'Đăng nhập thất bại. Vui lòng thử lại.');
+      setApiError(error.message || t("auth.login.loginFailed"));
     } finally {
       setLoading(false);
     }
@@ -90,45 +94,41 @@ const Login = () => {
   const handleGoogleLogin = async (credentialResponse) => {
     try {
       setLoading(true);
-      setApiError('');
-      
+      setApiError("");
+
       const response = await googleLogin(credentialResponse.credential);
-      
+
       if (response.success) {
         // Store token and user data
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data));
-        
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data));
+
         // Redirect based on role
-        if (response.data.role === 'admin') {
-          navigate('/admin/dashboard');
+        if (response.data.role === "admin") {
+          navigate("/admin/dashboard");
         } else {
-          navigate('/dashboard');
+          navigate("/dashboard");
         }
       }
     } catch (error) {
-      setApiError(error.message || 'Đăng nhập Google thất bại. Vui lòng thử lại.');
+      setApiError(error.message || t("auth.login.googleLoginFailed"));
     } finally {
       setLoading(false);
     }
   };
 
   const handleGoogleError = () => {
-    setApiError('Đăng nhập Google thất bại. Vui lòng thử lại.');
+    setApiError(t("auth.login.googleLoginFailed"));
   };
 
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <AuthLayout>
         <form onSubmit={handleSubmit} className="login-form">
-          {apiError && (
-            <div className="alert alert-error">
-              {apiError}
-            </div>
-          )}
+          {apiError && <div className="alert alert-error">{apiError}</div>}
 
           <div className="form-group">
-            <label className="form-label">Email</label>
+            <label className="form-label">{t("auth.login.email")}</label>
             <AuthInput
               type="email"
               name="email"
@@ -141,9 +141,9 @@ const Login = () => {
           </div>
 
           <div className="form-group">
-            <label className="form-label">Mật khẩu</label>
+            <label className="form-label">{t("auth.login.password")}</label>
             <AuthInput
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="••••••••"
               value={formData.password}
@@ -156,19 +156,15 @@ const Login = () => {
           </div>
 
           <div className="forgot-password-link">
-            <Link to="/forgot-password">Quên mật khẩu?</Link>
+            <Link to="/forgot-password">{t("auth.login.forgotPassword")}</Link>
           </div>
 
-          <AuthButton 
-            type="submit" 
-            loading={loading}
-            disabled={loading}
-          >
-            Đăng nhập
+          <AuthButton type="submit" loading={loading} disabled={loading}>
+            {t("auth.login.submit")}
           </AuthButton>
 
           <div className="divider">
-            <span>hoặc tiếp tục với</span>
+            <span>{t("auth.login.orContinueWith")}</span>
           </div>
 
           <div className="google-login-wrapper">
@@ -179,14 +175,14 @@ const Login = () => {
               size="large"
               text="continue_with"
               shape="rectangular"
-              locale="vi"
+              locale={i18n.language}
               width="100%"
             />
           </div>
 
           <div className="signup-link">
-            Chưa có tài khoản?{' '}
-            <Link to="/register">Đăng ký ngay</Link>
+            {t("auth.login.noAccount")}{" "}
+            <Link to="/register">{t("auth.login.signUpNow")}</Link>
           </div>
         </form>
       </AuthLayout>

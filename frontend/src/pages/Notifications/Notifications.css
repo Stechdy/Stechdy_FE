@@ -1,9 +1,31 @@
+/* Fade In Animation */
+@keyframes notificationsFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Notifications Page */
 .notifications-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #F8F9FA 0%, #E9ECEF 100%);
   padding: 24px;
+  animation: notificationsFadeIn 0.4s ease-out;
 }
+
+.notifications-page > * {
+  animation: notificationsFadeIn 0.4s ease-out;
+}
+
+.notifications-page > *:nth-child(1) { animation-delay: 0s; }
+.notifications-page > *:nth-child(2) { animation-delay: 0.05s; }
+.notifications-page > *:nth-child(3) { animation-delay: 0.1s; }
+.notifications-page > *:nth-child(4) { animation-delay: 0.15s; }
 
 .page-container {
   max-width: 1200px;
