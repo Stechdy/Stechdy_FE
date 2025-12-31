@@ -1,12 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import moodService from "../../services/moodService";
 import "./BottomNav.css";
 
 const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
+  const [hasTodayMood, setHasTodayMood] = useState(false);
+
+  useEffect(() => {
+    checkTodayMood();
+  }, []);
+
+  const checkTodayMood = async () => {
+    try {
+      const response = await moodService.getTodayMood();
+      setHasTodayMood(response.success && response.data);
+    } catch (error) {
+      console.error("Error checking today mood:", error);
+      setHasTodayMood(false);
+    }
+  };
+
+  const handleMoodClick = () => {
+    if (hasTodayMood) {
+      navigate("/mood/history");
+    } else {
+      navigate("/mood");
+    }
+  };
 
   const isActive = (path) => {
     // For account, also check if on profile page
@@ -15,11 +39,19 @@ const BottomNav = () => {
         location.pathname === "/account" || location.pathname === "/profile"
       );
     }
+    // For mood, also check if on mood/history page
+    if (path === "/mood") {
+      return (
+        location.pathname === "/mood" || location.pathname === "/mood/history"
+      );
+    }
     return location.pathname === path;
   };
 
+  const isDashboard = location.pathname === "/dashboard";
+
   return (
-    <nav className="bottom-nav">
+    <nav className={`bottom-nav ${isDashboard ? "show-all" : ""}`}>
       <button
         className={`nav-item ${isActive("/dashboard") ? "active" : ""}`}
         onClick={() => navigate("/dashboard")}
@@ -60,7 +92,7 @@ const BottomNav = () => {
 
       <button
         className={`nav-item ${isActive("/mood") ? "active" : ""}`}
-        onClick={() => navigate("/mood")}
+        onClick={handleMoodClick}
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path

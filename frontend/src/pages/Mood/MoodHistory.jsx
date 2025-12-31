@@ -17,7 +17,19 @@ const MoodHistory = () => {
   );
 
   useEffect(() => {
+    console.log('MoodHistory component mounted or route changed');
     loadStats();
+  }, []);
+
+  // Reload stats when returning to this page
+  useEffect(() => {
+    const handleFocus = () => {
+      console.log('Window focused, reloading stats');
+      loadStats();
+    };
+    
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, []);
 
   // Update language when it changes
@@ -63,9 +75,14 @@ const MoodHistory = () => {
 
   const loadStats = async () => {
     try {
+      console.log('Loading mood stats...');
       const response = await moodService.getMoodStats(30);
+      console.log('Mood stats response:', response);
       if (response.success) {
+        console.log('Stats data:', response.data);
         setStats(response.data);
+      } else {
+        console.warn('Stats request not successful:', response);
       }
     } catch (error) {
       console.error("Error loading stats:", error);

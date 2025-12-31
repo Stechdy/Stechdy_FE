@@ -75,6 +75,9 @@ const Login = () => {
       if (response.success) {
         // Store token and user data
         localStorage.setItem("token", response.data.token);
+        if (response.data.refreshToken) {
+          localStorage.setItem("refreshToken", response.data.refreshToken);
+        }
         localStorage.setItem("user", JSON.stringify(response.data));
 
         // Redirect based on role
@@ -101,6 +104,9 @@ const Login = () => {
       if (response.success) {
         // Store token and user data
         localStorage.setItem("token", response.data.token);
+        if (response.data.refreshToken) {
+          localStorage.setItem("refreshToken", response.data.refreshToken);
+        }
         localStorage.setItem("user", JSON.stringify(response.data));
 
         // Redirect based on role

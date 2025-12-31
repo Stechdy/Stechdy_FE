@@ -81,13 +81,20 @@ const MoodCalendar = () => {
       const startOfMonth = new Date(
         currentMonth.getFullYear(),
         currentMonth.getMonth(),
-        1
+        1,
+        0, 0, 0, 0
       );
       const endOfMonth = new Date(
         currentMonth.getFullYear(),
         currentMonth.getMonth() + 1,
-        0
+        0,
+        23, 59, 59, 999
       );
+
+      console.log('MoodCalendar - loadMonthMoods');
+      console.log('MoodCalendar - currentMonth:', currentMonth);
+      console.log('MoodCalendar - startOfMonth:', startOfMonth.toISOString());
+      console.log('MoodCalendar - endOfMonth:', endOfMonth.toISOString());
 
       const response = await moodService.getMoodEntries({
         startDate: startOfMonth.toISOString(),
@@ -95,8 +102,13 @@ const MoodCalendar = () => {
         limit: 100,
       });
 
+      console.log('Calendar mood entries response:', response);
       if (response.success) {
+        console.log('Calendar moods data count:', response.data?.length);
+        console.log('Calendar moods data:', response.data);
         setMoods(response.data);
+      } else {
+        console.warn('Calendar response not successful:', response);
       }
     } catch (error) {
       console.error("Error loading moods:", error);
@@ -130,8 +142,6 @@ const MoodCalendar = () => {
 
   const getMoodForDate = (day) => {
     if (!day) return null;
-<<<<<<< HEAD
-    
     return moods.find(mood => {
       // Parse mood date from backend and extract just the date part
       const moodDate = new Date(mood.date);
@@ -145,23 +155,6 @@ const MoodCalendar = () => {
       return year === currentMonth.getFullYear() &&
              month === currentMonth.getMonth() + 1 && // month is 1-indexed in date string
              dayOfMonth === day;
-=======
-
-    return moods.find((mood) => {
-      // Parse mood date from backend (which is stored in Vietnam timezone)
-      const moodDate = new Date(mood.date);
-
-      // Get date components in UTC+7 (Vietnam timezone)
-      const vietnamOffset = 7 * 60; // minutes
-      const localTime = new Date(moodDate.getTime());
-
-      // Compare with target date
-      return (
-        localTime.getFullYear() === currentMonth.getFullYear() &&
-        localTime.getMonth() === currentMonth.getMonth() &&
-        localTime.getDate() === day
-      );
->>>>>>> dev
     });
   };
 

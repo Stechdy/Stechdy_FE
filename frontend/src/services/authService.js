@@ -122,9 +122,67 @@ export const getMe = async () => {
 };
 
 // Logout
-export const logout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
+export const logout = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    
+    if (token) {
+      // Call logout endpoint to clear refresh token on server
+      await fetch(`${API_URL}/auth/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+    }
+  } catch (error) {
+    console.error('Logout error:', error);
+  } finally {
+    // Always clear local storage
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+  }
+};
+
+// Refresh Access Token
+export const refreshAccessToken = async () => {
+  try {
+    const refreshToken = localStorage.getItem('refreshToken');
+    
+    if (!refreshToken) {
+      throw new Error('No refresh token found');
+    }
+
+    const response = await fetch(`${API_URL}/auth/refresh-token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Failed to refresh token');
+    }
+
+    // Update tokens in localStorage
+    if (data.data.token) {
+      localStorage.setItem('token', data.data.token);
+    }
+    if (data.data.refreshToken) {
+      localStorage.setItem('refreshToken', data.data.refreshToken);
+    }
+
+    return data;
+  } catch (error) {
+    // If refresh fails, logout user
+    logout();
+    throw error;
+  }
 };
 
 // Change Password
@@ -198,7 +256,7 @@ export const refreshUserData = async () => {
     const token = localStorage.getItem('token');
     if (!token) return null;
 
-    const response = await fetch(`${API_URL}/users/me`, {
+    const response = await fetch(`${API_URL}/auth/me`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

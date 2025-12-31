@@ -372,23 +372,11 @@
   .notification-dropdown {
     width: calc(100vw - 32px);
     right: -16px;
+    left: auto;
     max-height: 80vh;
-    border-radius: 12px 12px 0 0;
-    position: fixed;
-    top: auto;
-    bottom: 0;
-    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(100%);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    border-radius: 12px;
+    position: absolute;
+    animation: slideDown 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dropdown-header {
@@ -419,5 +407,13 @@
 
   .notif-content p {
     font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) and (min-width: 481px) {
+  .notification-dropdown {
+    width: calc(100vw - 64px);
+    right: 8px;
+    max-height: 70vh;
   }
 }

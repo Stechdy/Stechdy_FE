@@ -94,6 +94,9 @@ const Register = () => {
       if (response.success) {
         // Store token and user data
         localStorage.setItem("token", response.data.token);
+        if (response.data.refreshToken) {
+          localStorage.setItem("refreshToken", response.data.refreshToken);
+        }
         localStorage.setItem("user", JSON.stringify(response.data));
 
         // Redirect to dashboard
@@ -116,6 +119,9 @@ const Register = () => {
       if (response.success) {
         // Store token and user data
         localStorage.setItem("token", response.data.token);
+        if (response.data.refreshToken) {
+          localStorage.setItem("refreshToken", response.data.refreshToken);
+        }
         localStorage.setItem("user", JSON.stringify(response.data));
 
         // Redirect to dashboard

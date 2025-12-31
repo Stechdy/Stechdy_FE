@@ -1,12 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import moodService from "../../services/moodService";
 import "./SidebarNav.css";
 
 const SidebarNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
+  const [hasTodayMood, setHasTodayMood] = useState(false);
+
+  useEffect(() => {
+    checkTodayMood();
+  }, []);
+
+  const checkTodayMood = async () => {
+    try {
+      const response = await moodService.getTodayMood();
+      setHasTodayMood(response.success && response.data);
+    } catch (error) {
+      console.error("Error checking today mood:", error);
+      setHasTodayMood(false);
+    }
+  };
+
+  const handleMoodClick = () => {
+    if (hasTodayMood) {
+      navigate("/mood/history");
+    } else {
+      navigate("/mood");
+    }
+  };
+
+  const isActive = (path) => {
+    console.log(`SidebarNav - checking path: ${path}, current location: ${location.pathname}`);
+    
+    // Check for exact match
+    if (location.pathname === path) {
+      console.log(`SidebarNav - isActive: ${path} matches ${location.pathname}`);
+      return true;
+    }
+    
+    // Check for mood paths
+    if (path === "/mood" && (location.pathname === "/mood" || location.pathname === "/mood/history")) {
+      console.log(`SidebarNav - isActive: ${path} matches mood path ${location.pathname}`);
+      return true;
+    }
+    
+    // Check for account/profile paths
+    if (path === "/account" && (location.pathname === "/account" || location.pathname === "/profile")) {
+      console.log(`SidebarNav - isActive: ${path} matches account path ${location.pathname}`);
+      return true;
+    }
+    
+    console.log(`SidebarNav - ${path} is NOT active`);
+    return false;
+  };
 
   const navItems = [
     {
@@ -131,9 +180,9 @@ const SidebarNav = () => {
         <button
           key={item.path}
           className={`nav-item ${item.isAI ? "nav-item-ai" : ""} ${
-            location.pathname === item.path ? "active" : ""
+            isActive(item.path) ? "active" : ""
           }`}
-          onClick={() => navigate(item.path)}
+          onClick={() => item.path === "/mood" ? handleMoodClick() : navigate(item.path)}
         >
           {item.icon}
           <span>{t(item.labelKey)}</span>
