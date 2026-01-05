@@ -175,7 +175,6 @@
 
 /* Week Calendar Container */
 .week-calendar-container {
-  background: var(--bg-card);
   border-radius: 20px;
   padding: 20px;
   margin-bottom: 20px;
@@ -195,17 +194,6 @@
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 8px;
-  background: var(--bg-card);
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: var(--shadow-card);
-  transition: background-color var(--transition-normal);
 }
 
 .calendar-day-name {
@@ -307,7 +295,6 @@
 
 /* Sessions Section */
 .sessions-section {
-  background: var(--bg-card);
   border-radius: 20px;
   padding: 24px;
   box-shadow: var(--shadow-card);
