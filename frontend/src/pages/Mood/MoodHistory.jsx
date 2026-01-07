@@ -100,14 +100,13 @@ const MoodHistory = () => {
   };
 
   return (
-    <div className="mood-history-container">
+    <div className="mood-history-page">
       <SidebarNav />
-      <div className="mood-history-page">
-        <header className="history-header">
-          <h1 className="history-title">{t("mood.history")}</h1>
-        </header>
+      <div className="mood-history-wrapper">
+        <div className="mood-history-content">
+          {/* Page Title */}
+          <h1 className="mood-history-page-title">{t("mood.history")}</h1>
 
-        <div className="history-content">
           {/* Loading State */}
           {loading && (
             <div className="loading-section">
@@ -116,40 +115,48 @@ const MoodHistory = () => {
             </div>
           )}
 
-          {/* Stats Cards */}
+          {/* Stats Cards Section */}
           {!loading && stats && stats.totalEntries > 0 && (
-            <div className="stats-section">
-              <div className="stat-card">
-                <div className="stat-icon">{getMoodEmoji(stats.avgMood)}</div>
-                <div className="stat-info">
-                  <span className="stat-label">
-                    {t("moodHistory.averageMood")}
-                  </span>
-                  <span className="stat-value">
-                    {stats.avgMood.toFixed(1)}/5
-                  </span>
+            <div className="mood-stats-card">
+              <div className="stats-grid">
+                <div className="stat-item">
+                  <div className="stat-icon-wrapper icon-bg-pink">
+                    <span className="stat-emoji">{getMoodEmoji(stats.avgMood)}</span>
+                  </div>
+                  <div className="stat-info">
+                    <span className="stat-label">
+                      {t("moodHistory.averageMood")}
+                    </span>
+                    <span className="stat-value">
+                      {stats.avgMood.toFixed(1)}/5
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="stat-card">
-                <div className="stat-icon">⚡</div>
-                <div className="stat-info">
-                  <span className="stat-label">
-                    {t("moodHistory.averageEnergy")}
-                  </span>
-                  <span className="stat-value">
-                    {stats.avgEnergy.toFixed(1)}/10
-                  </span>
+                <div className="stat-item">
+                  <div className="stat-icon-wrapper icon-bg-yellow">
+                    <span className="stat-emoji">⚡</span>
+                  </div>
+                  <div className="stat-info">
+                    <span className="stat-label">
+                      {t("moodHistory.averageEnergy")}
+                    </span>
+                    <span className="stat-value">
+                      {stats.avgEnergy.toFixed(1)}/10
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="stat-card">
-                <div className="stat-icon">📊</div>
-                <div className="stat-info">
-                  <span className="stat-label">
-                    {t("moodHistory.totalEntries")}
-                  </span>
-                  <span className="stat-value">{stats.totalEntries}</span>
+                <div className="stat-item">
+                  <div className="stat-icon-wrapper icon-bg-blue">
+                    <span className="stat-emoji">📊</span>
+                  </div>
+                  <div className="stat-info">
+                    <span className="stat-label">
+                      {t("moodHistory.totalEntries")}
+                    </span>
+                    <span className="stat-value">{stats.totalEntries}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -157,7 +164,7 @@ const MoodHistory = () => {
 
           {/* Empty State */}
           {!loading && stats && stats.totalEntries === 0 && (
-            <div className="empty-state">
+            <div className="empty-state-card">
               <div className="empty-icon">📊</div>
               <h3>{t("moodHistory.noDataYet")}</h3>
               <p>{t("moodHistory.startTracking")}</p>
@@ -167,16 +174,16 @@ const MoodHistory = () => {
             </div>
           )}
 
-          {/* Calendar */}
-          <div className="calendar-section">
-            <h2 className="section-title">{t("moodHistory.moodCalendar")}</h2>
+          {/* Calendar Section */}
+          <div className="calendar-card">
+            <h2 className="card-section-title">{t("moodHistory.moodCalendar")}</h2>
             <MoodCalendar />
           </div>
 
-          {/* Top Emotions */}
+          {/* Top Emotions Section */}
           {!loading && stats && stats.topEmotions.length > 0 && (
-            <div className="emotions-section">
-              <h2 className="section-title">
+            <div className="emotions-card">
+              <h2 className="card-section-title">
                 {t("moodHistory.commonEmotions")}
               </h2>
               <div className="emotion-list">

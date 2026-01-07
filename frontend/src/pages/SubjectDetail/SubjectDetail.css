@@ -111,82 +111,144 @@
 /* Main Content */
 .subject-main {
   padding: 20px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* Progress Card */
 .subject-progress-card {
-  background: var(--bg-card);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: var(--shadow-card);
-  transition: background-color var(--transition-normal);
+  background: linear-gradient(135deg, rgba(138, 192, 213, 0.08) 0%, rgba(212, 181, 216, 0.08) 100%);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 8px 24px rgba(138, 192, 213, 0.12);
+  border: 1px solid rgba(138, 192, 213, 0.15);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.subject-progress-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(138, 192, 213, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.subject-progress-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(138, 192, 213, 0.2);
 }
 
 .subject-progress-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .subject-progress-info h3 {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--text-primary);
   margin: 0;
   transition: color var(--transition-normal);
+  letter-spacing: -0.02em;
 }
 
 .progress-percent {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--text-primary);
-  transition: color var(--transition-normal);
+  font-size: 48px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #8AC0D5 0%, #D4B5D8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: all var(--transition-normal);
+  letter-spacing: -0.03em;
+  position: relative;
 }
 
-.subject-progress-card .subject-progress-bar {
-  height: 12px;
-  background: var(--bg-secondary);
-  border-radius: 6px;
+.progress-bar {
+  height: 16px;
+  background: rgba(138, 192, 213, 0.12);
+  border-radius: 12px;
   overflow: hidden;
   transition: background-color var(--transition-normal);
+  position: relative;
+  z-index: 1;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.subject-progress-card .subject-progress-fill {
+.progress-fill {
   height: 100%;
-  border-radius: 6px;
-  transition: width 0.5s ease;
+  border-radius: 12px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  box-shadow: 0 2px 8px rgba(138, 192, 213, 0.3);
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+  border-radius: 12px 12px 0 0;
 }
 
 .progress-hours {
-  margin-top: 12px;
+  margin-top: 16px;
   text-align: center;
+  position: relative;
+  z-index: 1;
 }
 
 .hours-text {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   color: var(--text-secondary);
   transition: color var(--transition-normal);
+  letter-spacing: 0.01em;
 }
 
 /* Section Title */
 .subject-section-title {
-  font-size: 18px;
-  font-weight: 700;
+  font-size: 22px;
+  font-weight: 800;
   color: var(--text-primary);
-  margin: 0 0 16px 0;
+  margin: 0 0 20px 0;
   transition: color var(--transition-normal);
+  letter-spacing: -0.02em;
+  position: relative;
+  display: inline-block;
+}
+
+.subject-section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 40px;
+  height: 4px;
+  background: linear-gradient(90deg, #8AC0D5 0%, #D4B5D8 100%);
+  border-radius: 2px;
 }
 
 .section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 
 .section-header .subject-section-title {
@@ -194,17 +256,22 @@
 }
 
 .view-all-btn {
-  background: none;
-  border: none;
+  background: linear-gradient(135deg, rgba(138, 192, 213, 0.1) 0%, rgba(212, 181, 216, 0.1) 100%);
+  border: 1px solid rgba(138, 192, 213, 0.2);
   color: #8AC0D5;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
+  padding: 8px 16px;
+  border-radius: 12px;
+  letter-spacing: 0.02em;
 }
 
 .view-all-btn:hover {
-  opacity: 0.8;
+  background: linear-gradient(135deg, rgba(138, 192, 213, 0.15) 0%, rgba(212, 181, 216, 0.15) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(138, 192, 213, 0.2);
 }
 
 /* Weekly Schedule Section */
@@ -213,76 +280,122 @@
 }
 
 .schedule-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
 
 .schedule-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px;
+  gap: 20px;
+  padding: 20px;
   background: var(--bg-card);
-  border-radius: 12px;
+  border-radius: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(138, 192, 213, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.schedule-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8AC0D5 0%, #D4B5D8 100%);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.schedule-item:hover::before {
+  transform: scaleX(1);
 }
 
 .schedule-item:hover {
-  transform: translateX(4px);
-  box-shadow: var(--shadow-card);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(138, 192, 213, 0.15);
+  border-color: rgba(138, 192, 213, 0.3);
 }
 
 .schedule-day {
-  width: 52px;
-  height: 52px;
-  border-radius: 12px;
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.schedule-day::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
 }
 
 .schedule-day .day-name {
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 1;
 }
 
 .schedule-info {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .schedule-time {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   color: var(--text-primary);
+  letter-spacing: -0.01em;
 }
 
 .schedule-duration {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
+  font-weight: 600;
+  background: linear-gradient(135deg, rgba(138, 192, 213, 0.08) 0%, rgba(212, 181, 216, 0.08) 100%);
+  padding: 4px 12px;
+  border-radius: 8px;
+  display: inline-block;
+  width: fit-content;
 }
 
 .schedule-status {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: rgba(138, 192, 213, 0.08);
+  letter-spacing: 0.01em;
 }
 
 .subject-no-sessions,
 .subject-no-deadlines {
-  padding: 24px;
+  padding: 32px;
   text-align: center;
   color: var(--text-tertiary);
-  background: var(--bg-secondary);
-  border-radius: 12px;
-  font-size: 14px;
+  background: linear-gradient(135deg, rgba(138, 192, 213, 0.05) 0%, rgba(212, 181, 216, 0.05) 100%);
+  border-radius: 16px;
+  font-size: 15px;
   transition: all var(--transition-normal);
+  border: 2px dashed rgba(138, 192, 213, 0.2);
+  font-weight: 600;
 }
 
 /* Deadlines Section */
@@ -291,90 +404,149 @@
 }
 
 .deadlines-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .deadline-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px;
+  gap: 20px;
+  padding: 20px;
   background: var(--bg-card);
-  border-radius: 12px;
-  box-shadow: var(--shadow-sm);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(138, 192, 213, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.deadline-item::after {
+  content: '';
+  position: absolute;
+  right: -100px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(138, 192, 213, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+  transition: right 0.4s ease;
+}
+
+.deadline-item:hover::after {
+  right: -50px;
+}
+
+.deadline-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(138, 192, 213, 0.15);
+  border-color: rgba(138, 192, 213, 0.3);
 }
 
 .deadline-indicator {
-  width: 4px;
-  height: 48px;
-  border-radius: 2px;
+  width: 5px;
+  height: 56px;
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
 }
 
 .deadline-info {
   flex: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .deadline-title {
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
   color: var(--text-primary);
-  margin: 0 0 6px 0;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
 }
 
 .deadline-due {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text-secondary);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  font-weight: 600;
 }
 
 .due-icon {
-  font-size: 14px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
 }
 
 .deadline-priority {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 12px;
+  position: relative;
+  z-index: 1;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /* Add Deadline Button */
 .add-deadline-btn {
   width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, #8AC0D5 0%, #7BB3C9 100%);
+  padding: 18px;
+  background: linear-gradient(135deg, #8AC0D5 0%, #D4B5D8 50%, #F0C5D5 100%);
   color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
+  border-radius: 16px;
+  font-size: 17px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(138, 192, 213, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 6px 20px rgba(138, 192, 213, 0.35);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.02em;
+}
+
+.add-deadline-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.add-deadline-btn:hover::before {
+  opacity: 1;
 }
 
 .add-deadline-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(138, 192, 213, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(138, 192, 213, 0.5);
 }
 
 .add-deadline-btn:active {
-  transform: translateY(0);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(138, 192, 213, 0.4);
 }
 
 /* Modal */
-.subject-modal-overlay {
+.modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -384,155 +556,285 @@
 }
 
 @keyframes subjectFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { 
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to { 
+    opacity: 1;
+    backdrop-filter: blur(8px);
+  }
 }
 
-.subject-modal-content {
+.modal-content {
   background: var(--bg-card);
-  border-radius: 20px;
+  border-radius: 24px;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
-  animation: subjectSlideUp 0.3s ease;
+  animation: subjectSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(138, 192, 213, 0.2);
 }
 
 @keyframes subjectSlideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(40px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
-.subject-subject-modal-header {
+.modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  border-bottom: 1px solid var(--border-primary);
+  padding: 24px;
+  border-bottom: 1px solid rgba(138, 192, 213, 0.15);
 }
 
-.subject-modal-header h3 {
-  font-size: 18px;
-  font-weight: 700;
+.modal-header h3 {
+  font-size: 22px;
+  font-weight: 800;
   color: var(--text-primary);
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
-.subject-subject-modal-close {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+.modal-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   border: none;
-  background: var(--bg-secondary);
+  background: linear-gradient(135deg, rgba(138, 192, 213, 0.1) 0%, rgba(212, 181, 216, 0.1) 100%);
   color: var(--text-secondary);
-  font-size: 20px;
+  font-size: 24px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
+  line-height: 1;
 }
 
-.subject-modal-close:hover {
-  background: var(--bg-hover);
+.modal-close:hover {
+  background: linear-gradient(135deg, rgba(138, 192, 213, 0.2) 0%, rgba(212, 181, 216, 0.2) 100%);
   color: var(--text-primary);
+  transform: rotate(90deg);
 }
 
-.subject-subject-modal-body {
-  padding: 20px;
+.modal-body {
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
-.subject-form-group {
+.form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
-.subject-form-group label {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.subject-form-group input,
-.subject-form-group select {
-  padding: 14px 16px;
-  border: 2px solid var(--border-primary);
-  border-radius: 12px;
+.form-group label {
   font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+.form-group input,
+.form-group select {
+  padding: 16px 18px;
+  border: 2px solid rgba(138, 192, 213, 0.2);
+  border-radius: 14px;
+  font-size: 16px;
   color: var(--text-primary);
   background: var(--bg-input);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
 }
 
-.subject-form-group input:focus,
-.subject-form-group select:focus {
+.form-group input:focus,
+.form-group select:focus {
   outline: none;
   border-color: #8AC0D5;
-  box-shadow: 0 0 0 3px rgba(138, 192, 213, 0.2);
+  box-shadow: 0 0 0 4px rgba(138, 192, 213, 0.15);
+  transform: translateY(-2px);
 }
 
-.subject-form-group input::placeholder {
+.form-group input::placeholder {
   color: var(--text-tertiary);
 }
 
-.subject-subject-modal-footer {
+.modal-footer {
   display: flex;
-  gap: 12px;
-  padding: 20px;
-  border-top: 1px solid var(--border-primary);
+  gap: 16px;
+  padding: 24px;
+  border-top: 1px solid rgba(138, 192, 213, 0.15);
 }
 
-.subject-cancel-btn {
+.cancel-btn {
   flex: 1;
-  padding: 14px;
-  background: var(--bg-secondary);
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(138, 192, 213, 0.1) 0%, rgba(212, 181, 216, 0.1) 100%);
   color: var(--text-secondary);
-  border: none;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
+  border: 1px solid rgba(138, 192, 213, 0.2);
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.3s ease;
+  letter-spacing: 0.01em;
 }
 
-.subject-cancel-btn:hover {
-  background: var(--bg-hover);
+.cancel-btn:hover {
+  background: linear-gradient(135deg, rgba(138, 192, 213, 0.15) 0%, rgba(212, 181, 216, 0.15) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.subject-submit-btn {
+.submit-btn {
   flex: 1;
-  padding: 14px;
-  background: linear-gradient(135deg, #8AC0D5 0%, #7BB3C9 100%);
+  padding: 16px;
+  background: linear-gradient(135deg, #8AC0D5 0%, #D4B5D8 50%, #F0C5D5 100%);
   color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 600;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.01em;
+  box-shadow: 0 6px 20px rgba(138, 192, 213, 0.35);
+  position: relative;
+  overflow: hidden;
 }
 
-.subject-submit-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(138, 192, 213, 0.4);
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.subject-submit-btn:disabled {
+.submit-btn:hover:not(:disabled)::before {
+  opacity: 1;
+}
+
+.submit-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(138, 192, 213, 0.5);
+}
+
+.submit-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Responsive */
+@media (min-width: 1024px) {
+  .subject-main {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    padding: 32px;
+  }
+
+  .subject-progress-card {
+    grid-column: 1 / -1;
+    padding: 40px;
+  }
+
+  .subject-progress-info h3 {
+    font-size: 24px;
+  }
+
+  .progress-percent {
+    font-size: 56px;
+  }
+
+  .progress-bar {
+    height: 20px;
+  }
+
+  .hours-text {
+    font-size: 18px;
+  }
+
+  .subject-section-title {
+    font-size: 24px;
+  }
+
+  .schedule-list,
+  .deadlines-list {
+    gap: 20px;
+  }
+
+  .schedule-item,
+  .deadline-item {
+    padding: 24px;
+  }
+
+  .schedule-day {
+    width: 72px;
+    height: 72px;
+  }
+
+  .schedule-day .day-name {
+    font-size: 15px;
+  }
+
+  .schedule-time {
+    font-size: 17px;
+  }
+
+  .schedule-duration {
+    font-size: 15px;
+  }
+
+  .schedule-status {
+    font-size: 16px;
+  }
+
+  .deadline-title {
+    font-size: 18px;
+  }
+
+  .deadline-due {
+    font-size: 15px;
+  }
+
+  .deadline-priority {
+    font-size: 14px;
+    padding: 10px 18px;
+  }
+
+  .add-deadline-btn {
+    padding: 20px;
+    font-size: 18px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .subject-main {
+    max-width: 1600px;
+    gap: 40px;
+    padding: 40px;
+  }
+
+  .subject-progress-card {
+    padding: 48px;
+  }
+}
+
 @media (max-width: 768px) {
   .subject-main {
     padding: 16px;

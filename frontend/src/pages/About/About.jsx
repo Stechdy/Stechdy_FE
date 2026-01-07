@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import BottomNav from "../../components/common/BottomNav";
+import SidebarNav from "../../components/common/SidebarNav";
 import "./About.css";
 
 const About = () => {
@@ -90,8 +92,12 @@ const About = () => {
 
   return (
     <div className="about-page">
-      {/* Back Button */}
-      <button className="about-back-btn" onClick={() => navigate("/account")}>
+      <SidebarNav />
+      <div className="about-wrapper">
+        <div className="about-content">
+          {/* Page Title */}
+          <div className="about-header-section">
+            <button className="about-back-btn" onClick={() => navigate("/account")}>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path
             d="M15 18L9 12L15 6"
@@ -101,11 +107,12 @@ const About = () => {
             strokeLinejoin="round"
           />
         </svg>
-      </button>
+            </button>
+            <h1 className="about-page-title">About Us</h1>
+          </div>
 
-      <div className="about-content">
-        {/* Header with App Icon */}
-        <div className="about-header">
+          {/* Header with App Icon */}
+          <div className="about-app-header">
           <div className="about-app-icon">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
               <path
@@ -131,10 +138,8 @@ const About = () => {
           <p className="about-subtitle">{t("about.title")}</p>
         </div>
 
-        <div className="about-divider"></div>
-
         {/* Mission Section */}
-        <div className="about-section mission-section">
+        <div className="about-card mission-card">
           <div className="section-header">
             <div className="section-icon mission-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -160,10 +165,8 @@ const About = () => {
           <p className="mission-text">{t("about.missionText")}</p>
         </div>
 
-        <div className="about-divider"></div>
-
         {/* Team Section */}
-        <div className="about-section team-section">
+        <div className="about-card team-card">
           <div className="section-header">
             <div className="section-icon team-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -216,10 +219,8 @@ const About = () => {
           </div>
         </div>
 
-        <div className="about-divider"></div>
-
         {/* Connect Section */}
-        <div className="about-section connect-section">
+        <div className="about-card connect-card">
           <div className="section-header">
             <div className="section-icon connect-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -251,6 +252,9 @@ const About = () => {
             ))}
           </div>
         </div>
+      </div>
+
+      <BottomNav />
       </div>
     </div>
   );

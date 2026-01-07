@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import BottomNav from "../../components/common/BottomNav";
+import SidebarNav from "../../components/common/SidebarNav";
 import "./HelpSupport.css";
 
 const HelpSupport = () => {
@@ -50,9 +52,12 @@ const HelpSupport = () => {
 
   return (
     <div className="help-page">
-      {/* Header */}
-      <div className="help-header">
-        <button className="help-back-btn" onClick={() => navigate("/account")}>
+      <SidebarNav />
+      <div className="help-wrapper">
+        <div className="help-content">
+          {/* Page Title */}
+          <div className="help-header-section">
+            <button className="help-back-btn" onClick={() => navigate("/account")}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path
               d="M19 12H5M5 12L12 19M5 12L12 5"
@@ -62,42 +67,42 @@ const HelpSupport = () => {
               strokeLinejoin="round"
             />
           </svg>
-        </button>
-        <h1 className="help-title">{t("helpSupport.title")}</h1>
-        <div className="help-header-spacer"></div>
-      </div>
+            </button>
+            <h1 className="help-page-title">{t("helpSupport.title")}</h1>
+          </div>
 
-      <div className="help-content">
-        {/* Search Bar */}
-        <div className="help-search">
-          <svg
-            className="search-icon"
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path
-              d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <input
-            type="text"
-            placeholder={t("helpSupport.searchPlaceholder")}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="search-input"
-          />
-        </div>
+          {/* Search Bar */}
+          <div className="help-search-card">
+            <div className="help-search">
+              <svg
+                className="search-icon"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M21 21L16.65 16.65M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <input
+                type="text"
+                placeholder={t("helpSupport.searchPlaceholder")}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input"
+              />
+            </div>
+          </div>
 
-        {/* Common Questions Section */}
-        <div className="help-section">
-          <h2 className="section-title">{t("helpSupport.commonQuestions")}</h2>
-          <div className="faq-list">
+          {/* Common Questions Section */}
+          <div className="help-faq-card">
+            <h2 className="help-section-title">{t("helpSupport.commonQuestions")}</h2>
+            <div className="faq-list">
             {filteredFaqs.map((item) => (
               <div
                 key={item.id}
@@ -131,13 +136,13 @@ const HelpSupport = () => {
                 </div>
               </div>
             ))}
+            </div>
           </div>
-        </div>
 
-        {/* Contact Support Section */}
-        <div className="help-section">
-          <h2 className="section-title">{t("helpSupport.contactSupport")}</h2>
-          <div className="contact-buttons">
+          {/* Contact Support Section */}
+          <div className="help-contact-card">
+            <h2 className="help-section-title">{t("helpSupport.contactSupport")}</h2>
+            <div className="contact-buttons">
             <button className="contact-btn chat-btn" onClick={handleChatWithUs}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path
@@ -169,13 +174,16 @@ const HelpSupport = () => {
               </svg>
               <span>{t("helpSupport.sendEmail")}</span>
             </button>
+            </div>
+          </div>
+
+          {/* Footer Message */}
+          <div className="help-footer-card">
+            <p>{t("helpSupport.footer")}</p>
           </div>
         </div>
 
-        {/* Footer Message */}
-        <div className="help-footer">
-          <p>{t("helpSupport.footer")}</p>
-        </div>
+        <BottomNav />
       </div>
     </div>
   );
