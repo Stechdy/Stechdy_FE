@@ -117,7 +117,7 @@ const SidebarNav = () => {
           <img 
             src={require("../../assets/STECHDY.webp")} 
             alt="S'Techdy AI" 
-            style={{ width: '28px', height: '28px', objectFit: 'contain', borderRadius: '8px' }}
+            style={{ width: '48px', height: '48px', objectFit: 'contain', borderRadius: '18px' }}
           />
         </div>
       ),

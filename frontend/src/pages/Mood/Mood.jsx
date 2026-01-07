@@ -26,13 +26,88 @@ const Mood = () => {
     { value: 5, emoji: "😄", label: t("mood.moods.veryHappy") },
   ];
 
-  // Energy icons based on level
+  // Energy icons based on level with better visuals
   const getEnergyIcon = (level) => {
-    if (level <= 2) return "🔋"; // Very low
-    if (level <= 4) return "🪫"; // Low
-    if (level <= 6) return "🔌"; // Medium
-    if (level <= 8) return "⚡"; // High
-    return "✨"; // Very high
+    if (level <= 2) return (
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="energy-svg">
+        <circle cx="24" cy="24" r="20" fill="url(#lowEnergy)" opacity="0.2"/>
+        <path d="M24 8C15.2 8 8 15.2 8 24C8 32.8 15.2 40 24 40C32.8 40 40 32.8 40 24C40 15.2 32.8 8 24 8ZM24 36C17.4 36 12 30.6 12 24C12 17.4 17.4 12 24 12C30.6 12 36 17.4 36 24C36 30.6 30.6 36 24 36Z" fill="#DC2626"/>
+        <circle cx="24" cy="24" r="6" fill="#DC2626"/>
+        <defs>
+          <linearGradient id="lowEnergy" x1="24" y1="4" x2="24" y2="44">
+            <stop stopColor="#DC2626"/>
+            <stop offset="1" stopColor="#991B1B"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    ); // Very low - Red battery icon
+    
+    if (level <= 4) return (
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="energy-svg">
+        <rect x="10" y="18" width="24" height="16" rx="2" fill="#F59E0B" opacity="0.2"/>
+        <rect x="34" y="22" width="4" height="8" rx="1" fill="#F59E0B"/>
+        <rect x="12" y="20" width="8" height="12" rx="1" fill="#F59E0B"/>
+        <path d="M24 14L20 24H24L22 34L30 22H26L28 14H24Z" fill="#F59E0B" opacity="0.5"/>
+      </svg>
+    ); // Low - Orange battery with small charge
+    
+    if (level <= 6) return (
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="energy-svg">
+        <rect x="10" y="18" width="24" height="16" rx="2" fill="#FBBF24" opacity="0.2"/>
+        <rect x="34" y="22" width="4" height="8" rx="1" fill="#FBBF24"/>
+        <rect x="12" y="20" width="14" height="12" rx="1" fill="#FBBF24"/>
+        <circle cx="24" cy="24" r="3" fill="#FBBF24"/>
+        <circle cx="24" cy="24" r="6" fill="#FBBF24" opacity="0.3"/>
+      </svg>
+    ); // Medium - Yellow battery half full
+    
+    if (level <= 8) return (
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="energy-svg">
+        <rect x="10" y="18" width="24" height="16" rx="2" fill="#10B981" opacity="0.2"/>
+        <rect x="34" y="22" width="4" height="8" rx="1" fill="#10B981"/>
+        <rect x="12" y="20" width="20" height="12" rx="1" fill="url(#highEnergy)"/>
+        <path d="M24 14L20 24H24L22 34L30 22H26L28 14H24Z" fill="#FBBF24" transform="translate(0, 2)"/>
+        <defs>
+          <linearGradient id="highEnergy" x1="12" y1="20" x2="32" y2="32">
+            <stop stopColor="#10B981"/>
+            <stop offset="1" stopColor="#059669"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    ); // High - Green battery almost full with lightning
+    
+    return (
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" className="energy-svg">
+        <circle cx="24" cy="24" r="20" fill="url(#veryHighEnergy)" opacity="0.2"/>
+        <circle cx="24" cy="24" r="16" fill="url(#veryHighGradient)"/>
+        <path d="M24 8L26 18L34 14L28 24L36 26L26 32L28 40L18 34L14 40L18 28L8 26L18 20L14 14L24 8Z" fill="url(#sparkle)"/>
+        <circle cx="24" cy="24" r="8" fill="#FCD34D"/>
+        <circle cx="24" cy="24" r="4" fill="#FBBF24"/>
+        <defs>
+          <linearGradient id="veryHighEnergy" x1="24" y1="4" x2="24" y2="44">
+            <stop stopColor="#FBBF24"/>
+            <stop offset="1" stopColor="#F59E0B"/>
+          </linearGradient>
+          <linearGradient id="veryHighGradient" x1="24" y1="8" x2="24" y2="40">
+            <stop stopColor="#FCD34D"/>
+            <stop offset="1" stopColor="#FBBF24"/>
+          </linearGradient>
+          <linearGradient id="sparkle" x1="24" y1="8" x2="24" y2="40">
+            <stop stopColor="#FEF3C7"/>
+            <stop offset="1" stopColor="#FCD34D"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    ); // Very high - Golden sparkle/star
+  };
+
+  // Get energy description based on level
+  const getEnergyDescription = (level) => {
+    if (level <= 2) return t("mood.energyDescriptions.veryLow") || "Exhausted";
+    if (level <= 4) return t("mood.energyDescriptions.low") || "Tired";
+    if (level <= 6) return t("mood.energyDescriptions.medium") || "Okay";
+    if (level <= 8) return t("mood.energyDescriptions.high") || "Energized";
+    return t("mood.energyDescriptions.veryHigh") || "Supercharged";
   };
 
   useEffect(() => {
@@ -162,8 +237,13 @@ const Mood = () => {
                 />
                 <span className="slider-label">{t("mood.high")}</span>
               </div>
-              <div className={`energy-icon ${iconAnimate ? "animate" : ""}`}>
-                {getEnergyIcon(energyLevel)}
+              <div className="energy-display">
+                <div className={`energy-icon ${iconAnimate ? "animate" : ""}`}>
+                  {getEnergyIcon(energyLevel)}
+                </div>
+                <p className="energy-description">
+                  {getEnergyDescription(energyLevel)}
+                </p>
               </div>
             </div>
           </div>
