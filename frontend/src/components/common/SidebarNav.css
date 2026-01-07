@@ -1,138 +1,260 @@
-/* Sidebar Navigation - Hidden on mobile */
+/* ============================================
+   SIDEBAR NAVIGATION - MOBILE HIDDEN
+   ============================================ */
 .sidebar-nav {
   display: none;
 }
 
-/* Desktop: Show sidebar */
+.sidebar-backdrop {
+  display: none;
+}
+
+/* ============================================
+   DESKTOP SIDEBAR - COLLAPSED BY DEFAULT
+   ============================================ */
 @media (min-width: 1024px) {
+  /* Backdrop overlay */
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(2px);
+    z-index: 998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .sidebar-backdrop.active {
+    display: block;
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* Sidebar container */
   .sidebar-nav {
     display: flex;
-    flex-direction: column;
-    width: 80px;
-    background: transparent;
-    padding: 20px 0;
-    gap: 8px;
-    align-items: center;
-    justify-content: center;
-    position: sticky;
+    position: fixed;
+    left: 16px;
     top: 0;
-    height: 100vh;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
-                background-color var(--transition-normal), 
-                border-color var(--transition-normal);
-    overflow: hidden;
+    bottom: 0;
+    margin: auto 0; /* Perfect vertical centering without transform */
+    height: fit-content;
+    max-height: 90vh;
+    width: 72px; /* Collapsed width */
+    z-index: 999;
+    transition: width 0.3s ease-in-out;
+    overflow: hidden; /* CRITICAL: prevents white gaps at corners */
+    border-radius: 24px; /* Apply to container */
   }
 
-  .sidebar-nav:hover {
-    width: 220px;
+  .sidebar-nav.expanded {
+    width: 220px; /* Expanded width */
   }
 
+  /* Background with glassmorphism - MUST match container dimensions */
   .sidebar-nav::before {
     content: '';
     position: absolute;
-    width: 100%;
-    background: var(--bg-card);
-    border-right: 1px solid var(--border-secondary);
-    border-radius: 0 20px 20px 0;
-    top: 50%;
-    transform: translateY(-50%);
-    height: auto;
-    min-height: 500px;
-    max-height: 500px;
+    inset: 0; /* Fills entire parent */
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border-primary);
+    box-shadow: var(--shadow-lg);
     z-index: -1;
-    transition: background-color var(--transition-normal), border-color var(--transition-normal);
+    transition: all var(--transition-normal);
   }
 
+  /* Dark mode support */
+  [data-theme="dark"] .sidebar-nav::before {
+    background: rgba(45, 45, 45, 0.95);
+    border: 1px solid var(--border-secondary);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  /* Inner content wrapper */
+  .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    padding: 12px;
+    width: 100%;
+    overflow: visible;
+  }
+
+  /* ============================================
+     NAV ITEMS - COLLAPSED STATE
+     ============================================ */
   .sidebar-nav .nav-item {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: flex-start; /* Align items to start */
     gap: 12px;
     background: transparent;
     border: none;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 12px;
+    transition: all 0.25s ease-in-out;
+    position: relative;
+    width: 100%;
+    height: 48px; /* Fixed height instead of min-height */
+    overflow: hidden;
+  }
+
+  /* Icon container */
+  .nav-item-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    /* Ensure perfect centering */
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-item-icon svg {
+    width: 30px;
+    height: 30px;
     color: var(--text-tertiary);
+    transition: all 0.25s ease-in-out;
+  }
+
+  /* Label - hidden when collapsed */
+  .nav-item-label {
     font-size: 14px;
     font-weight: 500;
-    cursor: pointer;
-    padding: 12px 16px;
-    border-radius: 12px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    width: 64px;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* Show only active item by default */
-  .sidebar-nav .nav-item.active {
-    max-height: 100px;
-    opacity: 1;
-    pointer-events: all;
-    color: var(--primary-blue);
-    background: var(--bg-hover);
-  }
-
-  .sidebar-nav .nav-item.active svg {
-    color: var(--primary-blue);
-  }
-
-  /* Show all items on hover */
-  .sidebar-nav:hover .nav-item {
-    max-height: 100px;
-    opacity: 1;
-    pointer-events: all;
-    width: 180px;
-  }
-
-  .sidebar-nav .nav-item span {
+    color: var(--text-secondary);
     white-space: nowrap;
     opacity: 0;
     transform: translateX(-10px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease-in-out;
+    pointer-events: none;
   }
 
-  .sidebar-nav:hover .nav-item span {
+  /* Show label when expanded */
+  .sidebar-nav.expanded .nav-item-label {
     opacity: 1;
     transform: translateX(0);
+    pointer-events: all;
   }
 
+  /* ============================================
+     HOVER STATE
+     ============================================ */
   .sidebar-nav .nav-item:hover {
     background: var(--bg-hover);
+  }
+
+  .sidebar-nav .nav-item:hover .nav-item-icon svg {
+    color: var(--primary-blue);
+    transform: scale(1.1);
+  }
+
+  .sidebar-nav.expanded .nav-item:hover .nav-item-label {
     color: var(--primary-blue);
   }
 
-  .sidebar-nav .nav-item:hover svg {
-    color: var(--primary-blue);
-  }
-
-  .sidebar-nav .nav-item svg {
-    color: var(--text-tertiary);
-    transition: color var(--transition-normal);
-    flex-shrink: 0;
-  }
-
-  .sidebar-nav .nav-item-ai {
-    position: relative;
-    margin: 8px 0;
-  }
-
-  .sidebar-nav .ai-fab {
-    width: 48px;
+  /* ============================================
+     ACTIVE STATE (Current Route)
+     ============================================ */
+  .sidebar-nav .nav-item.active {
+    background: linear-gradient(135deg, 
+      rgba(240, 197, 213, 0.15) 0%, 
+      rgba(138, 192, 213, 0.15) 100%);
+    /* Ensure no layout shift */
+    padding: 12px;
     height: 48px;
+  }
+
+  [data-theme="dark"] .sidebar-nav .nav-item.active {
+    background: linear-gradient(135deg, 
+      rgba(240, 197, 213, 0.12) 0%, 
+      rgba(138, 192, 213, 0.12) 100%);
+  }
+
+  .sidebar-nav .nav-item.active .nav-item-icon {
+    /* Prevent any position shift */
+    transform: none;
+  }
+
+  .sidebar-nav .nav-item.active .nav-item-icon svg {
+    color: var(--primary-blue);
+  }
+
+  .sidebar-nav .nav-item.active .nav-item-label {
+    color: var(--primary-blue);
+    font-weight: 600;
+  }
+
+  /* Active indicator dot - visible in collapsed state */
+  .sidebar-nav .nav-item.active::after {
+    content: '';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    background: var(--primary-blue);
     border-radius: 50%;
+    box-shadow: 0 0 8px var(--primary-blue);
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* Hide dot when expanded */
+  .sidebar-nav.expanded .nav-item.active::after {
+    opacity: 0;
+  }
+
+  /* ============================================
+     AI ICON - SPECIAL GRADIENT BACKGROUND
+     ============================================ */
+  .sidebar-nav .ai-fab {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
     background: var(--primary-gradient);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(138, 192, 213, 0.3);
+    box-shadow: var(--shadow-gradient);
     transition: all var(--transition-normal);
-    flex-shrink: 0;
   }
 
-  .sidebar-nav .nav-item-ai:hover .ai-fab {
+  .sidebar-nav .nav-item:hover .ai-fab {
+    box-shadow: 0 4px 16px rgba(138, 192, 213, 0.35);
     transform: scale(1.05);
-    box-shadow: 0 6px 16px rgba(138, 192, 213, 0.4);
+  }
+
+  [data-theme="dark"] .sidebar-nav .nav-item:hover .ai-fab {
+    box-shadow: 0 4px 16px rgba(138, 192, 213, 0.25);
+  }
+
+  .sidebar-nav .ai-fab svg,
+  .sidebar-nav .ai-fab img {
+    width: 28px;
+    height: 28px;
+    color: white !important;
+  }
+
+
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+@media (max-width: 1023px) {
+  .sidebar-nav,
+  .sidebar-backdrop {
+    display: none !important;
   }
 }

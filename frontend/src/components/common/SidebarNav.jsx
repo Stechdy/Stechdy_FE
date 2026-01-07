@@ -9,6 +9,7 @@ const SidebarNav = () => {
   const location = useLocation();
   const { t } = useTranslation();
   const [hasTodayMood, setHasTodayMood] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     checkTodayMood();
@@ -113,17 +114,14 @@ const SidebarNav = () => {
       path: "/ai",
       icon: (
         <div className="ai-fab">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
-            <circle cx="12" cy="12" r="10" fill="white" />
-            <path
-              d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V15H13V17ZM13 13H11V7H13V13Z"
-              fill="#8AC0D5"
-            />
-          </svg>
+          <img 
+            src={require("../../assets/STECHDY.webp")} 
+            alt="S'Techdy AI" 
+            style={{ width: '28px', height: '28px', objectFit: 'contain', borderRadius: '8px' }}
+          />
         </div>
       ),
       labelKey: "sidebarNav.ai",
-      isAI: true,
     },
     {
       path: "/mood",
@@ -175,20 +173,35 @@ const SidebarNav = () => {
   ];
 
   return (
-    <nav className="sidebar-nav">
-      {navItems.map((item) => (
-        <button
-          key={item.path}
-          className={`nav-item ${item.isAI ? "nav-item-ai" : ""} ${
-            isActive(item.path) ? "active" : ""
-          }`}
-          onClick={() => item.path === "/mood" ? handleMoodClick() : navigate(item.path)}
-        >
-          {item.icon}
-          <span>{t(item.labelKey)}</span>
-        </button>
-      ))}
-    </nav>
+    <>
+      {/* Backdrop overlay when expanded */}
+      <div 
+        className={`sidebar-backdrop ${isExpanded ? "active" : ""}`}
+        onClick={() => setIsExpanded(false)}
+      />
+      
+      {/* Sidebar navigation */}
+      <nav 
+        className={`sidebar-nav ${isExpanded ? "expanded" : ""}`}
+        onMouseEnter={() => setIsExpanded(true)}
+        onMouseLeave={() => setIsExpanded(false)}
+      >
+        <div className="sidebar-content">
+          {navItems.map((item) => (
+            <button
+              key={item.path}
+              className={`nav-item ${isActive(item.path) ? "active" : ""}`}
+              onClick={() => item.path === "/mood" ? handleMoodClick() : navigate(item.path)}
+            >
+              <div className="nav-item-icon">
+                {item.icon}
+              </div>
+              <span className="nav-item-label">{t(item.labelKey)}</span>
+            </button>
+          ))}
+        </div>
+      </nav>
+    </>
   );
 };
 
