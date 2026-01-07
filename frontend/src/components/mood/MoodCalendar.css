@@ -1,6 +1,5 @@
 /* Mood Calendar Component */
 .mood-calendar {
-  background: var(--bg-card);
   border-radius: 16px;
   padding: 16px;
   box-shadow: var(--shadow-card);

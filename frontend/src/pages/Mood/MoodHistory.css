@@ -14,46 +14,79 @@
 .mood-history-container {
   display: flex;
   min-height: 100vh;
-  background: var(--bg-primary);
+  background: linear-gradient(
+    180deg,
+    #e8d5f0 0%,
+    #f5e6f0 15%,
+    #f8f0f5 30%,
+    #f5f0f8 50%,
+    #f0e8f5 70%,
+    #f5e0f0 85%,
+    #f8d8e8 100%
+  );
+  transition: background-color var(--transition-normal);
+}
+
+[data-theme="dark"] .mood-history-container {
+  background: linear-gradient(
+    180deg,
+    #1a1625 0%,
+    #1e1a2e 15%,
+    #221e35 30%,
+    #1e1a2e 50%,
+    #1a1625 70%,
+    #1e1a2e 85%,
+    #221e35 100%
+  );
 }
 
 /* Mood History Page */
 .mood-history-page {
   flex: 1;
   min-height: 100vh;
-  background: var(--bg-primary);
+  background: transparent;
   padding-bottom: 80px;
-  animation: moodHistoryFadeIn 0.4s ease-out;
 }
 
-.mood-history-page > * {
-  animation: moodHistoryFadeIn 0.4s ease-out;
+.history-content > * {
+  animation: moodHistoryFadeIn 0.4s ease-out backwards;
 }
 
-.mood-history-page > *:nth-child(1) { animation-delay: 0s; }
-.mood-history-page > *:nth-child(2) { animation-delay: 0.05s; }
-.mood-history-page > *:nth-child(3) { animation-delay: 0.1s; }
+.history-content > *:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.history-content > *:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.history-content > *:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.history-content > *:nth-child(4) {
+  animation-delay: 0.2s;
+}
 
 .history-header {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px 20px;
-  background: var(--bg-card);
-  border-bottom: 1px solid var(--border-primary);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  background: transparent;
+  position: relative;
 }
 
 .history-title {
   font-size: 30px;
   font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+[data-theme="dark"] .history-title {
   background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin: 0;
+  color: transparent;
 }
 
 .history-content {
@@ -88,7 +121,6 @@
 }
 
 .stat-card {
-  background: var(--bg-card);
   border-radius: 16px;
   padding: 12px;
   display: flex;
@@ -147,7 +179,6 @@
 
 /* Emotions Section */
 .emotions-section {
-  background: var(--bg-card);
   border-radius: 16px;
   padding: 16px;
   box-shadow: var(--shadow-card);
