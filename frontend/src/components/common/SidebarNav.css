@@ -13,22 +13,13 @@
    DESKTOP SIDEBAR - COLLAPSED BY DEFAULT
    ============================================ */
 @media (min-width: 1024px) {
-  /* Backdrop overlay */
+  /* Backdrop overlay - Disabled */
   .sidebar-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(2px);
-    z-index: 998;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease-in-out;
+    display: none !important;
   }
 
   .sidebar-backdrop.active {
-    display: block;
-    opacity: 1;
-    pointer-events: all;
+    display: none !important;
   }
 
   /* Sidebar container */
@@ -79,21 +70,27 @@
   .sidebar-content {
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 50px; /* Giảm gap khi collapsed */
     padding: 12px;
     width: 100%;
     overflow: visible;
+    transition: gap 0.5s ease-in-out;
+  }
+
+  /* Tăng gap khi expanded */
+  .sidebar-nav.expanded .sidebar-content {
+    gap: 50px;
   }
 
   /* ============================================
      NAV ITEMS - COLLAPSED STATE
      ============================================ */
   .sidebar-nav .nav-item {
-    display: flex;
+    display: none; /* Ẩn tất cả items khi collapsed */
     flex-direction: row;
     align-items: center;
     justify-content: flex-start; /* Align items to start */
-    gap: 12px;
+    gap: 15px;
     background: transparent;
     border: none;
     cursor: pointer;
@@ -104,6 +101,16 @@
     width: 100%;
     height: 48px; /* Fixed height instead of min-height */
     overflow: hidden;
+  }
+
+  /* Chỉ hiển thị item active khi collapsed */
+  .sidebar-nav .nav-item.active {
+    display: flex;
+  }
+
+  /* Hiển thị tất cả items khi expanded */
+  .sidebar-nav.expanded .nav-item {
+    display: flex;
   }
 
   /* Icon container */
@@ -195,33 +202,13 @@
     font-weight: 600;
   }
 
-  /* Active indicator dot - visible in collapsed state */
-  .sidebar-nav .nav-item.active::after {
-    content: '';
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 6px;
-    height: 6px;
-    background: var(--primary-blue);
-    border-radius: 50%;
-    box-shadow: 0 0 8px var(--primary-blue);
-    transition: opacity 0.3s ease-in-out;
-  }
-
-  /* Hide dot when expanded */
-  .sidebar-nav.expanded .nav-item.active::after {
-    opacity: 0;
-  }
-
   /* ============================================
      AI ICON - SPECIAL GRADIENT BACKGROUND
      ============================================ */
   .sidebar-nav .ai-fab {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
+    width: 48px;
+    height: 48px;
+    border-radius: 18px;
     background: var(--primary-gradient);
     display: flex;
     align-items: center;
@@ -241,8 +228,8 @@
 
   .sidebar-nav .ai-fab svg,
   .sidebar-nav .ai-fab img {
-    width: 28px;
-    height: 28px;
+    width: 48px;
+    height: 50px;
     color: white !important;
   }
 
