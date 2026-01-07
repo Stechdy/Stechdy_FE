@@ -234,7 +234,7 @@ const Account = () => {
           />
         </svg>
       ),
-      onClick: () => navigate("/notifications"),
+      onClick: () => navigate("/notification-settings"),
       iconBg: "icon-bg-orange",
     },
   ];

@@ -38,6 +38,7 @@ import MoodHistory from "./pages/Mood/MoodHistory";
 import StudyTracker from "./pages/StudyTracker/StudyTracker";
 import SubjectDetail from "./pages/SubjectDetail/SubjectDetail";
 import Notifications from "./pages/Notifications/Notifications";
+import NotificationSettings from "./pages/NotificationSettings/NotificationSettings";
 import HelpSupport from "./pages/HelpSupport/HelpSupport";
 import TermsOfUse from "./pages/TermsOfUse/TermsOfUse";
 
@@ -161,6 +162,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Notifications />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/notification-settings"
+            element={
+              <PrivateRoute>
+                <NotificationSettings />
               </PrivateRoute>
             }
           />
