@@ -60,6 +60,12 @@
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     transform-style: preserve-3d;
+    text-decoration: none;
+    outline: none;
+  }
+
+  .sidebar-nav .nav-item:focus {
+    outline: none;
   }
 
   /* Chỉ hiển thị item active khi collapsed */

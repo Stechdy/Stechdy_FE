@@ -13,17 +13,29 @@ const SidebarNav = () => {
   
   // Get the current active index based on route
   const getCurrentIndex = () => {
-    const paths = ["/dashboard", "/calendar", "/ai", "/mood", "/account"];
+    const pathname = location.pathname;
     
-    // Check for exact matches and special cases
-    if (location.pathname === "/mood/history") return 3; // mood index
-    if (location.pathname === "/profile") return 4; // account index
+    // Check for mood routes (including /mood/history)
+    if (pathname === "/mood" || pathname === "/mood/history") return 3;
     
-    for (let i = 0; i < paths.length; i++) {
-      if (location.pathname === paths[i]) return i;
-      // Check for account/profile
-      if (paths[i] === "/account" && location.pathname === "/account") return i;
-    }
+    // Check for account routes (including all sub-pages)
+    if (pathname.startsWith("/account") || 
+        pathname === "/profile" || 
+        pathname === "/notification-settings" ||
+        pathname === "/help" ||
+        pathname === "/about" ||
+        pathname === "/terms" ||
+        pathname === "/user-information") return 4;
+    
+    // Check for dashboard
+    if (pathname === "/dashboard") return 0;
+    
+    // Check for calendar
+    if (pathname === "/calendar") return 1;
+    
+    // Check for AI
+    if (pathname === "/ai") return 2;
+    
     return 0; // Default to dashboard
   };
 
@@ -72,18 +84,28 @@ const SidebarNav = () => {
   };
 
   const isActive = (path) => {
+    const pathname = location.pathname;
+    
     // Check for exact match
-    if (location.pathname === path) {
+    if (pathname === path) {
       return true;
     }
     
     // Check for mood paths
-    if (path === "/mood" && (location.pathname === "/mood" || location.pathname === "/mood/history")) {
+    if (path === "/mood" && (pathname === "/mood" || pathname === "/mood/history")) {
       return true;
     }
     
-    // Check for account/profile paths
-    if (path === "/account" && (location.pathname === "/account" || location.pathname === "/profile")) {
+    // Check for account and all its sub-pages
+    if (path === "/account" && (
+      pathname.startsWith("/account") || 
+      pathname === "/profile" || 
+      pathname === "/notification-settings" ||
+      pathname === "/help" ||
+      pathname === "/about" ||
+      pathname === "/terms" ||
+      pathname === "/user-information"
+    )) {
       return true;
     }
     

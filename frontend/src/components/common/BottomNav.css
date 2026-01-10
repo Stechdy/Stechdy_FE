@@ -33,6 +33,12 @@
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: 68px;
   position: relative;
+  text-decoration: none;
+  outline: none;
+}
+
+.nav-item:focus {
+  outline: none;
 }
 
 .nav-item:active {
@@ -41,30 +47,6 @@
 
 .nav-item.active {
   color: var(--primary-blue);
-}
-
-.nav-item.active::after {
-  content: "";
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 32px;
-  height: 3px;
-  background: var(--primary-gradient);
-  border-radius: 2px 2px 0 0;
-  animation: slideIn 0.3s ease-out;
-}
-
-@keyframes slideIn {
-  from {
-    width: 0;
-    opacity: 0;
-  }
-  to {
-    width: 32px;
-    opacity: 1;
-  }
 }
 
 .nav-item.active svg {
