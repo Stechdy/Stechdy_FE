@@ -397,7 +397,7 @@ const UserInformation = () => {
         <div className="user-info-content">
         {/* Page Title */}
         <div className="user-info-header">
-          <button className="back-button" onClick={() => navigate("/account")}>
+          <button className="back-button" onClick={() => navigate(-1)}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path
                 d="M15 18L9 12L15 6"

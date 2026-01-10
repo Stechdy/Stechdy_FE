@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import { useTranslation } from "react-i18next";
 import moodService from "../../services/moodService";
 import "./MoodCalendar.css";
@@ -267,7 +268,7 @@ const MoodCalendar = () => {
       </div>
 
       {/* Mood Detail Modal */}
-      {selectedMood && (
+      {selectedMood && ReactDOM.createPortal(
         <div className="mood-modal-overlay" onClick={closeModal}>
           <div className="mood-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
@@ -326,7 +327,8 @@ const MoodCalendar = () => {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

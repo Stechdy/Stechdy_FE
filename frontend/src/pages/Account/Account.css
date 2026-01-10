@@ -898,6 +898,7 @@
 
   .account-right-column {
     width: 100%;
+    margin-top: -35px
   }
 
   .account-page-title {
