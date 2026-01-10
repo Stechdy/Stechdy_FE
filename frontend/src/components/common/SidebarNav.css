@@ -62,6 +62,16 @@
     transform-style: preserve-3d;
   }
 
+  /* Chỉ hiển thị item active khi collapsed */
+  .sidebar-nav .nav-item.active {
+    display: flex;
+  }
+
+  /* Hiển thị tất cả items khi expanded */
+  .sidebar-nav.expanded .nav-item {
+    display: flex;
+  }
+
   /* Icon container */
   .nav-item-icon {
     display: flex;
