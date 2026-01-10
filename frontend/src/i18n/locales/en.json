@@ -342,6 +342,13 @@
       "happy": "Happy",
       "veryHappy": "Very Happy"
     },
+    "energyDescriptions": {
+      "veryLow": "Exhausted",
+      "low": "Tired",
+      "medium": "Okay",
+      "high": "Energized",
+      "veryHigh": "Supercharged"
+    },
     "history": "Mood History"
   },
   "calendar": {

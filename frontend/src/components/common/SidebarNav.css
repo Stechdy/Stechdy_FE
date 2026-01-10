@@ -10,100 +10,56 @@
 }
 
 /* ============================================
-   DESKTOP SIDEBAR - COLLAPSED BY DEFAULT
+   DESKTOP SIDEBAR - CURVED CAROUSEL
    ============================================ */
 @media (min-width: 1024px) {
-  /* Backdrop overlay */
   .sidebar-backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(2px);
-    z-index: 998;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease-in-out;
+    display: none !important;
   }
 
-  .sidebar-backdrop.active {
-    display: block;
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  /* Sidebar container */
+  /* Sidebar container - no background */
   .sidebar-nav {
     display: flex;
     position: fixed;
-    left: 16px;
-    top: 0;
-    bottom: 0;
-    margin: auto 0; /* Perfect vertical centering without transform */
-    height: fit-content;
-    max-height: 90vh;
-    width: 72px; /* Collapsed width */
+    left: 60px;
+    top: 50%;
+    transform: translateY(-50%);
     z-index: 999;
-    transition: width 0.3s ease-in-out;
-    overflow: hidden; /* CRITICAL: prevents white gaps at corners */
-    border-radius: 24px; /* Apply to container */
-  }
-
-  .sidebar-nav.expanded {
-    width: 220px; /* Expanded width */
-  }
-
-  /* Background with glassmorphism - MUST match container dimensions */
-  .sidebar-nav::before {
-    content: '';
-    position: absolute;
-    inset: 0; /* Fills entire parent */
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid var(--border-primary);
-    box-shadow: var(--shadow-lg);
-    z-index: -1;
-    transition: all var(--transition-normal);
-  }
-
-  /* Dark mode support */
-  [data-theme="dark"] .sidebar-nav::before {
-    background: rgba(45, 45, 45, 0.95);
-    border: 1px solid var(--border-secondary);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    pointer-events: none;
   }
 
   /* Inner content wrapper */
   .sidebar-content {
     display: flex;
     flex-direction: column;
-    gap: 50px;
-    padding: 12px;
-    width: 100%;
-    overflow: visible;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    pointer-events: auto;
+    position: relative;
+    height: 0; /* Items positioned absolutely relative to center */
   }
 
   /* ============================================
-     NAV ITEMS - COLLAPSED STATE
+     NAV ITEMS - SMOOTH CAROUSEL
      ============================================ */
   .sidebar-nav .nav-item {
+    position: absolute;
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: flex-start; /* Align items to start */
-    gap: 12px;
+    justify-content: center;
     background: transparent;
     border: none;
     cursor: pointer;
-    padding: 12px;
-    border-radius: 12px;
-    transition: all 0.25s ease-in-out;
-    position: relative;
-    width: 100%;
-    height: 48px; /* Fixed height instead of min-height */
-    overflow: hidden;
+    padding: 0;
+    width: 48px;
+    height: 48px;
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), 
+                opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
   }
 
   /* Icon container */
@@ -111,142 +67,106 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     flex-shrink: 0;
-    position: relative;
-    z-index: 2;
-    /* Ensure perfect centering */
-    margin: 0;
-    padding: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
   .nav-item-icon svg {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     color: var(--text-tertiary);
-    transition: all 0.25s ease-in-out;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  /* Label - hidden when collapsed */
+  /* Label - Tooltip style */
   .nav-item-label {
-    font-size: 14px;
+    position: absolute;
+    left: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
     font-weight: 500;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     white-space: nowrap;
+    background: var(--bg-primary);
+    padding: 8px 14px;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
     opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.3s ease-in-out;
+    visibility: hidden;
     pointer-events: none;
+    transition: all 0.2s ease;
   }
 
-  /* Show label when expanded */
-  .sidebar-nav.expanded .nav-item-label {
+  [data-theme="dark"] .nav-item-label {
+    background: var(--bg-secondary);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Tooltip arrow */
+  .nav-item-label::before {
+    content: '';
+    position: absolute;
+    left: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-right-color: var(--bg-primary);
+  }
+
+  [data-theme="dark"] .nav-item-label::before {
+    border-right-color: var(--bg-secondary);
+  }
+
+  /* Show tooltip on hover */
+  .nav-item:hover .nav-item-label {
     opacity: 1;
-    transform: translateX(0);
-    pointer-events: all;
+    visibility: visible;
+    left: 56px;
   }
 
   /* ============================================
      HOVER STATE
      ============================================ */
-  .sidebar-nav .nav-item:hover {
-    background: var(--bg-hover);
-  }
-
-  .sidebar-nav .nav-item:hover .nav-item-icon svg {
-    color: var(--primary-blue);
-    transform: scale(1.1);
-  }
-
-  .sidebar-nav.expanded .nav-item:hover .nav-item-label {
+  .nav-item:hover .nav-item-icon svg {
     color: var(--primary-blue);
   }
 
   /* ============================================
-     ACTIVE STATE (Current Route)
+     ACTIVE STATE (Current Route / Center)
      ============================================ */
-  .sidebar-nav .nav-item.active {
-    background: linear-gradient(135deg, 
-      rgba(240, 197, 213, 0.15) 0%, 
-      rgba(138, 192, 213, 0.15) 100%);
-    /* Ensure no layout shift */
-    padding: 12px;
-    height: 48px;
-  }
-
-  [data-theme="dark"] .sidebar-nav .nav-item.active {
-    background: linear-gradient(135deg, 
-      rgba(240, 197, 213, 0.12) 0%, 
-      rgba(138, 192, 213, 0.12) 100%);
-  }
-
-  .sidebar-nav .nav-item.active .nav-item-icon {
-    /* Prevent any position shift */
-    transform: none;
-  }
-
-  .sidebar-nav .nav-item.active .nav-item-icon svg {
+  .nav-item.active .nav-item-icon svg {
     color: var(--primary-blue);
-  }
-
-  .sidebar-nav .nav-item.active .nav-item-label {
-    color: var(--primary-blue);
-    font-weight: 600;
-  }
-
-  /* Active indicator dot - visible in collapsed state */
-  .sidebar-nav .nav-item.active::after {
-    content: '';
-    position: absolute;
-    right: 8px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 6px;
-    height: 6px;
-    background: var(--primary-blue);
-    border-radius: 50%;
-    box-shadow: 0 0 8px var(--primary-blue);
-    transition: opacity 0.3s ease-in-out;
-  }
-
-  /* Hide dot when expanded */
-  .sidebar-nav.expanded .nav-item.active::after {
-    opacity: 0;
   }
 
   /* ============================================
-     AI ICON - SPECIAL GRADIENT BACKGROUND
+     AI ICON - SPECIAL STYLE
      ============================================ */
   .sidebar-nav .ai-fab {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     background: var(--primary-gradient);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow-gradient);
-    transition: all var(--transition-normal);
+    box-shadow: 0 2px 12px rgba(138, 192, 213, 0.3);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .sidebar-nav .nav-item:hover .ai-fab {
-    box-shadow: 0 4px 16px rgba(138, 192, 213, 0.35);
-    transform: scale(1.05);
-  }
-
-  [data-theme="dark"] .sidebar-nav .nav-item:hover .ai-fab {
-    box-shadow: 0 4px 16px rgba(138, 192, 213, 0.25);
+  .nav-item:hover .ai-fab {
+    box-shadow: 0 4px 20px rgba(138, 192, 213, 0.5);
   }
 
   .sidebar-nav .ai-fab svg,
   .sidebar-nav .ai-fab img {
-    width: 28px;
-    height: 28px;
+    width: 40px;
+    height: 40px;
     color: white !important;
+    border-radius: 50%;
   }
-
-
 }
 
 /* ============================================

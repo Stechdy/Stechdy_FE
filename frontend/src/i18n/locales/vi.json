@@ -342,6 +342,13 @@
       "happy": "Vui",
       "veryHappy": "Rất vui"
     },
+    "energyDescriptions": {
+      "veryLow": "Kiệt sức",
+      "low": "Mệt mỏi",
+      "medium": "Ổn định",
+      "high": "Tràn đầy năng lượng",
+      "veryHigh": "Siêu tích cực"
+    },
     "history": "Lịch sử tâm trạng"
   },
   "calendar": {
