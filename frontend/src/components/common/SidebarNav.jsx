@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import moodService from "../../services/moodService";
@@ -9,11 +9,35 @@ const SidebarNav = () => {
   const location = useLocation();
   const { t } = useTranslation();
   const [hasTodayMood, setHasTodayMood] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const itemRefs = useRef([]);
+  
+  // Get the current active index based on route
+  const getCurrentIndex = () => {
+    const paths = ["/dashboard", "/calendar", "/ai", "/mood", "/account"];
+    
+    // Check for exact matches and special cases
+    if (location.pathname === "/mood/history") return 3; // mood index
+    if (location.pathname === "/profile") return 4; // account index
+    
+    for (let i = 0; i < paths.length; i++) {
+      if (location.pathname === paths[i]) return i;
+      // Check for account/profile
+      if (paths[i] === "/account" && location.pathname === "/account") return i;
+    }
+    return 0; // Default to dashboard
+  };
+
+  const [activeIndex, setActiveIndex] = useState(getCurrentIndex());
 
   useEffect(() => {
     checkTodayMood();
   }, []);
+
+  // Update activeIndex when route changes
+  useEffect(() => {
+    const newIndex = getCurrentIndex();
+    setActiveIndex(newIndex);
+  }, [location.pathname]);
 
   const checkTodayMood = async () => {
     try {
@@ -33,29 +57,58 @@ const SidebarNav = () => {
     }
   };
 
+  const handleNavClick = (item, index) => {
+    // Set active index immediately for smooth animation
+    setActiveIndex(index);
+
+    // Navigate after animation starts
+    setTimeout(() => {
+      if (item.path === "/mood") {
+        handleMoodClick();
+      } else {
+        navigate(item.path);
+      }
+    }, 150);
+  };
+
   const isActive = (path) => {
-    console.log(`SidebarNav - checking path: ${path}, current location: ${location.pathname}`);
-    
     // Check for exact match
     if (location.pathname === path) {
-      console.log(`SidebarNav - isActive: ${path} matches ${location.pathname}`);
       return true;
     }
     
     // Check for mood paths
     if (path === "/mood" && (location.pathname === "/mood" || location.pathname === "/mood/history")) {
-      console.log(`SidebarNav - isActive: ${path} matches mood path ${location.pathname}`);
       return true;
     }
     
     // Check for account/profile paths
     if (path === "/account" && (location.pathname === "/account" || location.pathname === "/profile")) {
-      console.log(`SidebarNav - isActive: ${path} matches account path ${location.pathname}`);
       return true;
     }
     
-    console.log(`SidebarNav - ${path} is NOT active`);
     return false;
+  };
+
+  // Calculate position for each item based on distance from active
+  const getItemStyle = (index) => {
+    const distance = index - activeIndex;
+    const verticalSpacing = 55; // Vertical space between items
+    
+    // Calculate vertical position only (no curve)
+    const yOffset = distance * verticalSpacing;
+    
+    // Scale based on distance (center is bigger)
+    const scale = distance === 0 ? 1.15 : Math.max(0.75, 1 - Math.abs(distance) * 0.12);
+    
+    // Opacity based on distance
+    const opacity = distance === 0 ? 1 : Math.max(0.6, 1 - Math.abs(distance) * 0.15);
+    
+    return {
+      transform: `translateY(${yOffset}px) scale(${scale})`,
+      opacity,
+      zIndex: 10 - Math.abs(distance),
+    };
   };
 
   const navItems = [
@@ -174,24 +227,16 @@ const SidebarNav = () => {
 
   return (
     <>
-      {/* Backdrop overlay when expanded */}
-      <div 
-        className={`sidebar-backdrop ${isExpanded ? "active" : ""}`}
-        onClick={() => setIsExpanded(false)}
-      />
-      
-      {/* Sidebar navigation */}
-      <nav 
-        className={`sidebar-nav ${isExpanded ? "expanded" : ""}`}
-        onMouseEnter={() => setIsExpanded(true)}
-        onMouseLeave={() => setIsExpanded(false)}
-      >
+      {/* Sidebar navigation - Curved carousel */}
+      <nav className="sidebar-nav">
         <div className="sidebar-content">
-          {navItems.map((item) => (
+          {navItems.map((item, index) => (
             <button
               key={item.path}
+              ref={(el) => (itemRefs.current[index] = el)}
               className={`nav-item ${isActive(item.path) ? "active" : ""}`}
-              onClick={() => item.path === "/mood" ? handleMoodClick() : navigate(item.path)}
+              onClick={() => handleNavClick(item, index)}
+              style={getItemStyle(index)}
             >
               <div className="nav-item-icon">
                 {item.icon}
