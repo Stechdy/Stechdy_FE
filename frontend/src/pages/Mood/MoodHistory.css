@@ -10,8 +10,8 @@
   }
 }
 
-/* Mood History Container */
-.mood-history-container {
+/* Mood History Page Container */
+.mood-history-page {
   display: flex;
   min-height: 100vh;
   background: linear-gradient(
@@ -27,7 +27,7 @@
   transition: background-color var(--transition-normal);
 }
 
-[data-theme="dark"] .mood-history-container {
+[data-theme="dark"] .mood-history-page {
   background: linear-gradient(
     180deg,
     #1a1625 0%,
@@ -40,70 +40,54 @@
   );
 }
 
-/* Mood History Page */
-.mood-history-page {
+.mood-history-wrapper {
   flex: 1;
-  min-height: 100vh;
-  background: transparent;
-  padding-bottom: 80px;
+  display: flex;
+  flex-direction: column;
 }
 
-.history-content > * {
+.mood-history-content {
+  padding: 24px 20px;
+  padding-bottom: 100px;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.mood-history-content > * {
   animation: moodHistoryFadeIn 0.4s ease-out backwards;
 }
 
-.history-content > *:nth-child(1) {
+.mood-history-content > *:nth-child(1) {
   animation-delay: 0.05s;
 }
-.history-content > *:nth-child(2) {
+.mood-history-content > *:nth-child(2) {
   animation-delay: 0.1s;
 }
-.history-content > *:nth-child(3) {
+.mood-history-content > *:nth-child(3) {
   animation-delay: 0.15s;
 }
-.history-content > *:nth-child(4) {
+.mood-history-content > *:nth-child(4) {
   animation-delay: 0.2s;
 }
 
-.history-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px 20px;
-  background: transparent;
-  position: relative;
-}
-
-.history-title {
-  font-size: 30px;
+/* Page Title */
+.mood-history-page-title {
+  font-size: 28px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin: 0;
+  color: var(--text-primary);
+  margin: 0 0 24px 0;
+  letter-spacing: -0.5px;
 }
 
-[data-theme="dark"] .history-title {
-  background: linear-gradient(135deg, #F0C5D5 0%, #D4B5D8 50%, #8AC0D5 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  color: transparent;
-}
-
-.history-content {
-  padding: 16px;
-}
-
-/* Responsive */
-@media (min-width: 768px) {
-  .history-content {
-    padding: 20px 40px;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-}
-
+/* Desktop */
 @media (min-width: 1024px) {
-  .mood-history-page {
+  .mood-history-content {
+    padding: 32px 40px;
+    max-width: 800px;
+  }
+
+  .mood-history-wrapper {
     padding-bottom: 20px;
   }
 
@@ -112,185 +96,317 @@
   }
 }
 
-/* Stats Section */
-.stats-section {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 8px;
-  margin-bottom: 20px;
+/* Stats Card Section */
+.mood-history-stats-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
 }
 
-.stat-card {
-  border-radius: 16px;
-  padding: 12px;
+[data-theme="dark"] .mood-history-stats-card {
+  background: rgba(30, 26, 46, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 1024px) {
+  .mood-history-stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.mood-history-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 480px) {
+  .mood-history-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.mood-history-stat-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  box-shadow: var(--shadow-card);
-  transition: all 0.2s ease;
+  gap: 12px;
 }
 
-.stat-card:active {
-  transform: scale(0.98);
-  box-shadow: var(--shadow-sm);
+@media (max-width: 480px) {
+  .mood-history-stat-item {
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+  }
+
+  [data-theme="dark"] .mood-history-stat-item {
+    background: rgba(255, 255, 255, 0.05);
+  }
 }
 
-.stat-icon {
-  font-size: 28px;
-  width: 44px;
-  height: 44px;
+.mood-history-stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 107, 157, 0.1);
-  border-radius: 12px;
+  flex-shrink: 0;
 }
 
-.stat-info {
+.mood-history-stat-emoji {
+  font-size: 24px;
+}
+
+.mood-history-icon-bg-pink {
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+}
+
+[data-theme="dark"] .mood-history-icon-bg-pink {
+  background: linear-gradient(135deg, #831843 0%, #9f1239 100%);
+}
+
+.mood-history-icon-bg-yellow {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+[data-theme="dark"] .mood-history-icon-bg-yellow {
+  background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+}
+
+.mood-history-icon-bg-blue {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+[data-theme="dark"] .mood-history-icon-bg-blue {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+}
+
+.mood-history-stat-info {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
 }
 
-.stat-label {
-  font-size: 12px;
+.mood-history-stat-label {
+  font-size: 11px;
   color: var(--text-secondary);
   font-weight: 500;
+  line-height: 1.2;
 }
 
-.stat-value {
-  font-size: 18px;
-  font-weight: 600;
-  color: #FF6B9D;
+@media (max-width: 480px) {
+  .mood-history-stat-label {
+    font-size: 12px;
+  }
 }
 
-/* Calendar Section */
-.calendar-section {
-  margin-bottom: 20px;
-}
-
-.section-title {
-  font-size: 15px;
+.mood-history-stat-value {
+  font-size: 16px;
   font-weight: 600;
   color: var(--text-primary);
-  margin: 0 0 12px 0;
 }
 
-/* Emotions Section */
-.emotions-section {
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: var(--shadow-card);
-  transition: all 0.2s ease;
+@media (max-width: 480px) {
+  .mood-history-stat-value {
+    font-size: 18px;
+  }
 }
 
-.emotions-section:active {
-  transform: scale(0.98);
-  box-shadow: var(--shadow-sm);
+/* Calendar Card Section */
+.mood-history-calendar-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: visible;
 }
 
-.emotion-list {
+[data-theme="dark"] .mood-history-calendar-card {
+  background: rgba(30, 26, 46, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 1024px) {
+  .mood-history-calendar-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.mood-history-card-section-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 16px 0;
+  letter-spacing: -0.2px;
+  margin-bottom: 10px;
+}
+
+/* Emotions Card Section */
+.mood-history-emotions-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .mood-history-emotions-card {
+  background: rgba(30, 26, 46, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (min-width: 1024px) {
+  .mood-history-emotions-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.mood-history-emotion-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-top: 12px;
+  gap: 14px;
 }
 
-.emotion-item {
+.mood-history-emotion-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  padding: 2px 0;
 }
 
-.emotion-name {
+.mood-history-emotion-name {
   font-size: 14px;
   font-weight: 500;
   color: var(--text-primary);
-  min-width: 80px;
-  text-transform: capitalize;
+  min-width: 100px;
+  flex-shrink: 0;
 }
 
-.emotion-bar-container {
+.mood-history-emotion-bar-container {
   flex: 1;
-  height: 8px;
-  background: #F0F0F0;
-  border-radius: 4px;
+  height: 10px;
+  background: rgba(167, 139, 250, 0.15);
+  border-radius: 8px;
   overflow: hidden;
 }
 
-.emotion-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #FF6B9D 0%, #FFA8C5 100%);
-  border-radius: 4px;
-  transition: width 0.5s ease;
+[data-theme="dark"] .mood-history-emotion-bar-container {
+  background: rgba(167, 139, 250, 0.2);
 }
 
-.emotion-count {
+.mood-history-emotion-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #a78bfa 0%, #60a5fa 100%);
+  border-radius: 8px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mood-history-emotion-count {
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-secondary);
-  min-width: 30px;
+  color: var(--text-primary);
+  min-width: 35px;
   text-align: right;
+  flex-shrink: 0;
 }
 
 /* Loading State */
-.loading-section {
+.mood-history-loading-section {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 60px 20px;
   color: var(--text-secondary);
 }
 
-.loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid var(--border-primary);
-  border-top-color: #FF6B9D;
+.mood-history-loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(167, 139, 250, 0.2);
+  border-top-color: #a78bfa;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
-/* Empty State */
-.empty-state {
+/* Empty State Card */
+.mood-history-empty-state-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  padding: 48px 32px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 40px 20px;
   text-align: center;
 }
 
-.empty-icon {
-  font-size: 64px;
-  margin-bottom: 16px;
-  opacity: 0.6;
+[data-theme="dark"] .mood-history-empty-state-card {
+  background: rgba(30, 26, 46, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.empty-state h3 {
-  font-size: 18px;
+@media (min-width: 1024px) {
+  .mood-history-empty-state-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.mood-history-empty-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  opacity: 0.7;
+  filter: grayscale(20%);
+}
+
+.mood-history-empty-state-card h3 {
+  font-size: 20px;
   font-weight: 600;
   color: var(--text-primary);
-  margin: 0 0 10px 0;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.3px;
 }
 
-.empty-state p {
-  font-size: 14px;
+.mood-history-empty-state-card p {
+  font-size: 15px;
   color: var(--text-secondary);
-  margin: 0 0 20px 0;
-  max-width: 280px;
+  margin: 0 0 24px 0;
+  max-width: 300px;
+  line-height: 1.5;
 }
 
-.start-btn {
-  padding: 12px 32px;
-  background: linear-gradient(135deg, #FF6B9D 0%, #FFA8C5 100%);
+.mood-history-start-btn {
+  padding: 14px 36px;
+  background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
   color: white;
   border: none;
   border-radius: 24px;
@@ -298,15 +414,20 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(167, 139, 250, 0.3);
 }
 
-.start-btn:hover {
+.mood-history-start-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(255, 107, 157, 0.3);
+  box-shadow: 0 6px 24px rgba(167, 139, 250, 0.4);
+}
+
+.mood-history-start-btn:active {
+  transform: scale(0.98);
 }
 
 /* Add Mood FAB */
-.add-mood-fab {
+.mood-history-add-mood-fab {
   position: fixed;
   bottom: 100px;
   right: 20px;
@@ -329,43 +450,43 @@
   overflow: hidden;
 }
 
-.fab-icon {
+.mood-history-fab-icon {
   font-size: 24px;
   font-weight: 300;
   line-height: 1;
   transition: transform 0.3s ease;
 }
 
-.fab-label {
+.mood-history-fab-label {
   max-width: 0;
   opacity: 0;
   white-space: nowrap;
   transition: all 0.3s ease;
 }
 
-.add-mood-fab:hover {
+.mood-history-add-mood-fab:hover {
   transform: scale(1.05);
   box-shadow: 0 6px 20px rgba(255, 107, 157, 0.5);
   padding-right: 24px;
 }
 
-.add-mood-fab:hover .fab-icon {
+.mood-history-add-mood-fab:hover .mood-history-fab-icon {
   transform: rotate(90deg);
 }
 
-.add-mood-fab:hover .fab-label {
+.mood-history-add-mood-fab:hover .mood-history-fab-label {
   max-width: 100px;
   opacity: 1;
   margin-left: 4px;
 }
 
-.add-mood-fab:active {
+.mood-history-add-mood-fab:active {
   transform: scale(0.95);
 }
 
 /* Mobile adjustments for FAB */
 @media (max-width: 480px) {
-  .add-mood-fab {
+  .mood-history-add-mood-fab {
     width: 56px;
     height: 56px;
     padding: 0;
@@ -373,80 +494,20 @@
     justify-content: center;
   }
   
-  .fab-label {
+  .mood-history-fab-label {
     display: none;
   }
   
-  .add-mood-fab:hover {
+  .mood-history-add-mood-fab:hover {
     padding: 0;
     width: 56px;
   }
   
-  .add-mood-fab:hover .fab-label {
+  .mood-history-add-mood-fab:hover .mood-history-fab-label {
     display: none;
   }
 }
 
-/* Responsive */
-@media (max-width: 480px) {
-  .stats-section {
-    grid-template-columns: 1fr;
-  }
-  
-  .stat-card {
-    padding: 10px;
-  }
-  
-  .stat-icon {
-    font-size: 24px;
-    width: 40px;
-    height: 40px;
-  }
-}
-
-@media (min-width: 768px) {
-  .history-content {
-    padding: 20px 40px;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-  
-  .stats-section {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-  
-  .stat-card {
-    padding: 16px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .mood-history-page {
-    padding-bottom: 20px;
-  }
-
-  .bottom-nav {
-    display: none;
-  }
-}
-
-/* Mobile Fix - Override container styles */
-@media (max-width: 1023px) {
-  .mood-history-container {
-    display: block !important;
-  }
-  
-  .mood-history-page {
-    flex: none !important;
-    width: 100% !important;
-    padding-bottom: 80px !important;
-  }
-  
-  .sidebar-nav {
-    display: none !important;
-  }
-}
 /* === FAB Breathing + Floating Icon (Mobile only) === */
 @keyframes fab-breathe {
   0% {
@@ -471,21 +532,22 @@
 
 /* Chỉ áp dụng cho app (mobile / tablet) */
 @media (max-width: 768px) {
-  .add-mood-fab {
+  .mood-history-add-mood-fab {
     animation: fab-breathe 3s ease-in-out infinite;
   }
 
-  .add-mood-fab .fab-icon {
+  .mood-history-add-mood-fab .mood-history-fab-icon {
     animation: float-icon 2s ease-in-out infinite;
   }
 }
+
 @keyframes hint-label {
   0%, 80% { opacity: 0; max-width: 0; }
   100% { opacity: 1; max-width: 100px; }
 }
 
 @media (max-width: 768px) {
-  .fab-label {
+  .mood-history-fab-label {
     animation: hint-label 6s infinite;
   }
 }

@@ -536,7 +536,6 @@ const SlotDetail = () => {
                         </span>
                       </div>
                     )}
-                    }
                     {session.actualDuration && (
                       <div className="slot-info-row highlight">
                         <span className="slot-info-label">

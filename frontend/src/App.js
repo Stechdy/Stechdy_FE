@@ -10,6 +10,7 @@ import PrivateRoute from "./components/common/PrivateRoute";
 import AdminPrivateRoute from "./components/common/AdminPrivateRoute";
 import ScrollToTop from "./components/common/ScrollToTop";
 import { SocketProvider } from "./context/SocketContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 // Landing Page
 import Landing from "./pages/Landing/Landing";
@@ -25,6 +26,12 @@ import ResetPassword from "./pages/Auth/ResetPassword";
 import AdminLogin from "./pages/Admin/AdminLogin";
 import AdminForgotPassword from "./pages/Admin/AdminForgotPassword";
 import AdminPayments from "./pages/Admin/AdminPayments";
+import AdminDashboard from "./pages/Admin/AdminDashboard";
+import AdminUsers from "./pages/Admin/AdminUsers";
+import AdminRevenue from "./pages/Admin/AdminRevenue";
+import AdminReports from "./pages/Admin/AdminReports";
+import AdminNotifications from "./pages/Admin/AdminNotifications";
+import AdminActivity from "./pages/Admin/AdminActivity";
 
 // Main App Pages
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -42,28 +49,13 @@ import NotificationSettings from "./pages/NotificationSettings/NotificationSetti
 import HelpSupport from "./pages/HelpSupport/HelpSupport";
 import TermsOfUse from "./pages/TermsOfUse/TermsOfUse";
 
-// Placeholder Admin component
-const AdminDashboard = () => (
-  <div style={{ padding: "40px", textAlign: "center" }}>
-    <h1>Admin Dashboard</h1>
-    <p>Welcome Admin!</p>
-    <button
-      onClick={() => {
-        localStorage.clear();
-        window.location.href = "/admin/login";
-      }}
-    >
-      Logout
-    </button>
-  </div>
-);
-
 function App() {
   return (
-    <SocketProvider>
-      <Router>
-        <ScrollToTop />
-        <Routes>
+    <ThemeProvider>
+      <SocketProvider>
+        <Router>
+          <ScrollToTop />
+          <Routes>
           {/* Public Routes - Redirect if authenticated */}
           <Route
             path="/login"
@@ -250,9 +242,49 @@ function App() {
           <Route
             path="/admin/dashboard"
             element={
-              <PrivateRoute adminOnly={true}>
+              <AdminPrivateRoute>
                 <AdminDashboard />
-              </PrivateRoute>
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <AdminPrivateRoute>
+                <AdminUsers />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/revenue"
+            element={
+              <AdminPrivateRoute>
+                <AdminRevenue />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/reports"
+            element={
+              <AdminPrivateRoute>
+                <AdminReports />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/notifications"
+            element={
+              <AdminPrivateRoute>
+                <AdminNotifications />
+              </AdminPrivateRoute>
+            }
+          />
+          <Route
+            path="/admin/activity"
+            element={
+              <AdminPrivateRoute>
+                <AdminActivity />
+              </AdminPrivateRoute>
             }
           />
 
@@ -263,6 +295,7 @@ function App() {
         </Routes>
       </Router>
     </SocketProvider>
+    </ThemeProvider>
   );
 }
 

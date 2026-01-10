@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { isAuthenticated, getUserRole } from '../../services/authService';
+import AdminThemeWrapper from './AdminThemeWrapper';
 
 const AdminPrivateRoute = ({ children }) => {
   const authenticated = isAuthenticated();
@@ -17,7 +18,11 @@ const AdminPrivateRoute = ({ children }) => {
     return <Navigate to="/dashboard" replace />;
   }
 
-  return children;
+  return (
+    <AdminThemeWrapper>
+      {children}
+    </AdminThemeWrapper>
+  );
 };
 
 export default AdminPrivateRoute;

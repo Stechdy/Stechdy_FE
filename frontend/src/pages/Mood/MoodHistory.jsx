@@ -100,56 +100,63 @@ const MoodHistory = () => {
   };
 
   return (
-    <div className="mood-history-container">
+    <div className="mood-history-page">
       <SidebarNav />
-      <div className="mood-history-page">
-        <header className="history-header">
-          <h1 className="history-title">{t("mood.history")}</h1>
-        </header>
+      <div className="mood-history-wrapper">
+        <div className="mood-history-content">
+          {/* Page Title */}
+          <h1 className="mood-history-page-title">{t("mood.history")}</h1>
 
-        <div className="history-content">
           {/* Loading State */}
           {loading && (
-            <div className="loading-section">
-              <div className="loading-spinner"></div>
+            <div className="mood-history-loading-section">
+              <div className="mood-history-loading-spinner"></div>
               <p>{t("common.loading")}</p>
             </div>
           )}
 
-          {/* Stats Cards */}
+          {/* Stats Cards Section */}
           {!loading && stats && stats.totalEntries > 0 && (
-            <div className="stats-section">
-              <div className="stat-card">
-                <div className="stat-icon">{getMoodEmoji(stats.avgMood)}</div>
-                <div className="stat-info">
-                  <span className="stat-label">
-                    {t("moodHistory.averageMood")}
-                  </span>
-                  <span className="stat-value">
-                    {stats.avgMood.toFixed(1)}/5
-                  </span>
+            <div className="mood-history-stats-card">
+              <div className="mood-history-stats-grid">
+                <div className="mood-history-stat-item">
+                  <div className="mood-history-stat-icon-wrapper mood-history-icon-bg-pink">
+                    <span className="mood-history-stat-emoji">{getMoodEmoji(stats.avgMood)}</span>
+                  </div>
+                  <div className="mood-history-stat-info">
+                    <span className="mood-history-stat-label">
+                      {t("moodHistory.averageMood")}
+                    </span>
+                    <span className="mood-history-stat-value">
+                      {stats.avgMood.toFixed(1)}/5
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="stat-card">
-                <div className="stat-icon">⚡</div>
-                <div className="stat-info">
-                  <span className="stat-label">
-                    {t("moodHistory.averageEnergy")}
-                  </span>
-                  <span className="stat-value">
-                    {stats.avgEnergy.toFixed(1)}/10
-                  </span>
+                <div className="mood-history-stat-item">
+                  <div className="mood-history-stat-icon-wrapper mood-history-icon-bg-yellow">
+                    <span className="mood-history-stat-emoji">⚡</span>
+                  </div>
+                  <div className="mood-history-stat-info">
+                    <span className="mood-history-stat-label">
+                      {t("moodHistory.averageEnergy")}
+                    </span>
+                    <span className="mood-history-stat-value">
+                      {stats.avgEnergy.toFixed(1)}/10
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="stat-card">
-                <div className="stat-icon">📊</div>
-                <div className="stat-info">
-                  <span className="stat-label">
-                    {t("moodHistory.totalEntries")}
-                  </span>
-                  <span className="stat-value">{stats.totalEntries}</span>
+                <div className="mood-history-stat-item">
+                  <div className="mood-history-stat-icon-wrapper mood-history-icon-bg-blue">
+                    <span className="mood-history-stat-emoji">📊</span>
+                  </div>
+                  <div className="mood-history-stat-info">
+                    <span className="mood-history-stat-label">
+                      {t("moodHistory.totalEntries")}
+                    </span>
+                    <span className="mood-history-stat-value">{stats.totalEntries}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -157,37 +164,37 @@ const MoodHistory = () => {
 
           {/* Empty State */}
           {!loading && stats && stats.totalEntries === 0 && (
-            <div className="empty-state">
-              <div className="empty-icon">📊</div>
+            <div className="mood-history-empty-state-card">
+              <div className="mood-history-empty-icon">📊</div>
               <h3>{t("moodHistory.noDataYet")}</h3>
               <p>{t("moodHistory.startTracking")}</p>
-              <button className="start-btn" onClick={() => navigate("/mood")}>
+              <button className="mood-history-start-btn" onClick={() => navigate("/mood")}>
                 {t("moodHistory.startNow")}
               </button>
             </div>
           )}
 
-          {/* Calendar */}
-          <div className="calendar-section">
-            <h2 className="section-title">{t("moodHistory.moodCalendar")}</h2>
+          {/* Calendar Section */}
+          <div className="mood-history-calendar-card">
+            <h2 className="mood-history-card-section-title">{t("moodHistory.moodCalendar")}</h2>
             <MoodCalendar />
           </div>
 
-          {/* Top Emotions */}
+          {/* Top Emotions Section */}
           {!loading && stats && stats.topEmotions.length > 0 && (
-            <div className="emotions-section">
-              <h2 className="section-title">
+            <div className="mood-history-emotions-card">
+              <h2 className="mood-history-card-section-title">
                 {t("moodHistory.commonEmotions")}
               </h2>
-              <div className="emotion-list">
+              <div className="mood-history-emotion-list">
                 {stats.topEmotions.map((emotion, index) => (
-                  <div key={index} className="emotion-item">
-                    <span className="emotion-name">
+                  <div key={index} className="mood-history-emotion-item">
+                    <span className="mood-history-emotion-name">
                       {translateEmotion(emotion.emotion)}
                     </span>
-                    <div className="emotion-bar-container">
+                    <div className="mood-history-emotion-bar-container">
                       <div
-                        className="emotion-bar"
+                        className="mood-history-emotion-bar"
                         style={{
                           width: `${
                             (emotion.count / stats.totalEntries) * 100
@@ -195,7 +202,7 @@ const MoodHistory = () => {
                         }}
                       />
                     </div>
-                    <span className="emotion-count">{emotion.count}</span>
+                    <span className="mood-history-emotion-count">{emotion.count}</span>
                   </div>
                 ))}
               </div>
@@ -204,12 +211,12 @@ const MoodHistory = () => {
 
           {/* Add New Mood Button */}
           <button
-            className="add-mood-fab"
+            className="mood-history-add-mood-fab"
             onClick={() => navigate("/mood")}
             title={t("moodHistory.addNewEntry")}
           >
-            <span className="fab-icon">+</span>
-            <span className="fab-label">{t("moodHistory.addMood")}</span>
+            <span className="mood-history-fab-icon">+</span>
+            <span className="mood-history-fab-label">{t("moodHistory.addMood")}</span>
           </button>
         </div>
 

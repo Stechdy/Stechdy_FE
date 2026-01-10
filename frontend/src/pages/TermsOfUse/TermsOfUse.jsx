@@ -1,6 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import BottomNav from "../../components/common/BottomNav";
+import SidebarNav from "../../components/common/SidebarNav";
 import "./TermsOfUse.css";
 
 const TermsOfUse = () => {
@@ -237,30 +239,31 @@ const TermsOfUse = () => {
 
   return (
     <div className="terms-page">
-      {/* Header */}
-      <div className="terms-header">
-        <button
-          className="terms-back-btn"
-          onClick={() => navigate(-1)}
-          aria-label={t("common.back")}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M19 12H5M5 12L12 19M5 12L12 5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
-        <h1 className="terms-title">{t("termsOfUse.title")}</h1>
-        <div className="terms-header-spacer"></div>
-      </div>
+      <SidebarNav />
+      <div className="terms-wrapper">
+        <div className="terms-content">
+          {/* Page Title */}
+          <div className="terms-header-section">
+            <button
+              className="terms-back-btn"
+              onClick={() => navigate(-1)}
+              aria-label={t("common.back")}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M19 12H5M5 12L12 19M5 12L12 5"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <h1 className="terms-page-title">{t("termsOfUse.title")}</h1>
+          </div>
 
-      <div className="terms-content">
-        {/* Hero Section */}
-        <div className="terms-hero">
+          {/* Hero Section */}
+          <div className="terms-hero-card">
           <div className="terms-hero-icon">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
               <path
@@ -307,12 +310,12 @@ const TermsOfUse = () => {
         </div>
 
         {/* Introduction */}
-        <div className="terms-intro">
+        <div className="terms-intro-card">
           <p>{t("termsOfUse.introduction")}</p>
         </div>
 
         {/* Sections */}
-        <div className="terms-sections">
+        <div className="terms-sections-card">
           {sections.map((section, index) => (
             <div key={section.id} className="terms-section">
               <div className="section-header">
@@ -327,12 +330,15 @@ const TermsOfUse = () => {
         </div>
 
         {/* Footer */}
-        <div className="terms-footer">
+        <div className="terms-footer-card">
           <p className="terms-footer-text">{t("termsOfUse.footer")}</p>
           <a href="mailto:legal@stechdy.com" className="terms-email-link">
             legal@stechdy.com
           </a>
         </div>
+      </div>
+
+      <BottomNav />
       </div>
     </div>
   );
