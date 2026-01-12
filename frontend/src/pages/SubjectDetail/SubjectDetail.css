@@ -827,7 +827,8 @@
   .subject-main {
     max-width: 1600px;
     gap: 40px;
-    padding: 40px;
+    padding: 200px;
+    margin-top: -150px;
   }
 
   .subject-progress-card {
