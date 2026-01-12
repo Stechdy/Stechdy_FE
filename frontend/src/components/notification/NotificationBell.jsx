@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import notificationService from "../../services/notificationService";
 import { useSocket } from "../../context/SocketContext";
+import NotificationItem from "./NotificationItem";
 import "./NotificationBell.css";
 
 const NotificationBell = () => {
@@ -12,7 +13,7 @@ const NotificationBell = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("all"); // 'all' or 'unread'
+  const [activeTab, setActiveTab] = useState("all"); // 'all', 'unread', or 'seen'
   const dropdownRef = useRef(null);
 
   // Use Socket.IO context
@@ -164,7 +165,11 @@ const NotificationBell = () => {
 
   // Filter notifications based on active tab
   const filteredNotifications =
-    activeTab === "all" ? notifications : notifications.filter((n) => !n.read);
+    activeTab === "all" 
+      ? notifications 
+      : activeTab === "unread"
+      ? notifications.filter((n) => !n.isRead)
+      : notifications.filter((n) => n.isRead); // seen
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -223,48 +228,37 @@ const NotificationBell = () => {
             >
               {t("notifications.unread")} ({unreadCount})
             </button>
+            <button
+              className={`tab ${activeTab === "seen" ? "active" : ""}`}
+              onClick={() => setActiveTab("seen")}
+            >
+              {t("notifications.seen")} ({notifications.length - unreadCount})
+            </button>
           </div>
 
           <div className="notification-list">
             {filteredNotifications.length === 0 ? (
               <div className="empty-state">
                 <span className="empty-icon">
-                  {activeTab === "unread" ? "✅" : "🔔"}
+                  {activeTab === "unread" ? "✅" : activeTab === "seen" ? "📭" : "🔔"}
                 </span>
                 <p>
                   {activeTab === "unread"
                     ? t("notifications.noUnreadNotifications")
+                    : activeTab === "seen"
+                    ? t("notifications.noSeenNotifications")
                     : t("notifications.noNotifications")}
                 </p>
               </div>
             ) : (
               filteredNotifications.map((notif) => (
-                <div
+                <NotificationItem
                   key={notif._id}
-                  className={`notification-item ${!notif.read ? "unread" : ""}`}
-                  onClick={() => !notif.read && handleMarkAsRead(notif._id)}
-                >
-                  <div className="notif-icon">
-                    {getNotificationIcon(notif.type)}
-                  </div>
-                  <div className="notif-content">
-                    <h4>{notif.title}</h4>
-                    <p>{notif.message}</p>
-                    <span className="notif-time">
-                      {formatTime(notif.createdAt)}
-                    </span>
-                  </div>
-                  <button
-                    className="delete-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDelete(notif._id);
-                    }}
-                    title={t("notifications.deleteNotification")}
-                  >
-                    ×
-                  </button>
-                </div>
+                  notification={notif}
+                  onMarkAsRead={handleMarkAsRead}
+                  onDelete={handleDelete}
+                  viewMode="card"
+                />
               ))
             )}
           </div>

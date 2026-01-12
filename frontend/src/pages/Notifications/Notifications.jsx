@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useSocket } from "../../context/SocketContext";
 import notificationService from "../../services/notificationService";
@@ -6,10 +7,11 @@ import "./Notifications.css";
 
 const Notifications = () => {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [filteredNotifs, setFilteredNotifs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState("all"); // all, unread, read
+  const [activeFilter, setActiveFilter] = useState("all"); // all, unread, seen
   const [activeType, setActiveType] = useState("all"); // all, mood, study, task, etc.
   const [selectedNotifs, setSelectedNotifs] = useState([]);
   const [selectMode, setSelectMode] = useState(false);
@@ -37,9 +39,9 @@ const Notifications = () => {
 
     // Filter by read status
     if (activeFilter === "unread") {
-      filtered = filtered.filter((n) => !n.read);
-    } else if (activeFilter === "read") {
-      filtered = filtered.filter((n) => n.read);
+      filtered = filtered.filter((n) => !n.isRead);
+    } else if (activeFilter === "seen") {
+      filtered = filtered.filter((n) => n.isRead);
     }
 
     // Filter by type
@@ -68,7 +70,7 @@ const Notifications = () => {
     try {
       await notificationService.markAsRead(id);
       setNotifications((prev) =>
-        prev.map((n) => (n._id === id ? { ...n, read: true } : n))
+        prev.map((n) => (n._id === id ? { ...n, isRead: true } : n))
       );
     } catch (error) {
       console.error("Error marking as read:", error);
@@ -78,7 +80,7 @@ const Notifications = () => {
   const handleMarkAllAsRead = async () => {
     try {
       await notificationService.markAllAsRead();
-      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
     } catch (error) {
       console.error("Error marking all as read:", error);
     }
@@ -185,6 +187,15 @@ const Notifications = () => {
         {/* Header */}
         <div className="page-header">
           <div className="header-left">
+            <button 
+              className="back-button" 
+              onClick={() => navigate(-1)}
+              title={t("common.back") || "Back"}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
             <h1>{t("notifications.title")}</h1>
             <span className="connection-status">
               {isConnected ? (
@@ -246,7 +257,7 @@ const Notifications = () => {
         <div className="filters-section">
           <div className="filter-group">
             <div className="filter-buttons">
-              {["all", "unread", "read"].map((filter) => (
+              {["all", "unread", "seen"].map((filter) => (
                 <button
                   key={filter}
                   className={`filter-btn ${
@@ -258,8 +269,8 @@ const Notifications = () => {
                     `${t("notifications.all")} (${notifications.length})`}
                   {filter === "unread" &&
                     `${t("notifications.unread")} (${unreadCount})`}
-                  {filter === "read" &&
-                    `${t("notifications.read")} (${
+                  {filter === "seen" &&
+                    `${t("notifications.seen")} (${
                       notifications.length - unreadCount
                     })`}
                 </button>
@@ -306,9 +317,15 @@ const Notifications = () => {
           ) : filteredNotifs.length === 0 ? (
             <div className="empty-state">
               <span className="empty-icon">
-                {activeFilter === "unread" ? "✅" : "🔔"}
+                {activeFilter === "unread" ? "✅" : activeFilter === "seen" ? "📭" : "🔔"}
               </span>
-              <h3>{t("notifications.noNotifications")}</h3>
+              <h3>
+                {activeFilter === "unread"
+                  ? t("notifications.noUnreadNotifications")
+                  : activeFilter === "seen"
+                  ? t("notifications.noSeenNotifications")
+                  : t("notifications.noNotifications")}
+              </h3>
             </div>
           ) : (
             <div className="notifications-grid">
@@ -316,12 +333,12 @@ const Notifications = () => {
                 <div
                   key={notif._id}
                   className={`notification-card ${
-                    !notif.read ? "unread" : ""
+                    !notif.isRead ? "unread" : ""
                   } ${selectedNotifs.includes(notif._id) ? "selected" : ""}`}
                   onClick={() => {
                     if (selectMode) {
                       handleSelectNotif(notif._id);
-                    } else if (!notif.read) {
+                    } else if (!notif.isRead) {
                       handleMarkAsRead(notif._id);
                     }
                   }}
@@ -343,7 +360,7 @@ const Notifications = () => {
                   <div className="card-content">
                     <div className="card-header">
                       <h3>{notif.title}</h3>
-                      {!notif.read && (
+                      {!notif.isRead && (
                         <span className="unread-badge">
                           {t("notifications.new")}
                         </span>

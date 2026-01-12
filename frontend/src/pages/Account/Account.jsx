@@ -215,7 +215,7 @@ const Account = () => {
     },
     {
       id: "notifications",
-      label: t("account.soundNotifications"),
+      label: t("account.notifications") || t("account.soundNotifications"),
       icon: (
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
           <path
