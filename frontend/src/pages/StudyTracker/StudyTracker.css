@@ -118,6 +118,10 @@
 
 .tracker-header .notification-btn {
   z-index: 1;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .tracker-main {

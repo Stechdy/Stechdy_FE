@@ -370,6 +370,7 @@
     "all": "Tất cả",
     "unread": "Chưa đọc",
     "read": "Đã đọc",
+    "seen": "Đã xem",
     "new": "Mới",
     "markAllRead": "Đánh dấu tất cả đã đọc",
     "delete": "Xóa",
@@ -378,6 +379,7 @@
     "cancel": "Hủy",
     "noNotifications": "Chưa có thông báo nào",
     "noUnreadNotifications": "Bạn đã đọc hết thông báo!",
+    "noSeenNotifications": "Chưa có thông báo đã xem",
     "viewAll": "Xem tất cả thông báo",
     "types": {
       "all": "Tất cả",
