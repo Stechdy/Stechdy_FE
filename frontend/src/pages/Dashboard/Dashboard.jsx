@@ -342,6 +342,9 @@ const Dashboard = () => {
               src={userData?.avatarUrl || "https://i.pravatar.cc/150?img=1"}
               alt="Profile"
               className="profile-avatar"
+              onClick={() => navigate('/profile', { state: { from: '/dashboard' } })}
+              style={{ cursor: 'pointer' }}
+              title={t("dashboard.viewProfile") || "Xem thông tin cá nhân"}
             />
             <div className="header-text">
               <h1 className="greeting">{greeting}</h1>

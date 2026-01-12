@@ -6,12 +6,34 @@ import SidebarNav from "../../components/common/SidebarNav";
 import { getVietnamTime, getVietnamDate } from "../../utils/helpers";
 import "./StudyTracker.css";
 
+const WaterDrop = ({ percentage, day, date, isToday, onClick }) => {
+  const fillHeight = Math.min(Math.max(percentage, 0), 100);
+  
+  return (
+    <div 
+      className={`streak-day ${isToday ? 'today' : ''}`} 
+      onClick={onClick}
+    >
+      <div 
+        className="water-fill"
+        style={{ height: `${fillHeight}%` }}
+      />
+      <div className="day-content">
+        <div className="day-number">{date}</div>
+      </div>
+    </div>
+  );
+};
+
 const StudyTracker = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
-  const [weekOffset, setWeekOffset] = useState(0); // 0 = current week, -1 = last week, +1 = next week
-  const [currentWeekNumber, setCurrentWeekNumber] = useState(null);
+  const { t, i18n } = useTranslation();
+  const [weekOffset, setWeekOffset] = useState(0); // For Weekly Schedule
+  const [currentWeekNumber, setCurrentWeekNumber] = useState(1);
   const [weekSchedule, setWeekSchedule] = useState([]);
+  const [monthOffset, setMonthOffset] = useState(0); // For Streak Calendar
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [monthSessions, setMonthSessions] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [todayProgress, setTodayProgress] = useState([]);
   const [streakData, setStreakData] = useState({
@@ -25,10 +47,43 @@ const StudyTracker = () => {
   });
 
   useEffect(() => {
-    fetchStudyTrackerData();
+    fetchWeeklySchedule();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [weekOffset]);
 
-  const fetchStudyTrackerData = async () => {
+  useEffect(() => {
+    fetchMonthData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [monthOffset]);
+
+  const fetchWeeklySchedule = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/login");
+        return;
+      }
+
+      // Fetch weekly schedule
+      const scheduleResponse = await fetch(
+        `http://localhost:3001/api/study-sessions/week?offset=${weekOffset}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (scheduleResponse.ok) {
+        const data = await scheduleResponse.json();
+        console.log('Week schedule:', data);
+        setWeekSchedule(data.sessions || []);
+        setCurrentWeekNumber(data.weekNumber || 1);
+      }
+    } catch (error) {
+      console.error("Error fetching weekly schedule:", error);
+    }
+  };
+
+  const fetchMonthData = async () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -49,24 +104,32 @@ const StudyTracker = () => {
         setSubjects(subjectsData);
       }
 
-      // Fetch week schedule
+      // Calculate month range
+      const today = getVietnamDate();
+      const targetMonth = new Date(today.getFullYear(), today.getMonth() + monthOffset, 1);
+      const monthStart = new Date(targetMonth.getFullYear(), targetMonth.getMonth(), 1, 0, 0, 0, 0);
+      const monthEnd = new Date(targetMonth.getFullYear(), targetMonth.getMonth() + 1, 0, 23, 59, 59, 999);
+      
+      setCurrentMonth(targetMonth);
+
+      // Fetch month sessions
       const scheduleResponse = await fetch(
-        `http://localhost:3001/api/study-sessions/week?offset=${weekOffset}`,
+        `http://localhost:3001/api/study-sessions/range?start=${monthStart.toISOString()}&end=${monthEnd.toISOString()}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       if (scheduleResponse.ok) {
-        const scheduleData = await scheduleResponse.json();
-        setWeekSchedule(scheduleData.sessions || []);
-        setCurrentWeekNumber(scheduleData.weekNumber);
+        const sessions = await scheduleResponse.json();
+        console.log('Month sessions:', sessions);
+        setMonthSessions(sessions || []);
       }
 
       // Fetch today's progress
-      const today = getVietnamDate();
-      const todayStart = new Date(today.setHours(0, 0, 0, 0));
-      const todayEnd = new Date(today.setHours(23, 59, 59, 999));
+      const todayDate = getVietnamDate();
+      const todayStart = new Date(todayDate.setHours(0, 0, 0, 0));
+      const todayEnd = new Date(todayDate.setHours(23, 59, 59, 999));
 
       const progressResponse = await fetch(
         `http://localhost:3001/api/study-sessions/today?start=${todayStart.toISOString()}&end=${todayEnd.toISOString()}`,
@@ -92,7 +155,7 @@ const StudyTracker = () => {
         setStreakData(streak);
       }
     } catch (error) {
-      console.error("Error fetching study tracker data:", error);
+      console.error("Error fetching month data:", error);
     }
   };
 
@@ -129,37 +192,111 @@ const StudyTracker = () => {
   };
 
   const getWeekDates = () => {
-    const dates = [];
     const today = getVietnamDate();
-    const currentDay = today.getDay();
-
-    // Get current Monday
+    const currentDayOfWeek = today.getDay();
+    const daysToMonday = currentDayOfWeek === 0 ? -6 : 1 - currentDayOfWeek;
+    
     const currentMonday = new Date(today);
-    const daysToMonday = currentDay === 0 ? -6 : 1 - currentDay;
     currentMonday.setDate(today.getDate() + daysToMonday);
-
-    // Apply weekOffset to get the Monday of requested week
-    const weekMonday = new Date(currentMonday);
-    weekMonday.setDate(currentMonday.getDate() + weekOffset * 7);
-
-    // Generate 7 days from Monday to Sunday
+    currentMonday.setHours(0, 0, 0, 0);
+    
+    const weekStart = new Date(currentMonday);
+    weekStart.setDate(currentMonday.getDate() + (weekOffset * 7));
+    
+    const dates = [];
+    const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    
     for (let i = 0; i < 7; i++) {
-      const date = new Date(weekMonday);
-      date.setDate(weekMonday.getDate() + i);
+      const date = new Date(weekStart);
+      date.setDate(weekStart.getDate() + i);
       dates.push({
-        day: date.toLocaleDateString("en-US", { weekday: "short" }),
-        date: `${date.getDate()}/${date.getMonth() + 1}`,
-        fullDate: date, // Keep full date object for comparison
+        day: dayNames[i],
+        date: date.getDate(),
+        fullDate: date.toISOString().split('T')[0],
       });
     }
-
+    
     return dates;
   };
 
-  const getSessionStatus = (day, timeSlot) => {
-    const session = weekSchedule.find(
-      (s) => s.dayOfWeek === day && s.timeSlot === timeSlot
-    );
+  const getMonthDates = () => {
+    const dates = [];
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    
+    // Get first day of month
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    
+    // Get day of week for first day (0 = Sunday, 1 = Monday, etc.)
+    const startDay = firstDay.getDay();
+    const mondayOffset = startDay === 0 ? 6 : startDay - 1;
+    
+    // Add empty slots for days before month starts (to align with Monday start)
+    for (let i = 0; i < mondayOffset; i++) {
+      dates.push(null);
+    }
+    
+    // Add all days in month
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+      const dayOfWeek = date.toLocaleDateString("en-US", { weekday: "short" });
+      dates.push({
+        day: dayOfWeek,
+        date: day,
+        fullDate: date.toISOString().split('T')[0],
+      });
+    }
+    
+    return dates;
+  };
+
+  const getDayProgress = (dayDate) => {
+    if (!dayDate) return 0;
+    
+    // Check if the day is in the future
+    const now = getVietnamTime();
+    const dayEnd = new Date(dayDate);
+    dayEnd.setHours(23, 59, 59, 999);
+    
+    if (dayEnd > now) {
+      return 0;
+    }
+    
+    // Get all completed sessions for this specific day
+    const dayStart = new Date(dayDate);
+    dayStart.setHours(0, 0, 0, 0);
+    
+    const daySessions = monthSessions.filter(session => {
+      const sessionDate = new Date(session.date);
+      sessionDate.setHours(0, 0, 0, 0);
+      return sessionDate.getTime() === dayStart.getTime() && session.status === 'completed';
+    });
+    
+    if (daySessions.length === 0) return 0;
+    
+    // Calculate total actual study time in minutes
+    let totalMinutes = 0;
+    daySessions.forEach(session => {
+      totalMinutes += session.actualDuration || 0;
+    });
+    
+    // Convert to percentage (assume 8 hours = 480 minutes = 100%)
+    const targetMinutesPerDay = 480; // 8 hours
+    const percentage = Math.min((totalMinutes / targetMinutesPerDay) * 100, 100);
+    
+    return percentage;
+  };
+
+  // For Weekly Schedule - use weekSchedule
+  const getWeekSessionStatus = (fullDate, timeSlot) => {
+    if (!fullDate) return "no-slot";
+    
+    const session = weekSchedule.find((s) => {
+      const sessionDate = new Date(s.date).toISOString().split('T')[0];
+      return sessionDate === fullDate && s.timeSlot === timeSlot;
+    });
 
     if (!session) return "no-slot";
 
@@ -186,10 +323,13 @@ const StudyTracker = () => {
     return "absent";
   };
 
-  const getSessionColor = (day, timeSlot) => {
-    const session = weekSchedule.find(
-      (s) => s.dayOfWeek === day && s.timeSlot === timeSlot
-    );
+  const getWeekSessionColor = (fullDate, timeSlot) => {
+    if (!fullDate) return "#8AC0D5";
+    
+    const session = weekSchedule.find((s) => {
+      const sessionDate = new Date(s.date).toISOString().split('T')[0];
+      return sessionDate === fullDate && s.timeSlot === timeSlot;
+    });
     return session?.subjectInfo?.color || "#8AC0D5";
   };
 
@@ -222,6 +362,7 @@ const StudyTracker = () => {
   };
 
   const weekDates = getWeekDates();
+  const monthDates = getMonthDates();
   const timeSlotKeys = [
     "studyTracker.timeSlots.morning",
     "studyTracker.timeSlots.afternoon",
@@ -255,7 +396,7 @@ const StudyTracker = () => {
               <div className="week-navigation">
                 <button onClick={() => setWeekOffset(weekOffset - 1)}>‹</button>
                 <span>
-                  {t("studyTracker.week")} {currentWeekNumber || "..."}
+                  {t("studyTracker.week")} {currentWeekNumber}
                 </span>
                 <button onClick={() => setWeekOffset(weekOffset + 1)}>›</button>
               </div>
@@ -265,6 +406,8 @@ const StudyTracker = () => {
               <div className="schedule-row header-row">
                 <div className="time-slot-label"></div>
                 {weekDates.map((day, idx) => {
+                  if (!day) return <div key={idx} className="empty-day"></div>;
+                  
                   const today = getVietnamDate();
                   today.setHours(0, 0, 0, 0);
                   const dayDate = new Date(day.fullDate);
@@ -289,8 +432,8 @@ const StudyTracker = () => {
                     {t(timeSlotKeys[slotIdx])}
                   </div>
                   {weekDates.map((day, dayIdx) => {
-                    const status = getSessionStatus(day.day, slot);
-                    const color = getSessionColor(day.day, slot);
+                    const status = getWeekSessionStatus(day.fullDate, slot);
+                    const color = getWeekSessionColor(day.fullDate, slot);
                     return (
                       <div key={dayIdx} className="schedule-cell">
                         {renderStatusIcon(status, color)}
@@ -376,58 +519,44 @@ const StudyTracker = () => {
 
           {/* Study Streak Calendar */}
           <section className="streak-calendar">
-            <h3>{t("studyTracker.streakCalendar")}</h3>
-            <div>
-              <div className="calendar-header">
-                {[
-                  t("studyTracker.weekDays.mon"),
-                  t("studyTracker.weekDays.tue"),
-                  t("studyTracker.weekDays.wed"),
-                  t("studyTracker.weekDays.thu"),
-                  t("studyTracker.weekDays.fri"),
-                  t("studyTracker.weekDays.sat"),
-                  t("studyTracker.weekDays.sun"),
-                ].map((day, idx) => (
-                  <div key={idx} className="weekday">
-                    {day}
-                  </div>
-                ))}
+            <div className="streak-header">
+              <h3>{t("studyTracker.streakCalendar")}</h3>
+              <div className="week-navigation">
+                <button onClick={() => setMonthOffset(monthOffset - 1)}>‹</button>
+                <span>
+                  {currentMonth.toLocaleDateString(i18n.language || 'en-US', { month: 'long', year: 'numeric' })}
+                </span>
+                <button onClick={() => setMonthOffset(monthOffset + 1)}>›</button>
               </div>
-              <div className="calendar-grid">
-                {Array.from({ length: 35 }, (_, i) => {
-                  const currentDate = getVietnamDate();
-                  const today = currentDate.getDate();
-                  const firstDay = new Date(
-                    currentDate.getFullYear(),
-                    currentDate.getMonth(),
-                    1
-                  );
-                  const startDay = firstDay.getDay();
-                  const daysInMonth = new Date(
-                    currentDate.getFullYear(),
-                    currentDate.getMonth() + 1,
-                    0
-                  ).getDate();
-
-                  const mondayShift = startDay === 0 ? 6 : startDay - 1;
-                  const dayNumber = i - mondayShift + 1;
-                  const isValidDay = dayNumber > 0 && dayNumber <= daysInMonth;
-                  const isActive =
-                    isValidDay && streakData.calendar?.includes(dayNumber);
-                  const isToday = isValidDay && dayNumber === today;
-
-                  return (
-                    <div
-                      key={i}
-                      className={`calendar-day ${isToday ? "today" : ""} ${
-                        isActive ? "active" : ""
-                      } ${!isValidDay ? "empty" : ""}`}
-                    >
-                      {isValidDay ? dayNumber : ""}
-                    </div>
-                  );
-                })}
-              </div>
+            </div>
+            
+            <div className="water-drops-grid">
+              {monthDates.map((dayInfo, idx) => {
+                // Handle empty days (null values for alignment)
+                if (!dayInfo) {
+                  return <div key={idx} className="empty-day"></div>;
+                }
+                
+                const today = getVietnamDate();
+                today.setHours(0, 0, 0, 0);
+                const dayDate = new Date(dayInfo.fullDate);
+                dayDate.setHours(0, 0, 0, 0);
+                const isToday = dayDate.getTime() === today.getTime();
+                const progress = getDayProgress(dayInfo.fullDate);
+                
+                return (
+                  <WaterDrop
+                    key={idx}
+                    percentage={progress}
+                    day={dayInfo.day}
+                    date={dayInfo.date}
+                    isToday={isToday}
+                    onClick={() => {
+                      // Optional: Navigate to day detail
+                    }}
+                  />
+                );
+              })}
             </div>
 
             {/* Streak Stats */}

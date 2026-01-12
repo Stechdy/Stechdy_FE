@@ -364,9 +364,6 @@ const SubjectDetail = () => {
               <h2 className="subject-section-title">
                 {t("subjectDetail.upcomingDeadlines")}
               </h2>
-              <button className="view-all-btn" onClick={() => {}}>
-                {t("subjectDetail.viewAll")}
-              </button>
             </div>
             <div className="deadlines-list">
               {upcomingDeadlines.length === 0 ? (

@@ -33,19 +33,27 @@ const BottomNav = () => {
   };
 
   const isActive = (path) => {
-    // For account, also check if on profile page
+    const pathname = location.pathname;
+    
+    // For account, check all account-related pages
     if (path === "/account") {
       return (
-        location.pathname === "/account" || location.pathname === "/profile"
+        pathname.startsWith("/account") ||
+        pathname === "/profile" ||
+        pathname === "/notification-settings" ||
+        pathname === "/help" ||
+        pathname === "/about" ||
+        pathname === "/terms" ||
+        pathname === "/user-information"
       );
     }
+    
     // For mood, also check if on mood/history page
     if (path === "/mood") {
-      return (
-        location.pathname === "/mood" || location.pathname === "/mood/history"
-      );
+      return pathname === "/mood" || pathname === "/mood/history";
     }
-    return location.pathname === path;
+    
+    return pathname === path;
   };
 
   const isDashboard = location.pathname === "/dashboard";

@@ -24,12 +24,11 @@ const PremiumBanner = () => {
       
       // Check if premium is still valid
       if (expiryDate > now) {
-        // Check if we should show the banner (just upgraded or first time seeing)
-        const lastShown = localStorage.getItem("premiumBannerShown");
-        const lastShownDate = lastShown ? new Date(lastShown) : null;
+        // Check if user has seen the welcome banner before
+        const hasSeenWelcome = localStorage.getItem("premiumWelcomeBannerSeen");
         
-        // Show banner if never shown or last shown more than 24 hours ago
-        if (!lastShownDate || (now - lastShownDate) > 24 * 60 * 60 * 1000) {
+        // Only show once - first time after becoming premium
+        if (!hasSeenWelcome) {
           setPremiumData({
             expiryDate: expiryDate.toLocaleDateString("vi-VN", {
               day: "2-digit",
@@ -45,7 +44,8 @@ const PremiumBanner = () => {
 
   const handleClose = () => {
     setShow(false);
-    localStorage.setItem("premiumBannerShown", new Date().toISOString());
+    // Mark as seen permanently - will only show once per user
+    localStorage.setItem("premiumWelcomeBannerSeen", "true");
   };
 
   if (!show || !premiumData) return null;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import moodService from "../../services/moodService";
@@ -9,11 +9,47 @@ const SidebarNav = () => {
   const location = useLocation();
   const { t } = useTranslation();
   const [hasTodayMood, setHasTodayMood] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const itemRefs = useRef([]);
+  
+  // Get the current active index based on route
+  const getCurrentIndex = () => {
+    const pathname = location.pathname;
+    
+    // Check for mood routes (including /mood/history)
+    if (pathname === "/mood" || pathname === "/mood/history") return 3;
+    
+    // Check for account routes (including all sub-pages)
+    if (pathname.startsWith("/account") || 
+        pathname === "/profile" || 
+        pathname === "/notification-settings" ||
+        pathname === "/help" ||
+        pathname === "/about" ||
+        pathname === "/terms" ||
+        pathname === "/user-information") return 4;
+    
+    // Check for dashboard
+    if (pathname === "/dashboard") return 0;
+    
+    // Check for calendar
+    if (pathname === "/calendar") return 1;
+    
+    // Check for AI
+    if (pathname === "/ai") return 2;
+    
+    return 0; // Default to dashboard
+  };
+
+  const [activeIndex, setActiveIndex] = useState(getCurrentIndex());
 
   useEffect(() => {
     checkTodayMood();
   }, []);
+
+  // Update activeIndex when route changes
+  useEffect(() => {
+    const newIndex = getCurrentIndex();
+    setActiveIndex(newIndex);
+  }, [location.pathname]);
 
   const checkTodayMood = async () => {
     try {
@@ -33,29 +69,68 @@ const SidebarNav = () => {
     }
   };
 
+  const handleNavClick = (item, index) => {
+    // Set active index immediately for smooth animation
+    setActiveIndex(index);
+
+    // Navigate after animation starts
+    setTimeout(() => {
+      if (item.path === "/mood") {
+        handleMoodClick();
+      } else {
+        navigate(item.path);
+      }
+    }, 150);
+  };
+
   const isActive = (path) => {
-    console.log(`SidebarNav - checking path: ${path}, current location: ${location.pathname}`);
+    const pathname = location.pathname;
     
     // Check for exact match
-    if (location.pathname === path) {
-      console.log(`SidebarNav - isActive: ${path} matches ${location.pathname}`);
+    if (pathname === path) {
       return true;
     }
     
     // Check for mood paths
-    if (path === "/mood" && (location.pathname === "/mood" || location.pathname === "/mood/history")) {
-      console.log(`SidebarNav - isActive: ${path} matches mood path ${location.pathname}`);
+    if (path === "/mood" && (pathname === "/mood" || pathname === "/mood/history")) {
       return true;
     }
     
-    // Check for account/profile paths
-    if (path === "/account" && (location.pathname === "/account" || location.pathname === "/profile")) {
-      console.log(`SidebarNav - isActive: ${path} matches account path ${location.pathname}`);
+    // Check for account and all its sub-pages
+    if (path === "/account" && (
+      pathname.startsWith("/account") || 
+      pathname === "/profile" || 
+      pathname === "/notification-settings" ||
+      pathname === "/help" ||
+      pathname === "/about" ||
+      pathname === "/terms" ||
+      pathname === "/user-information"
+    )) {
       return true;
     }
     
-    console.log(`SidebarNav - ${path} is NOT active`);
     return false;
+  };
+
+  // Calculate position for each item based on distance from active
+  const getItemStyle = (index) => {
+    const distance = index - activeIndex;
+    const verticalSpacing = 55; // Vertical space between items
+    
+    // Calculate vertical position only (no curve)
+    const yOffset = distance * verticalSpacing;
+    
+    // Scale based on distance (center is bigger)
+    const scale = distance === 0 ? 1.15 : Math.max(0.75, 1 - Math.abs(distance) * 0.12);
+    
+    // Opacity based on distance
+    const opacity = distance === 0 ? 1 : Math.max(0.6, 1 - Math.abs(distance) * 0.15);
+    
+    return {
+      transform: `translateY(${yOffset}px) scale(${scale})`,
+      opacity,
+      zIndex: 10 - Math.abs(distance),
+    };
   };
 
   const navItems = [
@@ -174,24 +249,16 @@ const SidebarNav = () => {
 
   return (
     <>
-      {/* Backdrop overlay when expanded */}
-      <div 
-        className={`sidebar-backdrop ${isExpanded ? "active" : ""}`}
-        onClick={() => setIsExpanded(false)}
-      />
-      
-      {/* Sidebar navigation */}
-      <nav 
-        className={`sidebar-nav ${isExpanded ? "expanded" : ""}`}
-        onMouseEnter={() => setIsExpanded(true)}
-        onMouseLeave={() => setIsExpanded(false)}
-      >
+      {/* Sidebar navigation - Curved carousel */}
+      <nav className="sidebar-nav">
         <div className="sidebar-content">
-          {navItems.map((item) => (
+          {navItems.map((item, index) => (
             <button
               key={item.path}
+              ref={(el) => (itemRefs.current[index] = el)}
               className={`nav-item ${isActive(item.path) ? "active" : ""}`}
-              onClick={() => item.path === "/mood" ? handleMoodClick() : navigate(item.path)}
+              onClick={() => handleNavClick(item, index)}
+              style={getItemStyle(index)}
             >
               <div className="nav-item-icon">
                 {item.icon}

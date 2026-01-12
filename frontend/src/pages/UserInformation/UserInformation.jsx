@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import BottomNav from "../../components/common/BottomNav";
+import SidebarNav from "../../components/common/SidebarNav";
 import "./UserInformation.css";
 
 const UserInformation = () => {
@@ -373,22 +374,30 @@ const UserInformation = () => {
 
   if (loading) {
     return (
-      <div className="user-info-container">
-        <div className="user-info-loading">
-          <div className="loading-spinner"></div>
-          <p>{t("userInfo.loading")}</p>
+      <div className="user-info-page">
+        <SidebarNav />
+        <div className="user-info-wrapper">
+          <div className="user-info-content">
+            <div className="user-info-loading">
+              <div className="loading-spinner"></div>
+              <p>{t("userInfo.loading")}</p>
+            </div>
+          </div>
+          <BottomNav />
         </div>
-        <BottomNav />
       </div>
     );
   }
 
   return (
-    <div className="user-info-container">
+    <div className="user-info-page">
+      <SidebarNav />
       <ToastContainer />
-      <div className="user-info-content">
+      <div className="user-info-wrapper">
+        <div className="user-info-content">
+        {/* Page Title */}
         <div className="user-info-header">
-          <button className="back-button" onClick={() => navigate("/account")}>
+          <button className="back-button" onClick={() => navigate(-1)}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path
                 d="M15 18L9 12L15 6"
@@ -399,11 +408,11 @@ const UserInformation = () => {
               />
             </svg>
           </button>
-          <h1 className="page-title">{t("userInfo.title")}</h1>
-          <div className="header-spacer"></div>
+          <h1 className="user-info-page-title">{t("userInfo.title")}</h1>
         </div>
 
-        <div className="profile-avatar-section">
+        {/* Profile Card */}
+        <div className="profile-info-card">
           <div className="avatar-wrapper">
             {uploadingAvatar && (
               <div className="avatar-upload-overlay">
@@ -517,9 +526,10 @@ const UserInformation = () => {
           </div>
         </div>
 
-        <div className="info-section">
+        {/* Personal Information Card */}
+        <div className="info-section-card">
           <div className="section-header">
-            <h3 className="section-title">{t("userInfo.personalInfo")}</h3>
+            <h3 className="card-section-title">{t("userInfo.personalInfo")}</h3>
             {!isEditing ? (
               <button className="edit-btn" onClick={() => setIsEditing(true)}>
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -725,8 +735,9 @@ const UserInformation = () => {
           </div>
         </div>
 
-        <div className="info-section">
-          <h3 className="section-title">{t("userInfo.accountDetails")}</h3>
+        {/* Account Details Card */}
+        <div className="info-section-card">
+          <h3 className="card-section-title">{t("userInfo.accountDetails")}</h3>
           <div className="info-cards">
             <div className="info-card">
               <div className="info-icon status-icon">
@@ -857,7 +868,8 @@ const UserInformation = () => {
         </div>
       </div>
 
-      <BottomNav />
+        <BottomNav />
+      </div>
     </div>
   );
 };
